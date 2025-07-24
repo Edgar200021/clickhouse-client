@@ -1,7 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { type SignUpSchema, signUpSchema } from "@/schemas/auth/signUp.schema";
+import {
+	type SignUpSchema,
+	signUpSchema,
+} from "@/schemas/api/auth/signUp.schema";
 import { useSignUpMutation } from "@/store/auth/authApi";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
@@ -10,9 +13,10 @@ import { Input } from "../ui/input";
 
 type Props = {
 	className?: string;
+	onSuccess?: () => void;
 };
 
-export const SignUpForm = ({ className }: Props) => {
+export const SignUpForm = ({ className, onSuccess }: Props) => {
 	const {
 		handleSubmit,
 		formState: { errors, isValid },
@@ -29,8 +33,9 @@ export const SignUpForm = ({ className }: Props) => {
 
 	const [signUp, { isLoading }] = useSignUpMutation();
 
-	const onSubmit = (data: SignUpSchema) => {
-		signUp({ email: data.email, password: data.password });
+	const onSubmit = async (data: SignUpSchema) => {
+		await signUp({ email: data.email, password: data.password }).unwrap();
+		onSuccess?.();
 	};
 
 	return (

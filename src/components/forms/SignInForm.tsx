@@ -1,7 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
 import { Controller, useForm } from "react-hook-form";
+import { Routes } from "@/const/routes";
 import { cn } from "@/lib/utils";
-import { type SignInSchema, signInSchema } from "@/schemas/auth/signIn.schema";
+import {
+	type SignInSchema,
+	signInSchema,
+} from "@/schemas/api/auth/signIn.schema";
 import { useSignInMutation } from "@/store/auth/authApi";
 import { Button } from "../ui/button";
 import { FieldErrors } from "../ui/FieldErrors";
@@ -9,9 +14,10 @@ import { Input } from "../ui/input";
 
 type Props = {
 	className?: string;
+	onSuccess?: () => void;
 };
 
-export const SignInForm = ({ className }: Props) => {
+export const SignInForm = ({ className, onSuccess }: Props) => {
 	const {
 		handleSubmit,
 		formState: { errors, isValid },
@@ -26,8 +32,9 @@ export const SignInForm = ({ className }: Props) => {
 
 	const [signIn, { isLoading }] = useSignInMutation();
 
-	const onSubmit = (data: SignInSchema) => {
-		signIn(data);
+	const onSubmit = async (data: SignInSchema) => {
+		await signIn(data).unwrap();
+		onSuccess?.();
 	};
 
 	return (

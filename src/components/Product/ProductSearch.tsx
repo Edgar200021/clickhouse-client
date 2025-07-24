@@ -4,7 +4,6 @@ import closeIcon from "@/assets/icons/close.svg";
 import searchIcon from "@/assets/icons/search.svg";
 import { Routes } from "@/const/routes";
 import { cn } from "@/lib/utils";
-import { Route } from "@/routes/auth/forgot-password";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 

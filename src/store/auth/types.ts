@@ -1,7 +1,7 @@
-import type { ForgotPasswordSchema } from "@/schemas/auth/forgotPassword.schema";
-import type { ResetPasswordSchema } from "@/schemas/auth/resetPassword.schema";
-import type { SignInSchema } from "@/schemas/auth/signIn.schema";
-import type { SignUpSchema } from "@/schemas/auth/signUp.schema";
+import type { ForgotPasswordSchema } from "@/schemas/api/auth/forgotPassword.schema";
+import type { ResetPasswordSchema } from "@/schemas/api/auth/resetPassword.schema";
+import type { SignInSchema } from "@/schemas/api/auth/signIn.schema";
+import type { SignUpSchema } from "@/schemas/api/auth/signUp.schema";
 import type { User } from "@/types/user";
 import type { ApiSuccessResponse } from "../types";
 
@@ -16,3 +16,6 @@ export type ForgotPasswordResponse = ApiSuccessResponse<string>;
 
 export type ResetPasswordRequest = ResetPasswordSchema;
 export type ResetPasswordResponse = ApiSuccessResponse<string>;
+
+export type LogoutRequest = null;
+export type LogoutResponse = ApiSuccessResponse<string>;

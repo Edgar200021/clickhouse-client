@@ -1,5 +1,5 @@
-import { Routes } from "@/const/routes";
 import { createFileRoute } from "@tanstack/react-router";
+import { Routes } from "@/const/routes";
 
 export const Route = createFileRoute(Routes.Main)({
 	component: Index,

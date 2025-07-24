@@ -1,6 +1,6 @@
-import { Routes } from "@/const/routes";
 import { Link } from "@tanstack/react-router";
 import logoIcon from "@/assets/icons/logo.svg";
+import { Routes } from "@/const/routes";
 import { cn } from "@/lib/utils";
 
 type Props = {

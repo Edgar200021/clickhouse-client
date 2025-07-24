@@ -15,7 +15,7 @@ export const HeaderPart = ({ className }: Props) => {
 			<Link className="w-6 h-6" to={Routes.Favorite}>
 				<img src={starIcon} className="w-full h-full" />
 			</Link>
-			<Link className="w-6 h-6" to={Routes.Favorite}>
+			<Link className="w-6 h-6" to={Routes.Basket}>
 				<img src={basketIcon} className="w-full h-full" />
 			</Link>
 			<AuthDirection />

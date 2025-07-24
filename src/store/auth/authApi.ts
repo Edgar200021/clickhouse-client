@@ -4,6 +4,8 @@ import { authActions } from "./authSlice";
 import type {
 	ForgotPasswordRequest,
 	ForgotPasswordResponse,
+	LogoutRequest,
+	LogoutResponse,
 	ResetPasswordRequest,
 	ResetPasswordResponse,
 	SignInRequest,
@@ -58,6 +60,17 @@ export const authApi = baseApi.injectEndpoints({
 				body,
 			}),
 		}),
+
+		logout: builder.mutation<LogoutResponse, LogoutRequest>({
+			query: () => ({
+				url: "/auth/logout",
+				method: "POST",
+			}),
+			onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+				await queryFulfilled;
+				dispatch(authActions.setUser(null));
+			},
+		}),
 	}),
 });
 
@@ -66,4 +79,5 @@ export const {
 	useSignInMutation,
 	useForgotPasswordMutation,
 	useResetPasswordMutation,
+	useLogoutMutation,
 } = authApi;

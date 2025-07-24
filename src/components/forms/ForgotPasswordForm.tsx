@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import {
 	type ForgotPasswordSchema,
 	forgotPassowrdSchema,
-} from "@/schemas/auth/forgotPassword.schema";
+} from "@/schemas/api/auth/forgotPassword.schema";
 import { useForgotPasswordMutation } from "@/store/auth/authApi";
 import { Button } from "../ui/button";
 import { FieldErrors } from "../ui/FieldErrors";
@@ -12,9 +12,10 @@ import { Input } from "../ui/input";
 
 type Props = {
 	className?: string;
+	onSuccess?: () => void;
 };
 
-export const ForgotPasswordForm = ({ className }: Props) => {
+export const ForgotPasswordForm = ({ className, onSuccess }: Props) => {
 	const {
 		handleSubmit,
 		formState: { errors, isValid },
@@ -28,8 +29,9 @@ export const ForgotPasswordForm = ({ className }: Props) => {
 
 	const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
-	const onSubmit = (data: ForgotPasswordSchema) => {
-		forgotPassword(data);
+	const onSubmit = async (data: ForgotPasswordSchema) => {
+		await forgotPassword(data).unwrap();
+		onSuccess?.();
 	};
 
 	return (
