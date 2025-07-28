@@ -15,7 +15,7 @@ export const Logo = ({ className }: Props) => {
 				width={140}
 				src={logoIcon}
 				alt="Clickhouse"
-				className="object-cover"
+				className="object-cover max-sm:w-[120px] max-sm:h-6"
 			/>
 		</Link>
 	);

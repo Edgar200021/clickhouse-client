@@ -11,23 +11,31 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthVkRouteImport } from './routes/auth/vk'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
-import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
-import { Route as AuthenticatedFavoriteRouteImport } from './routes/_authenticated/favorite'
-import { Route as AuthenticatedBasketRouteImport } from './routes/_authenticated/basket'
+import { Route as AuthAccountVerificationRouteImport } from './routes/auth/account-verification'
 
 const PaymentLazyRouteImport = createFileRoute('/payment')()
 const DeliveryLazyRouteImport = createFileRoute('/delivery')()
 const ContactsLazyRouteImport = createFileRoute('/contacts')()
 const ConditionsLazyRouteImport = createFileRoute('/conditions')()
-const CatalogLazyRouteImport = createFileRoute('/catalog')()
 const AuthSignUpLazyRouteImport = createFileRoute('/auth/sign-up')()
 const AuthSignInLazyRouteImport = createFileRoute('/auth/sign-in')()
 const AuthForgotPasswordLazyRouteImport = createFileRoute(
   '/auth/forgot-password',
+)()
+const AuthenticatedProfileLazyRouteImport = createFileRoute(
+  '/_authenticated/profile',
+)()
+const AuthenticatedFavoriteLazyRouteImport = createFileRoute(
+  '/_authenticated/favorite',
+)()
+const AuthenticatedBasketLazyRouteImport = createFileRoute(
+  '/_authenticated/basket',
 )()
 
 const PaymentLazyRoute = PaymentLazyRouteImport.update({
@@ -50,11 +58,11 @@ const ConditionsLazyRoute = ConditionsLazyRouteImport.update({
   path: '/conditions',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/conditions.lazy').then((d) => d.Route))
-const CatalogLazyRoute = CatalogLazyRouteImport.update({
+const CatalogRoute = CatalogRouteImport.update({
   id: '/catalog',
   path: '/catalog',
   getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/catalog.lazy').then((d) => d.Route))
+} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -86,39 +94,59 @@ const AuthForgotPasswordLazyRoute = AuthForgotPasswordLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/auth/forgot-password.lazy').then((d) => d.Route),
 )
+const AuthenticatedProfileLazyRoute =
+  AuthenticatedProfileLazyRouteImport.update({
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/profile.lazy').then((d) => d.Route),
+  )
+const AuthenticatedFavoriteLazyRoute =
+  AuthenticatedFavoriteLazyRouteImport.update({
+    id: '/favorite',
+    path: '/favorite',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/favorite.lazy').then((d) => d.Route),
+  )
+const AuthenticatedBasketLazyRoute = AuthenticatedBasketLazyRouteImport.update({
+  id: '/basket',
+  path: '/basket',
+  getParentRoute: () => AuthenticatedRoute,
+} as any).lazy(() =>
+  import('./routes/_authenticated/basket.lazy').then((d) => d.Route),
+)
+const AuthVkRoute = AuthVkRouteImport.update({
+  id: '/vk',
+  path: '/vk',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedFavoriteRoute = AuthenticatedFavoriteRouteImport.update({
-  id: '/favorite',
-  path: '/favorite',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedBasketRoute = AuthenticatedBasketRouteImport.update({
-  id: '/basket',
-  path: '/basket',
-  getParentRoute: () => AuthenticatedRoute,
+const AuthAccountVerificationRoute = AuthAccountVerificationRouteImport.update({
+  id: '/account-verification',
+  path: '/account-verification',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
-  '/catalog': typeof CatalogLazyRoute
+  '/catalog': typeof CatalogRoute
   '/conditions': typeof ConditionsLazyRoute
   '/contacts': typeof ContactsLazyRoute
   '/delivery': typeof DeliveryLazyRoute
   '/payment': typeof PaymentLazyRoute
-  '/basket': typeof AuthenticatedBasketRoute
-  '/favorite': typeof AuthenticatedFavoriteRoute
-  '/profile': typeof AuthenticatedProfileRoute
+  '/auth/account-verification': typeof AuthAccountVerificationRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/vk': typeof AuthVkRoute
+  '/basket': typeof AuthenticatedBasketLazyRoute
+  '/favorite': typeof AuthenticatedFavoriteLazyRoute
+  '/profile': typeof AuthenticatedProfileLazyRoute
   '/auth/forgot-password': typeof AuthForgotPasswordLazyRoute
   '/auth/sign-in': typeof AuthSignInLazyRoute
   '/auth/sign-up': typeof AuthSignUpLazyRoute
@@ -126,15 +154,17 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
-  '/catalog': typeof CatalogLazyRoute
+  '/catalog': typeof CatalogRoute
   '/conditions': typeof ConditionsLazyRoute
   '/contacts': typeof ContactsLazyRoute
   '/delivery': typeof DeliveryLazyRoute
   '/payment': typeof PaymentLazyRoute
-  '/basket': typeof AuthenticatedBasketRoute
-  '/favorite': typeof AuthenticatedFavoriteRoute
-  '/profile': typeof AuthenticatedProfileRoute
+  '/auth/account-verification': typeof AuthAccountVerificationRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/vk': typeof AuthVkRoute
+  '/basket': typeof AuthenticatedBasketLazyRoute
+  '/favorite': typeof AuthenticatedFavoriteLazyRoute
+  '/profile': typeof AuthenticatedProfileLazyRoute
   '/auth/forgot-password': typeof AuthForgotPasswordLazyRoute
   '/auth/sign-in': typeof AuthSignInLazyRoute
   '/auth/sign-up': typeof AuthSignUpLazyRoute
@@ -144,15 +174,17 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/catalog': typeof CatalogLazyRoute
+  '/catalog': typeof CatalogRoute
   '/conditions': typeof ConditionsLazyRoute
   '/contacts': typeof ContactsLazyRoute
   '/delivery': typeof DeliveryLazyRoute
   '/payment': typeof PaymentLazyRoute
-  '/_authenticated/basket': typeof AuthenticatedBasketRoute
-  '/_authenticated/favorite': typeof AuthenticatedFavoriteRoute
-  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/auth/account-verification': typeof AuthAccountVerificationRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/vk': typeof AuthVkRoute
+  '/_authenticated/basket': typeof AuthenticatedBasketLazyRoute
+  '/_authenticated/favorite': typeof AuthenticatedFavoriteLazyRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileLazyRoute
   '/auth/forgot-password': typeof AuthForgotPasswordLazyRoute
   '/auth/sign-in': typeof AuthSignInLazyRoute
   '/auth/sign-up': typeof AuthSignUpLazyRoute
@@ -167,10 +199,12 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/delivery'
     | '/payment'
+    | '/auth/account-verification'
+    | '/auth/reset-password'
+    | '/auth/vk'
     | '/basket'
     | '/favorite'
     | '/profile'
-    | '/auth/reset-password'
     | '/auth/forgot-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
@@ -183,10 +217,12 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/delivery'
     | '/payment'
+    | '/auth/account-verification'
+    | '/auth/reset-password'
+    | '/auth/vk'
     | '/basket'
     | '/favorite'
     | '/profile'
-    | '/auth/reset-password'
     | '/auth/forgot-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
@@ -200,10 +236,12 @@ export interface FileRouteTypes {
     | '/contacts'
     | '/delivery'
     | '/payment'
+    | '/auth/account-verification'
+    | '/auth/reset-password'
+    | '/auth/vk'
     | '/_authenticated/basket'
     | '/_authenticated/favorite'
     | '/_authenticated/profile'
-    | '/auth/reset-password'
     | '/auth/forgot-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
@@ -213,7 +251,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  CatalogLazyRoute: typeof CatalogLazyRoute
+  CatalogRoute: typeof CatalogRoute
   ConditionsLazyRoute: typeof ConditionsLazyRoute
   ContactsLazyRoute: typeof ContactsLazyRoute
   DeliveryLazyRoute: typeof DeliveryLazyRoute
@@ -254,7 +292,7 @@ declare module '@tanstack/react-router' {
       id: '/catalog'
       path: '/catalog'
       fullPath: '/catalog'
-      preLoaderRoute: typeof CatalogLazyRouteImport
+      preLoaderRoute: typeof CatalogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -299,6 +337,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordLazyRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileLazyRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/favorite': {
+      id: '/_authenticated/favorite'
+      path: '/favorite'
+      fullPath: '/favorite'
+      preLoaderRoute: typeof AuthenticatedFavoriteLazyRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/basket': {
+      id: '/_authenticated/basket'
+      path: '/basket'
+      fullPath: '/basket'
+      preLoaderRoute: typeof AuthenticatedBasketLazyRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/auth/vk': {
+      id: '/auth/vk'
+      path: '/vk'
+      fullPath: '/auth/vk'
+      preLoaderRoute: typeof AuthVkRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/auth/reset-password': {
       id: '/auth/reset-password'
       path: '/reset-password'
@@ -306,39 +372,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthResetPasswordRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_authenticated/profile': {
-      id: '/_authenticated/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof AuthenticatedProfileRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/favorite': {
-      id: '/_authenticated/favorite'
-      path: '/favorite'
-      fullPath: '/favorite'
-      preLoaderRoute: typeof AuthenticatedFavoriteRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/basket': {
-      id: '/_authenticated/basket'
-      path: '/basket'
-      fullPath: '/basket'
-      preLoaderRoute: typeof AuthenticatedBasketRouteImport
-      parentRoute: typeof AuthenticatedRoute
+    '/auth/account-verification': {
+      id: '/auth/account-verification'
+      path: '/account-verification'
+      fullPath: '/auth/account-verification'
+      preLoaderRoute: typeof AuthAccountVerificationRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
   }
 }
 
 interface AuthRouteRouteChildren {
+  AuthAccountVerificationRoute: typeof AuthAccountVerificationRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  AuthVkRoute: typeof AuthVkRoute
   AuthForgotPasswordLazyRoute: typeof AuthForgotPasswordLazyRoute
   AuthSignInLazyRoute: typeof AuthSignInLazyRoute
   AuthSignUpLazyRoute: typeof AuthSignUpLazyRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthAccountVerificationRoute: AuthAccountVerificationRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
+  AuthVkRoute: AuthVkRoute,
   AuthForgotPasswordLazyRoute: AuthForgotPasswordLazyRoute,
   AuthSignInLazyRoute: AuthSignInLazyRoute,
   AuthSignUpLazyRoute: AuthSignUpLazyRoute,
@@ -349,15 +405,15 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedBasketRoute: typeof AuthenticatedBasketRoute
-  AuthenticatedFavoriteRoute: typeof AuthenticatedFavoriteRoute
-  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedBasketLazyRoute: typeof AuthenticatedBasketLazyRoute
+  AuthenticatedFavoriteLazyRoute: typeof AuthenticatedFavoriteLazyRoute
+  AuthenticatedProfileLazyRoute: typeof AuthenticatedProfileLazyRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedBasketRoute: AuthenticatedBasketRoute,
-  AuthenticatedFavoriteRoute: AuthenticatedFavoriteRoute,
-  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedBasketLazyRoute: AuthenticatedBasketLazyRoute,
+  AuthenticatedFavoriteLazyRoute: AuthenticatedFavoriteLazyRoute,
+  AuthenticatedProfileLazyRoute: AuthenticatedProfileLazyRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -368,7 +424,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  CatalogLazyRoute: CatalogLazyRoute,
+  CatalogRoute: CatalogRoute,
   ConditionsLazyRoute: ConditionsLazyRoute,
   ContactsLazyRoute: ContactsLazyRoute,
   DeliveryLazyRoute: DeliveryLazyRoute,

@@ -5,5 +5,5 @@ type Props = {
 };
 
 export const Footer = ({ className }: Props) => {
-	return <div className={cn("", className)}>Footer</div>;
+	return <footer className={cn("", className)}>Footer</footer>;
 };

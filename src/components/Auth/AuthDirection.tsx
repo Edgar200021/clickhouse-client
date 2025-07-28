@@ -16,10 +16,12 @@ import { Routes } from "@/const/routes";
 import { cn } from "@/lib/utils";
 import { authSelectors } from "@/store/auth/authSlice";
 import { useAppSelector } from "@/store/store";
-import { ForgotPasswordForm } from "./forms/ForgotPasswordForm";
-import { SignInForm } from "./forms/SignInForm";
-import { SignUpForm } from "./forms/SignUpForm";
-import { Button } from "./ui/button";
+import { ForgotPasswordForm } from "../forms/ForgotPasswordForm";
+import { SignInForm } from "../forms/SignInForm";
+import { SignUpForm } from "../forms/SignUpForm";
+import { Notification, type NotificationVariants } from "../Notification";
+import { Button } from "../ui/button";
+import { OAuth2 } from "./OAuth2";
 
 type Props = {
 	className?: string;
@@ -30,11 +32,14 @@ export const AuthDirection = ({ className }: Props) => {
 	const [type, setType] = useState<"signUp" | "signIn" | "forgotPassword">(
 		"signIn",
 	);
+	const [notification, setNotification] = useState<NotificationVariants | null>(
+		null,
+	);
 	const user = useAppSelector(authSelectors.getUser);
 
 	const { redirect } = useSearch({ from: "__root__" });
 	const navigate = useNavigate({ from: "/" });
-	const matches = useMediaQuery("(max-width: 768px)");
+	const matches = useMediaQuery("(max-width: 799px)");
 
 	useEffect(() => {
 		if (!redirect) return;
@@ -61,10 +66,6 @@ export const AuthDirection = ({ className }: Props) => {
 				<img src={userIcon} className="w-full h-full" alt="UserIcon" />
 			</Link>
 		);
-
-	const onSuccess = () => {
-		setOpen(false);
-	};
 
 	return (
 		<Drawer open={open} onOpenChange={setOpen} direction="right">
@@ -93,53 +94,71 @@ export const AuthDirection = ({ className }: Props) => {
 					<DrawerDescription className="hidden"></DrawerDescription>
 				</DrawerHeader>
 
-				{type === "signUp" && (
-					<SignUpForm onSuccess={onSuccess} className="px-0" />
-				)}
-				{type === "signIn" && (
-					<SignInForm
-						onSuccess={() => {
-							onSuccess();
-							if (redirect) {
-								return navigate({
-									replace: true,
-									to: redirect,
-									search: (prev) => ({ ...prev, redirect: undefined }),
-								});
-							}
+				{notification && <Notification variant={notification} />}
 
-							navigate({ to: Routes.Profile });
-						}}
-						className="px-0"
-					/>
+				{!notification && (
+					<>
+						{type === "signUp" && (
+							<SignUpForm
+								onSuccess={(email) =>
+									setNotification({ email, type: "signUpSuccess" })
+								}
+								className="px-0"
+							/>
+						)}
+						{type === "signIn" && (
+							<SignInForm
+								onSuccess={() => {
+									setOpen(false);
+									if (redirect) {
+										return navigate({
+											replace: true,
+											to: redirect,
+											search: (prev) => ({ ...prev, redirect: undefined }),
+										});
+									}
+
+									navigate({ to: Routes.Profile });
+								}}
+								className="px-0"
+							/>
+						)}
+						{type === "forgotPassword" && (
+							<ForgotPasswordForm
+								onSuccess={(email) =>
+									setNotification({ email, type: "forgotPasswordSuccess" })
+								}
+								className="px-0"
+							/>
+						)}
+						<div className="flex items-center justify-between gap-x-5 mb-10">
+							<Button
+								onClick={() => setType(type === "signIn" ? "signUp" : "signIn")}
+								variant="ghost"
+								className="cursor-pointer p-0 text-[#5a5a5a]"
+							>
+								{type === "signIn" ? "Регистрация" : "Вход"}
+							</Button>
+							<Button
+								onClick={() =>
+									setType(
+										type === "signIn" || type === "signUp"
+											? "forgotPassword"
+											: "signUp",
+									)
+								}
+								variant="ghost"
+								className="cursor-pointer p-0 text-[#5a5a5a]"
+							>
+								{type === "signIn" || type === "signUp"
+									? "Восстановление пароля"
+									: "Регистрация"}
+							</Button>
+						</div>
+
+						<OAuth2 from={redirect} />
+					</>
 				)}
-				{type === "forgotPassword" && (
-					<ForgotPasswordForm onSuccess={onSuccess} className="px-0" />
-				)}
-				<div className="flex items-center justify-between gap-x-5">
-					<Button
-						onClick={() => setType(type === "signIn" ? "signUp" : "signIn")}
-						variant="ghost"
-						className="cursor-pointer p-0 text-[#5a5a5a]"
-					>
-						{type === "signIn" ? "Регистрация" : "Вход"}
-					</Button>
-					<Button
-						onClick={() =>
-							setType(
-								type === "signIn" || type === "signUp"
-									? "forgotPassword"
-									: "signUp",
-							)
-						}
-						variant="ghost"
-						className="cursor-pointer p-0 text-[#5a5a5a]"
-					>
-						{type === "signIn" || type === "signUp"
-							? "Восстановление пароля"
-							: "Регистрация"}
-					</Button>
-				</div>
 			</DrawerContent>
 		</Drawer>
 	);

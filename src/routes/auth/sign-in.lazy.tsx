@@ -1,4 +1,5 @@
 import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { OAuth2 } from "@/components/Auth/OAuth2";
 import { SignInForm } from "@/components/forms/SignInForm";
 import { Routes } from "@/const/routes";
 
@@ -11,7 +12,7 @@ function RouteComponent() {
 	const navigate = useNavigate();
 
 	return (
-		<div className="flex h-full items-center pt-48 flex-col gap-y-5 max-w-[600px] mx-auto">
+		<div className="flex h-full items-center pt-48 flex-col gap-y-5 max-w-[600px] mx-auto  max-[800px]:pt-32">
 			<SignInForm
 				onSuccess={() =>
 					navigate({
@@ -25,7 +26,7 @@ function RouteComponent() {
 				className="px-0"
 			/>
 
-			<div className="flex items-center justify-between gap-x-5 w-full">
+			<div className="flex items-center justify-between gap-x-5 w-full mb-8">
 				<Link
 					to={Routes.Auth.SignUp}
 					className="cursor-pointer p-0 text-[#5a5a5a]"
@@ -39,6 +40,7 @@ function RouteComponent() {
 					Восстановление пароля
 				</Link>
 			</div>
+			<OAuth2 from={redirect} className="w-full gap-y-5" />
 		</div>
 	);
 }

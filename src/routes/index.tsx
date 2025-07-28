@@ -6,5 +6,5 @@ export const Route = createFileRoute(Routes.Main)({
 });
 
 function Index() {
-	return <h3>Welcome Home!</h3>;
+	return <div className="flex items-center justify-center"></div>;
 }

@@ -12,7 +12,7 @@ import { Input } from "../ui/input";
 
 type Props = {
 	className?: string;
-	onSuccess?: () => void;
+	onSuccess?: (email: string) => void;
 };
 
 export const ForgotPasswordForm = ({ className, onSuccess }: Props) => {
@@ -31,7 +31,7 @@ export const ForgotPasswordForm = ({ className, onSuccess }: Props) => {
 
 	const onSubmit = async (data: ForgotPasswordSchema) => {
 		await forgotPassword(data).unwrap();
-		onSuccess?.();
+		onSuccess?.(data.email);
 	};
 
 	return (
@@ -40,7 +40,7 @@ export const ForgotPasswordForm = ({ className, onSuccess }: Props) => {
 			className={cn("p-5 max-w-[600px] w-full mx-auto", className)}
 		>
 			<h1 className="text-4xl font-bold mb-10">Восстановление пароля</h1>
-			<fieldset className="m-0 p-0">
+			<fieldset disabled={isLoading} className="m-0 p-0">
 				<div className="mb-9 flex flex-col gap-y-3">
 					<Controller
 						name="email"

@@ -7,8 +7,8 @@ import type { AuthState } from "@/store/auth/authSlice";
 
 export const Route = createRootRouteWithContext<{
 	user: AuthState["user"];
-	isLoadingGettingUser: boolean;
 }>()({
+	validateSearch: baseSearchParams,
 	component: () => (
 		<div className="main-container box">
 			<Header />
@@ -18,5 +18,4 @@ export const Route = createRootRouteWithContext<{
 			<Footer /> <TanStackRouterDevtools />
 		</div>
 	),
-	validateSearch: baseSearchParams,
 });

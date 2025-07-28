@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/drawer";
 import { Routes } from "@/const/routes";
 import { cn } from "@/lib/utils";
+import { HeaderPart } from "./Header/HeaderPart";
 import { Button } from "./ui/button";
 import { Logo } from "./ui/Logo";
 
@@ -36,9 +37,9 @@ export const Menu = ({ className }: Props) => {
 					<span className="w-full h-[1.2px] bg-[#5a5a5a] hover:w-1/2 transition-all duration-300 ease group-hover:w-1/2"></span>
 				</Button>
 			</DrawerTrigger>
-			<DrawerContent className="!max-w-[500px] pl-32 ">
+			<DrawerContent className="!max-w-[500px] pl-32 max-sm:pl-14 max-sm:pt-5 gap-y-10 ">
 				<DrawerHeader className="!flex flex-row items-center justify-between gap-x-4 mb-[30px]">
-					<Logo />
+					<Logo className="shrink-0" />
 					<DrawerClose asChild>
 						<Button className="w-4 h-4 p-0 cursor-pointer" variant="ghost">
 							<img
@@ -75,10 +76,11 @@ export const Menu = ({ className }: Props) => {
 							<Link to={Routes.Conditions}>Условия</Link>
 						</li>
 						<li className="hover:text-orange-400 hover:translate-x-2 transition-all duration-300 ease">
-							<Link to={Routes.Conditions}>Контакты</Link>
+							<Link to={Routes.Contacts}>Контакты</Link>
 						</li>
 					</ul>
 				</nav>
+				<HeaderPart />
 			</DrawerContent>
 		</Drawer>
 	);

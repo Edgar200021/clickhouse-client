@@ -1,5 +1,4 @@
 import { createRouter, RouterProvider } from "@tanstack/react-router";
-import { Loader, LoaderCircle } from "lucide-react";
 import { Spinner } from "./components/ui/Spinner";
 import { routeTree } from "./routeTree.gen";
 import { authSelectors } from "./store/auth/authSlice";
@@ -8,7 +7,7 @@ import { useGetMeQuery } from "./store/user/userApi";
 
 const router = createRouter({
 	routeTree,
-	context: { user: null, isLoadingGettingUser: false },
+	context: { user: null },
 });
 
 declare module "@tanstack/react-router" {
@@ -28,12 +27,7 @@ function App() {
 			</div>
 		);
 
-	return (
-		<RouterProvider
-			router={router}
-			context={{ user, isLoadingGettingUser: true }}
-		/>
-	);
+	return <RouterProvider router={router} context={{ user }} />;
 }
 
 export default App;

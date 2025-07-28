@@ -2,8 +2,12 @@ import { baseApi } from "../baseApi";
 import { authActions } from "./authSlice";
 
 import type {
+	AccountVerificationRequest,
+	AccountVerificationResponse,
 	ForgotPasswordRequest,
 	ForgotPasswordResponse,
+	GoogleSignInRequest,
+	GoogleSignInResponse,
 	LogoutRequest,
 	LogoutResponse,
 	ResetPasswordRequest,
@@ -13,6 +17,7 @@ import type {
 	SignUpRequest,
 	SignUpResponse,
 } from "./types";
+
 export const authApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
 		signUp: builder.mutation<SignUpResponse, SignUpRequest>({
@@ -23,6 +28,17 @@ export const authApi = baseApi.injectEndpoints({
 					email: body.email,
 					password: body.password,
 				},
+			}),
+		}),
+
+		accountVerification: builder.mutation<
+			AccountVerificationResponse,
+			AccountVerificationRequest
+		>({
+			query: (body) => ({
+				url: "/auth/verify-account",
+				method: "POST",
+				body,
 			}),
 		}),
 
@@ -37,6 +53,12 @@ export const authApi = baseApi.injectEndpoints({
 
 				dispatch(authActions.setUser(data.data));
 			},
+		}),
+
+		googleSignIn: builder.query<GoogleSignInResponse, GoogleSignInRequest>({
+			query: () => ({
+				url: "/auth/google",
+			}),
 		}),
 
 		forgotPassword: builder.mutation<
@@ -77,6 +99,8 @@ export const authApi = baseApi.injectEndpoints({
 export const {
 	useSignUpMutation,
 	useSignInMutation,
+	useLazyGoogleSignInQuery,
+	useAccountVerificationMutation,
 	useForgotPasswordMutation,
 	useResetPasswordMutation,
 	useLogoutMutation,

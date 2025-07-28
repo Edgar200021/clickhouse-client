@@ -1,9 +1,5 @@
 import z from "zod/v3";
 
 export const resetPasswordSearchParams = z.object({
-	token: z.string().trim().optional(),
+	token: z.string().trim(),
 });
-
-export type resetPasswordSearchParams = z.infer<
-	typeof resetPasswordSearchParams
->;

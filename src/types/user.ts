@@ -10,8 +10,6 @@ export type User = {
 	createdAt: string;
 	updatetAt: string;
 	role: UserRole;
-	firstName: Nullable<string>;
-	lastName: Nullable<string>;
 	isVerified: boolean;
-	email: string;
+	email: Nullable<string>;
 };

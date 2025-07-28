@@ -43,7 +43,7 @@ export const SignInForm = ({ className, onSuccess }: Props) => {
 			className={cn("p-5 max-w-[600px] w-full mx-auto", className)}
 		>
 			<h1 className="text-4xl font-bold mb-10">Вход</h1>
-			<fieldset className="m-0 p-0">
+			<fieldset disabled={isLoading} className="m-0 p-0">
 				<div className="mb-9 flex flex-col gap-y-3">
 					<Controller
 						name="email"

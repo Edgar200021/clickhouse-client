@@ -6,7 +6,7 @@ export const Route = createFileRoute("/_authenticated")({
 		const { user } = context;
 		if (!user) {
 			return redirect({
-				to: window.innerWidth <= 768 ? Routes.Auth.SignIn : Routes.Main,
+				to: window.innerWidth < 800 ? Routes.Auth.SignIn : Routes.Main,
 				search: {
 					redirect: location.pathname,
 				},
