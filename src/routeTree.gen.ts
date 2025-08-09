@@ -11,288 +11,456 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as CatalogRouteImport } from './routes/catalog'
+import { Route as RegularLayoutRouteImport } from './routes/_regularLayout'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as AuthRouteRouteImport } from './routes/auth/route'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthVkRouteImport } from './routes/auth/vk'
-import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
-import { Route as AuthAccountVerificationRouteImport } from './routes/auth/account-verification'
+import { Route as RegularLayoutIndexRouteImport } from './routes/_regularLayout/index'
+import { Route as RegularLayoutAuthRouteRouteImport } from './routes/_regularLayout/auth/route'
+import { Route as RegularLayoutCatalogCatalogPathRouteImport } from './routes/_regularLayout/catalog/$catalogPath'
+import { Route as RegularLayoutAuthResetPasswordRouteImport } from './routes/_regularLayout/auth/reset-password'
+import { Route as RegularLayoutAuthAccountVerificationRouteImport } from './routes/_regularLayout/auth/account-verification'
 
-const PaymentLazyRouteImport = createFileRoute('/payment')()
-const DeliveryLazyRouteImport = createFileRoute('/delivery')()
-const ContactsLazyRouteImport = createFileRoute('/contacts')()
-const ConditionsLazyRouteImport = createFileRoute('/conditions')()
-const AuthSignUpLazyRouteImport = createFileRoute('/auth/sign-up')()
-const AuthSignInLazyRouteImport = createFileRoute('/auth/sign-in')()
-const AuthForgotPasswordLazyRouteImport = createFileRoute(
-  '/auth/forgot-password',
+const RegularLayoutPaymentLazyRouteImport = createFileRoute(
+  '/_regularLayout/payment',
 )()
-const AuthenticatedProfileLazyRouteImport = createFileRoute(
-  '/_authenticated/profile',
+const RegularLayoutDeliveryLazyRouteImport = createFileRoute(
+  '/_regularLayout/delivery',
 )()
-const AuthenticatedFavoriteLazyRouteImport = createFileRoute(
-  '/_authenticated/favorite',
+const RegularLayoutContactsLazyRouteImport = createFileRoute(
+  '/_regularLayout/contacts',
 )()
-const AuthenticatedBasketLazyRouteImport = createFileRoute(
-  '/_authenticated/basket',
+const RegularLayoutConditionsLazyRouteImport = createFileRoute(
+  '/_regularLayout/conditions',
 )()
+const RegularLayoutCatalogRouteLazyRouteImport = createFileRoute(
+  '/_regularLayout/catalog',
+)()
+const AuthenticatedAdminRouteLazyRouteImport = createFileRoute(
+  '/_authenticated/admin',
+)()
+const AuthenticatedAdminIndexLazyRouteImport = createFileRoute(
+  '/_authenticated/admin/',
+)()
+const RegularLayoutAuthSignUpLazyRouteImport = createFileRoute(
+  '/_regularLayout/auth/sign-up',
+)()
+const RegularLayoutAuthSignInLazyRouteImport = createFileRoute(
+  '/_regularLayout/auth/sign-in',
+)()
+const RegularLayoutAuthForgotPasswordLazyRouteImport = createFileRoute(
+  '/_regularLayout/auth/forgot-password',
+)()
+const RegularLayoutAuthenticatedProfileLazyRouteImport = createFileRoute(
+  '/_regularLayout/_authenticated/profile',
+)()
+const RegularLayoutAuthenticatedFavoriteLazyRouteImport = createFileRoute(
+  '/_regularLayout/_authenticated/favorite',
+)()
+const RegularLayoutAuthenticatedBasketLazyRouteImport = createFileRoute(
+  '/_regularLayout/_authenticated/basket',
+)()
+const AuthenticatedAdminProductsIndexLazyRouteImport = createFileRoute(
+  '/_authenticated/admin/products/',
+)()
+const AuthenticatedAdminCategoriesIndexLazyRouteImport = createFileRoute(
+  '/_authenticated/admin/categories/',
+)()
+const AuthenticatedAdminProductsUpdateLazyRouteImport = createFileRoute(
+  '/_authenticated/admin/products/update',
+)()
+const AuthenticatedAdminProductsCreateLazyRouteImport = createFileRoute(
+  '/_authenticated/admin/products/create',
+)()
+const AuthenticatedAdminCategoriesCreateLazyRouteImport = createFileRoute(
+  '/_authenticated/admin/categories/create',
+)()
+const AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRouteImport =
+  createFileRoute('/_authenticated/admin/categories/update/{-$categoryId}')()
 
-const PaymentLazyRoute = PaymentLazyRouteImport.update({
-  id: '/payment',
-  path: '/payment',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/payment.lazy').then((d) => d.Route))
-const DeliveryLazyRoute = DeliveryLazyRouteImport.update({
-  id: '/delivery',
-  path: '/delivery',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/delivery.lazy').then((d) => d.Route))
-const ContactsLazyRoute = ContactsLazyRouteImport.update({
-  id: '/contacts',
-  path: '/contacts',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/contacts.lazy').then((d) => d.Route))
-const ConditionsLazyRoute = ConditionsLazyRouteImport.update({
-  id: '/conditions',
-  path: '/conditions',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/conditions.lazy').then((d) => d.Route))
-const CatalogRoute = CatalogRouteImport.update({
-  id: '/catalog',
-  path: '/catalog',
+const RegularLayoutRoute = RegularLayoutRouteImport.update({
+  id: '/_regularLayout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
+const RegularLayoutIndexRoute = RegularLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => RegularLayoutRoute,
 } as any)
-const AuthSignUpLazyRoute = AuthSignUpLazyRouteImport.update({
-  id: '/sign-up',
-  path: '/sign-up',
-  getParentRoute: () => AuthRouteRoute,
-} as any).lazy(() => import('./routes/auth/sign-up.lazy').then((d) => d.Route))
-const AuthSignInLazyRoute = AuthSignInLazyRouteImport.update({
-  id: '/sign-in',
-  path: '/sign-in',
-  getParentRoute: () => AuthRouteRoute,
-} as any).lazy(() => import('./routes/auth/sign-in.lazy').then((d) => d.Route))
-const AuthForgotPasswordLazyRoute = AuthForgotPasswordLazyRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => AuthRouteRoute,
-} as any).lazy(() =>
-  import('./routes/auth/forgot-password.lazy').then((d) => d.Route),
-)
-const AuthenticatedProfileLazyRoute =
-  AuthenticatedProfileLazyRouteImport.update({
-    id: '/profile',
+const RegularLayoutPaymentLazyRoute =
+  RegularLayoutPaymentLazyRouteImport.update({
+    id: '/payment',
+    path: '/payment',
+    getParentRoute: () => RegularLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_regularLayout/payment.lazy').then((d) => d.Route),
+  )
+const RegularLayoutDeliveryLazyRoute =
+  RegularLayoutDeliveryLazyRouteImport.update({
+    id: '/delivery',
+    path: '/delivery',
+    getParentRoute: () => RegularLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_regularLayout/delivery.lazy').then((d) => d.Route),
+  )
+const RegularLayoutContactsLazyRoute =
+  RegularLayoutContactsLazyRouteImport.update({
+    id: '/contacts',
+    path: '/contacts',
+    getParentRoute: () => RegularLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_regularLayout/contacts.lazy').then((d) => d.Route),
+  )
+const RegularLayoutConditionsLazyRoute =
+  RegularLayoutConditionsLazyRouteImport.update({
+    id: '/conditions',
+    path: '/conditions',
+    getParentRoute: () => RegularLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_regularLayout/conditions.lazy').then((d) => d.Route),
+  )
+const RegularLayoutCatalogRouteLazyRoute =
+  RegularLayoutCatalogRouteLazyRouteImport.update({
+    id: '/catalog',
+    path: '/catalog',
+    getParentRoute: () => RegularLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_regularLayout/catalog/route.lazy').then((d) => d.Route),
+  )
+const AuthenticatedAdminRouteLazyRoute =
+  AuthenticatedAdminRouteLazyRouteImport.update({
+    id: '/admin',
+    path: '/admin',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/admin/route.lazy').then((d) => d.Route),
+  )
+const RegularLayoutAuthRouteRoute = RegularLayoutAuthRouteRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => RegularLayoutRoute,
+} as any)
+const AuthenticatedAdminIndexLazyRoute =
+  AuthenticatedAdminIndexLazyRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/admin/index.lazy').then((d) => d.Route),
+  )
+const RegularLayoutAuthSignUpLazyRoute =
+  RegularLayoutAuthSignUpLazyRouteImport.update({
+    id: '/sign-up',
+    path: '/sign-up',
+    getParentRoute: () => RegularLayoutAuthRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_regularLayout/auth/sign-up.lazy').then((d) => d.Route),
+  )
+const RegularLayoutAuthSignInLazyRoute =
+  RegularLayoutAuthSignInLazyRouteImport.update({
+    id: '/sign-in',
+    path: '/sign-in',
+    getParentRoute: () => RegularLayoutAuthRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_regularLayout/auth/sign-in.lazy').then((d) => d.Route),
+  )
+const RegularLayoutAuthForgotPasswordLazyRoute =
+  RegularLayoutAuthForgotPasswordLazyRouteImport.update({
+    id: '/forgot-password',
+    path: '/forgot-password',
+    getParentRoute: () => RegularLayoutAuthRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_regularLayout/auth/forgot-password.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const RegularLayoutAuthenticatedProfileLazyRoute =
+  RegularLayoutAuthenticatedProfileLazyRouteImport.update({
+    id: '/_authenticated/profile',
     path: '/profile',
-    getParentRoute: () => AuthenticatedRoute,
+    getParentRoute: () => RegularLayoutRoute,
   } as any).lazy(() =>
-    import('./routes/_authenticated/profile.lazy').then((d) => d.Route),
+    import('./routes/_regularLayout/_authenticated/profile.lazy').then(
+      (d) => d.Route,
+    ),
   )
-const AuthenticatedFavoriteLazyRoute =
-  AuthenticatedFavoriteLazyRouteImport.update({
-    id: '/favorite',
+const RegularLayoutAuthenticatedFavoriteLazyRoute =
+  RegularLayoutAuthenticatedFavoriteLazyRouteImport.update({
+    id: '/_authenticated/favorite',
     path: '/favorite',
-    getParentRoute: () => AuthenticatedRoute,
+    getParentRoute: () => RegularLayoutRoute,
   } as any).lazy(() =>
-    import('./routes/_authenticated/favorite.lazy').then((d) => d.Route),
+    import('./routes/_regularLayout/_authenticated/favorite.lazy').then(
+      (d) => d.Route,
+    ),
   )
-const AuthenticatedBasketLazyRoute = AuthenticatedBasketLazyRouteImport.update({
-  id: '/basket',
-  path: '/basket',
-  getParentRoute: () => AuthenticatedRoute,
-} as any).lazy(() =>
-  import('./routes/_authenticated/basket.lazy').then((d) => d.Route),
-)
-const AuthVkRoute = AuthVkRouteImport.update({
-  id: '/vk',
-  path: '/vk',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthAccountVerificationRoute = AuthAccountVerificationRouteImport.update({
-  id: '/account-verification',
-  path: '/account-verification',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
+const RegularLayoutAuthenticatedBasketLazyRoute =
+  RegularLayoutAuthenticatedBasketLazyRouteImport.update({
+    id: '/_authenticated/basket',
+    path: '/basket',
+    getParentRoute: () => RegularLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_regularLayout/_authenticated/basket.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const RegularLayoutCatalogCatalogPathRoute =
+  RegularLayoutCatalogCatalogPathRouteImport.update({
+    id: '/$catalogPath',
+    path: '/$catalogPath',
+    getParentRoute: () => RegularLayoutCatalogRouteLazyRoute,
+  } as any)
+const RegularLayoutAuthResetPasswordRoute =
+  RegularLayoutAuthResetPasswordRouteImport.update({
+    id: '/reset-password',
+    path: '/reset-password',
+    getParentRoute: () => RegularLayoutAuthRouteRoute,
+  } as any)
+const RegularLayoutAuthAccountVerificationRoute =
+  RegularLayoutAuthAccountVerificationRouteImport.update({
+    id: '/account-verification',
+    path: '/account-verification',
+    getParentRoute: () => RegularLayoutAuthRouteRoute,
+  } as any)
+const AuthenticatedAdminProductsIndexLazyRoute =
+  AuthenticatedAdminProductsIndexLazyRouteImport.update({
+    id: '/products/',
+    path: '/products/',
+    getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/admin/products/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const AuthenticatedAdminCategoriesIndexLazyRoute =
+  AuthenticatedAdminCategoriesIndexLazyRouteImport.update({
+    id: '/categories/',
+    path: '/categories/',
+    getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/admin/categories/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const AuthenticatedAdminProductsUpdateLazyRoute =
+  AuthenticatedAdminProductsUpdateLazyRouteImport.update({
+    id: '/products/update',
+    path: '/products/update',
+    getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/admin/products/update.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const AuthenticatedAdminProductsCreateLazyRoute =
+  AuthenticatedAdminProductsCreateLazyRouteImport.update({
+    id: '/products/create',
+    path: '/products/create',
+    getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/admin/products/create.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const AuthenticatedAdminCategoriesCreateLazyRoute =
+  AuthenticatedAdminCategoriesCreateLazyRouteImport.update({
+    id: '/categories/create',
+    path: '/categories/create',
+    getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/admin/categories/create.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute =
+  AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRouteImport.update(
+    {
+      id: '/categories/update/{-$categoryId}',
+      path: '/categories/update/{-$categoryId}',
+      getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+    } as any,
+  ).lazy(() =>
+    import(
+      './routes/_authenticated/admin/categories/update.{-$categoryId}.lazy'
+    ).then((d) => d.Route),
+  )
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/auth': typeof AuthRouteRouteWithChildren
-  '/catalog': typeof CatalogRoute
-  '/conditions': typeof ConditionsLazyRoute
-  '/contacts': typeof ContactsLazyRoute
-  '/delivery': typeof DeliveryLazyRoute
-  '/payment': typeof PaymentLazyRoute
-  '/auth/account-verification': typeof AuthAccountVerificationRoute
-  '/auth/reset-password': typeof AuthResetPasswordRoute
-  '/auth/vk': typeof AuthVkRoute
-  '/basket': typeof AuthenticatedBasketLazyRoute
-  '/favorite': typeof AuthenticatedFavoriteLazyRoute
-  '/profile': typeof AuthenticatedProfileLazyRoute
-  '/auth/forgot-password': typeof AuthForgotPasswordLazyRoute
-  '/auth/sign-in': typeof AuthSignInLazyRoute
-  '/auth/sign-up': typeof AuthSignUpLazyRoute
+  '/auth': typeof RegularLayoutAuthRouteRouteWithChildren
+  '/admin': typeof AuthenticatedAdminRouteLazyRouteWithChildren
+  '/catalog': typeof RegularLayoutCatalogRouteLazyRouteWithChildren
+  '/conditions': typeof RegularLayoutConditionsLazyRoute
+  '/contacts': typeof RegularLayoutContactsLazyRoute
+  '/delivery': typeof RegularLayoutDeliveryLazyRoute
+  '/payment': typeof RegularLayoutPaymentLazyRoute
+  '/': typeof RegularLayoutIndexRoute
+  '/auth/account-verification': typeof RegularLayoutAuthAccountVerificationRoute
+  '/auth/reset-password': typeof RegularLayoutAuthResetPasswordRoute
+  '/catalog/$catalogPath': typeof RegularLayoutCatalogCatalogPathRoute
+  '/basket': typeof RegularLayoutAuthenticatedBasketLazyRoute
+  '/favorite': typeof RegularLayoutAuthenticatedFavoriteLazyRoute
+  '/profile': typeof RegularLayoutAuthenticatedProfileLazyRoute
+  '/auth/forgot-password': typeof RegularLayoutAuthForgotPasswordLazyRoute
+  '/auth/sign-in': typeof RegularLayoutAuthSignInLazyRoute
+  '/auth/sign-up': typeof RegularLayoutAuthSignUpLazyRoute
+  '/admin/': typeof AuthenticatedAdminIndexLazyRoute
+  '/admin/categories/create': typeof AuthenticatedAdminCategoriesCreateLazyRoute
+  '/admin/products/create': typeof AuthenticatedAdminProductsCreateLazyRoute
+  '/admin/products/update': typeof AuthenticatedAdminProductsUpdateLazyRoute
+  '/admin/categories': typeof AuthenticatedAdminCategoriesIndexLazyRoute
+  '/admin/products': typeof AuthenticatedAdminProductsIndexLazyRoute
+  '/admin/categories/update/{-$categoryId}': typeof AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/auth': typeof AuthRouteRouteWithChildren
-  '/catalog': typeof CatalogRoute
-  '/conditions': typeof ConditionsLazyRoute
-  '/contacts': typeof ContactsLazyRoute
-  '/delivery': typeof DeliveryLazyRoute
-  '/payment': typeof PaymentLazyRoute
-  '/auth/account-verification': typeof AuthAccountVerificationRoute
-  '/auth/reset-password': typeof AuthResetPasswordRoute
-  '/auth/vk': typeof AuthVkRoute
-  '/basket': typeof AuthenticatedBasketLazyRoute
-  '/favorite': typeof AuthenticatedFavoriteLazyRoute
-  '/profile': typeof AuthenticatedProfileLazyRoute
-  '/auth/forgot-password': typeof AuthForgotPasswordLazyRoute
-  '/auth/sign-in': typeof AuthSignInLazyRoute
-  '/auth/sign-up': typeof AuthSignUpLazyRoute
+  '/auth': typeof RegularLayoutAuthRouteRouteWithChildren
+  '/catalog': typeof RegularLayoutCatalogRouteLazyRouteWithChildren
+  '/conditions': typeof RegularLayoutConditionsLazyRoute
+  '/contacts': typeof RegularLayoutContactsLazyRoute
+  '/delivery': typeof RegularLayoutDeliveryLazyRoute
+  '/payment': typeof RegularLayoutPaymentLazyRoute
+  '/': typeof RegularLayoutIndexRoute
+  '/auth/account-verification': typeof RegularLayoutAuthAccountVerificationRoute
+  '/auth/reset-password': typeof RegularLayoutAuthResetPasswordRoute
+  '/catalog/$catalogPath': typeof RegularLayoutCatalogCatalogPathRoute
+  '/basket': typeof RegularLayoutAuthenticatedBasketLazyRoute
+  '/favorite': typeof RegularLayoutAuthenticatedFavoriteLazyRoute
+  '/profile': typeof RegularLayoutAuthenticatedProfileLazyRoute
+  '/auth/forgot-password': typeof RegularLayoutAuthForgotPasswordLazyRoute
+  '/auth/sign-in': typeof RegularLayoutAuthSignInLazyRoute
+  '/auth/sign-up': typeof RegularLayoutAuthSignUpLazyRoute
+  '/admin': typeof AuthenticatedAdminIndexLazyRoute
+  '/admin/categories/create': typeof AuthenticatedAdminCategoriesCreateLazyRoute
+  '/admin/products/create': typeof AuthenticatedAdminProductsCreateLazyRoute
+  '/admin/products/update': typeof AuthenticatedAdminProductsUpdateLazyRoute
+  '/admin/categories': typeof AuthenticatedAdminCategoriesIndexLazyRoute
+  '/admin/products': typeof AuthenticatedAdminProductsIndexLazyRoute
+  '/admin/categories/update/{-$categoryId}': typeof AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/auth': typeof AuthRouteRouteWithChildren
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/catalog': typeof CatalogRoute
-  '/conditions': typeof ConditionsLazyRoute
-  '/contacts': typeof ContactsLazyRoute
-  '/delivery': typeof DeliveryLazyRoute
-  '/payment': typeof PaymentLazyRoute
-  '/auth/account-verification': typeof AuthAccountVerificationRoute
-  '/auth/reset-password': typeof AuthResetPasswordRoute
-  '/auth/vk': typeof AuthVkRoute
-  '/_authenticated/basket': typeof AuthenticatedBasketLazyRoute
-  '/_authenticated/favorite': typeof AuthenticatedFavoriteLazyRoute
-  '/_authenticated/profile': typeof AuthenticatedProfileLazyRoute
-  '/auth/forgot-password': typeof AuthForgotPasswordLazyRoute
-  '/auth/sign-in': typeof AuthSignInLazyRoute
-  '/auth/sign-up': typeof AuthSignUpLazyRoute
+  '/_regularLayout': typeof RegularLayoutRouteWithChildren
+  '/_regularLayout/auth': typeof RegularLayoutAuthRouteRouteWithChildren
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteLazyRouteWithChildren
+  '/_regularLayout/catalog': typeof RegularLayoutCatalogRouteLazyRouteWithChildren
+  '/_regularLayout/conditions': typeof RegularLayoutConditionsLazyRoute
+  '/_regularLayout/contacts': typeof RegularLayoutContactsLazyRoute
+  '/_regularLayout/delivery': typeof RegularLayoutDeliveryLazyRoute
+  '/_regularLayout/payment': typeof RegularLayoutPaymentLazyRoute
+  '/_regularLayout/': typeof RegularLayoutIndexRoute
+  '/_regularLayout/auth/account-verification': typeof RegularLayoutAuthAccountVerificationRoute
+  '/_regularLayout/auth/reset-password': typeof RegularLayoutAuthResetPasswordRoute
+  '/_regularLayout/catalog/$catalogPath': typeof RegularLayoutCatalogCatalogPathRoute
+  '/_regularLayout/_authenticated/basket': typeof RegularLayoutAuthenticatedBasketLazyRoute
+  '/_regularLayout/_authenticated/favorite': typeof RegularLayoutAuthenticatedFavoriteLazyRoute
+  '/_regularLayout/_authenticated/profile': typeof RegularLayoutAuthenticatedProfileLazyRoute
+  '/_regularLayout/auth/forgot-password': typeof RegularLayoutAuthForgotPasswordLazyRoute
+  '/_regularLayout/auth/sign-in': typeof RegularLayoutAuthSignInLazyRoute
+  '/_regularLayout/auth/sign-up': typeof RegularLayoutAuthSignUpLazyRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexLazyRoute
+  '/_authenticated/admin/categories/create': typeof AuthenticatedAdminCategoriesCreateLazyRoute
+  '/_authenticated/admin/products/create': typeof AuthenticatedAdminProductsCreateLazyRoute
+  '/_authenticated/admin/products/update': typeof AuthenticatedAdminProductsUpdateLazyRoute
+  '/_authenticated/admin/categories/': typeof AuthenticatedAdminCategoriesIndexLazyRoute
+  '/_authenticated/admin/products/': typeof AuthenticatedAdminProductsIndexLazyRoute
+  '/_authenticated/admin/categories/update/{-$categoryId}': typeof AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/auth'
+    | '/admin'
     | '/catalog'
     | '/conditions'
     | '/contacts'
     | '/delivery'
     | '/payment'
+    | '/'
     | '/auth/account-verification'
     | '/auth/reset-password'
-    | '/auth/vk'
+    | '/catalog/$catalogPath'
     | '/basket'
     | '/favorite'
     | '/profile'
     | '/auth/forgot-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/admin/'
+    | '/admin/categories/create'
+    | '/admin/products/create'
+    | '/admin/products/update'
+    | '/admin/categories'
+    | '/admin/products'
+    | '/admin/categories/update/{-$categoryId}'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/auth'
     | '/catalog'
     | '/conditions'
     | '/contacts'
     | '/delivery'
     | '/payment'
+    | '/'
     | '/auth/account-verification'
     | '/auth/reset-password'
-    | '/auth/vk'
+    | '/catalog/$catalogPath'
     | '/basket'
     | '/favorite'
     | '/profile'
     | '/auth/forgot-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/admin'
+    | '/admin/categories/create'
+    | '/admin/products/create'
+    | '/admin/products/update'
+    | '/admin/categories'
+    | '/admin/products'
+    | '/admin/categories/update/{-$categoryId}'
   id:
     | '__root__'
-    | '/'
-    | '/auth'
     | '/_authenticated'
-    | '/catalog'
-    | '/conditions'
-    | '/contacts'
-    | '/delivery'
-    | '/payment'
-    | '/auth/account-verification'
-    | '/auth/reset-password'
-    | '/auth/vk'
-    | '/_authenticated/basket'
-    | '/_authenticated/favorite'
-    | '/_authenticated/profile'
-    | '/auth/forgot-password'
-    | '/auth/sign-in'
-    | '/auth/sign-up'
+    | '/_regularLayout'
+    | '/_regularLayout/auth'
+    | '/_authenticated/admin'
+    | '/_regularLayout/catalog'
+    | '/_regularLayout/conditions'
+    | '/_regularLayout/contacts'
+    | '/_regularLayout/delivery'
+    | '/_regularLayout/payment'
+    | '/_regularLayout/'
+    | '/_regularLayout/auth/account-verification'
+    | '/_regularLayout/auth/reset-password'
+    | '/_regularLayout/catalog/$catalogPath'
+    | '/_regularLayout/_authenticated/basket'
+    | '/_regularLayout/_authenticated/favorite'
+    | '/_regularLayout/_authenticated/profile'
+    | '/_regularLayout/auth/forgot-password'
+    | '/_regularLayout/auth/sign-in'
+    | '/_regularLayout/auth/sign-up'
+    | '/_authenticated/admin/'
+    | '/_authenticated/admin/categories/create'
+    | '/_authenticated/admin/products/create'
+    | '/_authenticated/admin/products/update'
+    | '/_authenticated/admin/categories/'
+    | '/_authenticated/admin/products/'
+    | '/_authenticated/admin/categories/update/{-$categoryId}'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  CatalogRoute: typeof CatalogRoute
-  ConditionsLazyRoute: typeof ConditionsLazyRoute
-  ContactsLazyRoute: typeof ContactsLazyRoute
-  DeliveryLazyRoute: typeof DeliveryLazyRoute
-  PaymentLazyRoute: typeof PaymentLazyRoute
+  RegularLayoutRoute: typeof RegularLayoutRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/payment': {
-      id: '/payment'
-      path: '/payment'
-      fullPath: '/payment'
-      preLoaderRoute: typeof PaymentLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/delivery': {
-      id: '/delivery'
-      path: '/delivery'
-      fullPath: '/delivery'
-      preLoaderRoute: typeof DeliveryLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contacts': {
-      id: '/contacts'
-      path: '/contacts'
-      fullPath: '/contacts'
-      preLoaderRoute: typeof ContactsLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/conditions': {
-      id: '/conditions'
-      path: '/conditions'
-      fullPath: '/conditions'
-      preLoaderRoute: typeof ConditionsLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/catalog': {
-      id: '/catalog'
-      path: '/catalog'
-      fullPath: '/catalog'
-      preLoaderRoute: typeof CatalogRouteImport
+    '/_regularLayout': {
+      id: '/_regularLayout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof RegularLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -302,133 +470,297 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
+    '/_regularLayout/': {
+      id: '/_regularLayout/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof RegularLayoutIndexRouteImport
+      parentRoute: typeof RegularLayoutRoute
     }
-    '/auth/sign-up': {
-      id: '/auth/sign-up'
+    '/_regularLayout/payment': {
+      id: '/_regularLayout/payment'
+      path: '/payment'
+      fullPath: '/payment'
+      preLoaderRoute: typeof RegularLayoutPaymentLazyRouteImport
+      parentRoute: typeof RegularLayoutRoute
+    }
+    '/_regularLayout/delivery': {
+      id: '/_regularLayout/delivery'
+      path: '/delivery'
+      fullPath: '/delivery'
+      preLoaderRoute: typeof RegularLayoutDeliveryLazyRouteImport
+      parentRoute: typeof RegularLayoutRoute
+    }
+    '/_regularLayout/contacts': {
+      id: '/_regularLayout/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof RegularLayoutContactsLazyRouteImport
+      parentRoute: typeof RegularLayoutRoute
+    }
+    '/_regularLayout/conditions': {
+      id: '/_regularLayout/conditions'
+      path: '/conditions'
+      fullPath: '/conditions'
+      preLoaderRoute: typeof RegularLayoutConditionsLazyRouteImport
+      parentRoute: typeof RegularLayoutRoute
+    }
+    '/_regularLayout/catalog': {
+      id: '/_regularLayout/catalog'
+      path: '/catalog'
+      fullPath: '/catalog'
+      preLoaderRoute: typeof RegularLayoutCatalogRouteLazyRouteImport
+      parentRoute: typeof RegularLayoutRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteLazyRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_regularLayout/auth': {
+      id: '/_regularLayout/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof RegularLayoutAuthRouteRouteImport
+      parentRoute: typeof RegularLayoutRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexLazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
+    '/_regularLayout/auth/sign-up': {
+      id: '/_regularLayout/auth/sign-up'
       path: '/sign-up'
       fullPath: '/auth/sign-up'
-      preLoaderRoute: typeof AuthSignUpLazyRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof RegularLayoutAuthSignUpLazyRouteImport
+      parentRoute: typeof RegularLayoutAuthRouteRoute
     }
-    '/auth/sign-in': {
-      id: '/auth/sign-in'
+    '/_regularLayout/auth/sign-in': {
+      id: '/_regularLayout/auth/sign-in'
       path: '/sign-in'
       fullPath: '/auth/sign-in'
-      preLoaderRoute: typeof AuthSignInLazyRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof RegularLayoutAuthSignInLazyRouteImport
+      parentRoute: typeof RegularLayoutAuthRouteRoute
     }
-    '/auth/forgot-password': {
-      id: '/auth/forgot-password'
+    '/_regularLayout/auth/forgot-password': {
+      id: '/_regularLayout/auth/forgot-password'
       path: '/forgot-password'
       fullPath: '/auth/forgot-password'
-      preLoaderRoute: typeof AuthForgotPasswordLazyRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof RegularLayoutAuthForgotPasswordLazyRouteImport
+      parentRoute: typeof RegularLayoutAuthRouteRoute
     }
-    '/_authenticated/profile': {
-      id: '/_authenticated/profile'
+    '/_regularLayout/_authenticated/profile': {
+      id: '/_regularLayout/_authenticated/profile'
       path: '/profile'
       fullPath: '/profile'
-      preLoaderRoute: typeof AuthenticatedProfileLazyRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof RegularLayoutAuthenticatedProfileLazyRouteImport
+      parentRoute: typeof RegularLayoutRoute
     }
-    '/_authenticated/favorite': {
-      id: '/_authenticated/favorite'
+    '/_regularLayout/_authenticated/favorite': {
+      id: '/_regularLayout/_authenticated/favorite'
       path: '/favorite'
       fullPath: '/favorite'
-      preLoaderRoute: typeof AuthenticatedFavoriteLazyRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof RegularLayoutAuthenticatedFavoriteLazyRouteImport
+      parentRoute: typeof RegularLayoutRoute
     }
-    '/_authenticated/basket': {
-      id: '/_authenticated/basket'
+    '/_regularLayout/_authenticated/basket': {
+      id: '/_regularLayout/_authenticated/basket'
       path: '/basket'
       fullPath: '/basket'
-      preLoaderRoute: typeof AuthenticatedBasketLazyRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof RegularLayoutAuthenticatedBasketLazyRouteImport
+      parentRoute: typeof RegularLayoutRoute
     }
-    '/auth/vk': {
-      id: '/auth/vk'
-      path: '/vk'
-      fullPath: '/auth/vk'
-      preLoaderRoute: typeof AuthVkRouteImport
-      parentRoute: typeof AuthRouteRoute
+    '/_regularLayout/catalog/$catalogPath': {
+      id: '/_regularLayout/catalog/$catalogPath'
+      path: '/$catalogPath'
+      fullPath: '/catalog/$catalogPath'
+      preLoaderRoute: typeof RegularLayoutCatalogCatalogPathRouteImport
+      parentRoute: typeof RegularLayoutCatalogRouteLazyRoute
     }
-    '/auth/reset-password': {
-      id: '/auth/reset-password'
+    '/_regularLayout/auth/reset-password': {
+      id: '/_regularLayout/auth/reset-password'
       path: '/reset-password'
       fullPath: '/auth/reset-password'
-      preLoaderRoute: typeof AuthResetPasswordRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof RegularLayoutAuthResetPasswordRouteImport
+      parentRoute: typeof RegularLayoutAuthRouteRoute
     }
-    '/auth/account-verification': {
-      id: '/auth/account-verification'
+    '/_regularLayout/auth/account-verification': {
+      id: '/_regularLayout/auth/account-verification'
       path: '/account-verification'
       fullPath: '/auth/account-verification'
-      preLoaderRoute: typeof AuthAccountVerificationRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof RegularLayoutAuthAccountVerificationRouteImport
+      parentRoute: typeof RegularLayoutAuthRouteRoute
+    }
+    '/_authenticated/admin/products/': {
+      id: '/_authenticated/admin/products/'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AuthenticatedAdminProductsIndexLazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
+    '/_authenticated/admin/categories/': {
+      id: '/_authenticated/admin/categories/'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AuthenticatedAdminCategoriesIndexLazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
+    '/_authenticated/admin/products/update': {
+      id: '/_authenticated/admin/products/update'
+      path: '/products/update'
+      fullPath: '/admin/products/update'
+      preLoaderRoute: typeof AuthenticatedAdminProductsUpdateLazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
+    '/_authenticated/admin/products/create': {
+      id: '/_authenticated/admin/products/create'
+      path: '/products/create'
+      fullPath: '/admin/products/create'
+      preLoaderRoute: typeof AuthenticatedAdminProductsCreateLazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
+    '/_authenticated/admin/categories/create': {
+      id: '/_authenticated/admin/categories/create'
+      path: '/categories/create'
+      fullPath: '/admin/categories/create'
+      preLoaderRoute: typeof AuthenticatedAdminCategoriesCreateLazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
+    '/_authenticated/admin/categories/update/{-$categoryId}': {
+      id: '/_authenticated/admin/categories/update/{-$categoryId}'
+      path: '/categories/update/{-$categoryId}'
+      fullPath: '/admin/categories/update/{-$categoryId}'
+      preLoaderRoute: typeof AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
     }
   }
 }
 
-interface AuthRouteRouteChildren {
-  AuthAccountVerificationRoute: typeof AuthAccountVerificationRoute
-  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
-  AuthVkRoute: typeof AuthVkRoute
-  AuthForgotPasswordLazyRoute: typeof AuthForgotPasswordLazyRoute
-  AuthSignInLazyRoute: typeof AuthSignInLazyRoute
-  AuthSignUpLazyRoute: typeof AuthSignUpLazyRoute
+interface AuthenticatedAdminRouteLazyRouteChildren {
+  AuthenticatedAdminIndexLazyRoute: typeof AuthenticatedAdminIndexLazyRoute
+  AuthenticatedAdminCategoriesCreateLazyRoute: typeof AuthenticatedAdminCategoriesCreateLazyRoute
+  AuthenticatedAdminProductsCreateLazyRoute: typeof AuthenticatedAdminProductsCreateLazyRoute
+  AuthenticatedAdminProductsUpdateLazyRoute: typeof AuthenticatedAdminProductsUpdateLazyRoute
+  AuthenticatedAdminCategoriesIndexLazyRoute: typeof AuthenticatedAdminCategoriesIndexLazyRoute
+  AuthenticatedAdminProductsIndexLazyRoute: typeof AuthenticatedAdminProductsIndexLazyRoute
+  AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute: typeof AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute
 }
 
-const AuthRouteRouteChildren: AuthRouteRouteChildren = {
-  AuthAccountVerificationRoute: AuthAccountVerificationRoute,
-  AuthResetPasswordRoute: AuthResetPasswordRoute,
-  AuthVkRoute: AuthVkRoute,
-  AuthForgotPasswordLazyRoute: AuthForgotPasswordLazyRoute,
-  AuthSignInLazyRoute: AuthSignInLazyRoute,
-  AuthSignUpLazyRoute: AuthSignUpLazyRoute,
-}
+const AuthenticatedAdminRouteLazyRouteChildren: AuthenticatedAdminRouteLazyRouteChildren =
+  {
+    AuthenticatedAdminIndexLazyRoute: AuthenticatedAdminIndexLazyRoute,
+    AuthenticatedAdminCategoriesCreateLazyRoute:
+      AuthenticatedAdminCategoriesCreateLazyRoute,
+    AuthenticatedAdminProductsCreateLazyRoute:
+      AuthenticatedAdminProductsCreateLazyRoute,
+    AuthenticatedAdminProductsUpdateLazyRoute:
+      AuthenticatedAdminProductsUpdateLazyRoute,
+    AuthenticatedAdminCategoriesIndexLazyRoute:
+      AuthenticatedAdminCategoriesIndexLazyRoute,
+    AuthenticatedAdminProductsIndexLazyRoute:
+      AuthenticatedAdminProductsIndexLazyRoute,
+    AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute:
+      AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute,
+  }
 
-const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
-  AuthRouteRouteChildren,
-)
+const AuthenticatedAdminRouteLazyRouteWithChildren =
+  AuthenticatedAdminRouteLazyRoute._addFileChildren(
+    AuthenticatedAdminRouteLazyRouteChildren,
+  )
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedBasketLazyRoute: typeof AuthenticatedBasketLazyRoute
-  AuthenticatedFavoriteLazyRoute: typeof AuthenticatedFavoriteLazyRoute
-  AuthenticatedProfileLazyRoute: typeof AuthenticatedProfileLazyRoute
+  AuthenticatedAdminRouteLazyRoute: typeof AuthenticatedAdminRouteLazyRouteWithChildren
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedBasketLazyRoute: AuthenticatedBasketLazyRoute,
-  AuthenticatedFavoriteLazyRoute: AuthenticatedFavoriteLazyRoute,
-  AuthenticatedProfileLazyRoute: AuthenticatedProfileLazyRoute,
+  AuthenticatedAdminRouteLazyRoute:
+    AuthenticatedAdminRouteLazyRouteWithChildren,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface RegularLayoutAuthRouteRouteChildren {
+  RegularLayoutAuthAccountVerificationRoute: typeof RegularLayoutAuthAccountVerificationRoute
+  RegularLayoutAuthResetPasswordRoute: typeof RegularLayoutAuthResetPasswordRoute
+  RegularLayoutAuthForgotPasswordLazyRoute: typeof RegularLayoutAuthForgotPasswordLazyRoute
+  RegularLayoutAuthSignInLazyRoute: typeof RegularLayoutAuthSignInLazyRoute
+  RegularLayoutAuthSignUpLazyRoute: typeof RegularLayoutAuthSignUpLazyRoute
+}
+
+const RegularLayoutAuthRouteRouteChildren: RegularLayoutAuthRouteRouteChildren =
+  {
+    RegularLayoutAuthAccountVerificationRoute:
+      RegularLayoutAuthAccountVerificationRoute,
+    RegularLayoutAuthResetPasswordRoute: RegularLayoutAuthResetPasswordRoute,
+    RegularLayoutAuthForgotPasswordLazyRoute:
+      RegularLayoutAuthForgotPasswordLazyRoute,
+    RegularLayoutAuthSignInLazyRoute: RegularLayoutAuthSignInLazyRoute,
+    RegularLayoutAuthSignUpLazyRoute: RegularLayoutAuthSignUpLazyRoute,
+  }
+
+const RegularLayoutAuthRouteRouteWithChildren =
+  RegularLayoutAuthRouteRoute._addFileChildren(
+    RegularLayoutAuthRouteRouteChildren,
+  )
+
+interface RegularLayoutCatalogRouteLazyRouteChildren {
+  RegularLayoutCatalogCatalogPathRoute: typeof RegularLayoutCatalogCatalogPathRoute
+}
+
+const RegularLayoutCatalogRouteLazyRouteChildren: RegularLayoutCatalogRouteLazyRouteChildren =
+  {
+    RegularLayoutCatalogCatalogPathRoute: RegularLayoutCatalogCatalogPathRoute,
+  }
+
+const RegularLayoutCatalogRouteLazyRouteWithChildren =
+  RegularLayoutCatalogRouteLazyRoute._addFileChildren(
+    RegularLayoutCatalogRouteLazyRouteChildren,
+  )
+
+interface RegularLayoutRouteChildren {
+  RegularLayoutAuthRouteRoute: typeof RegularLayoutAuthRouteRouteWithChildren
+  RegularLayoutCatalogRouteLazyRoute: typeof RegularLayoutCatalogRouteLazyRouteWithChildren
+  RegularLayoutConditionsLazyRoute: typeof RegularLayoutConditionsLazyRoute
+  RegularLayoutContactsLazyRoute: typeof RegularLayoutContactsLazyRoute
+  RegularLayoutDeliveryLazyRoute: typeof RegularLayoutDeliveryLazyRoute
+  RegularLayoutPaymentLazyRoute: typeof RegularLayoutPaymentLazyRoute
+  RegularLayoutIndexRoute: typeof RegularLayoutIndexRoute
+  RegularLayoutAuthenticatedBasketLazyRoute: typeof RegularLayoutAuthenticatedBasketLazyRoute
+  RegularLayoutAuthenticatedFavoriteLazyRoute: typeof RegularLayoutAuthenticatedFavoriteLazyRoute
+  RegularLayoutAuthenticatedProfileLazyRoute: typeof RegularLayoutAuthenticatedProfileLazyRoute
+}
+
+const RegularLayoutRouteChildren: RegularLayoutRouteChildren = {
+  RegularLayoutAuthRouteRoute: RegularLayoutAuthRouteRouteWithChildren,
+  RegularLayoutCatalogRouteLazyRoute:
+    RegularLayoutCatalogRouteLazyRouteWithChildren,
+  RegularLayoutConditionsLazyRoute: RegularLayoutConditionsLazyRoute,
+  RegularLayoutContactsLazyRoute: RegularLayoutContactsLazyRoute,
+  RegularLayoutDeliveryLazyRoute: RegularLayoutDeliveryLazyRoute,
+  RegularLayoutPaymentLazyRoute: RegularLayoutPaymentLazyRoute,
+  RegularLayoutIndexRoute: RegularLayoutIndexRoute,
+  RegularLayoutAuthenticatedBasketLazyRoute:
+    RegularLayoutAuthenticatedBasketLazyRoute,
+  RegularLayoutAuthenticatedFavoriteLazyRoute:
+    RegularLayoutAuthenticatedFavoriteLazyRoute,
+  RegularLayoutAuthenticatedProfileLazyRoute:
+    RegularLayoutAuthenticatedProfileLazyRoute,
+}
+
+const RegularLayoutRouteWithChildren = RegularLayoutRoute._addFileChildren(
+  RegularLayoutRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AuthRouteRoute: AuthRouteRouteWithChildren,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  CatalogRoute: CatalogRoute,
-  ConditionsLazyRoute: ConditionsLazyRoute,
-  ContactsLazyRoute: ContactsLazyRoute,
-  DeliveryLazyRoute: DeliveryLazyRoute,
-  PaymentLazyRoute: PaymentLazyRoute,
+  RegularLayoutRoute: RegularLayoutRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

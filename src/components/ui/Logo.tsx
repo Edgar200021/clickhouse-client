@@ -5,11 +5,12 @@ import { cn } from "@/lib/utils";
 
 type Props = {
 	className?: string;
+	to?: (typeof Routes)["Main"] | (typeof Routes)["Admin"]["Base"];
 };
 
-export const Logo = ({ className }: Props) => {
+export const Logo = ({ className, to = Routes.Main }: Props) => {
 	return (
-		<Link to={Routes.Main} className={cn("", className)}>
+		<Link to={to} className={cn("", className)}>
 			<img
 				height={40}
 				width={140}

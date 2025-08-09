@@ -1,16 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
 import { Controller, useForm } from "react-hook-form";
+import { Routes } from "@/const/routes";
 import { cn } from "@/lib/utils";
 import {
 	type UpdateProfileSchema,
 	updateProfileSchema,
 } from "@/schemas/api/user/updateProfile.schema";
+import { useLogoutMutation } from "@/store/auth/authApi";
 import { Button } from "../ui/button";
 import { FieldErrors } from "../ui/FieldErrors";
 import { Input } from "../ui/input";
-import { useLogoutMutation } from "@/store/auth/authApi";
-import { useNavigate } from "@tanstack/react-router";
-import { Routes } from "@/const/routes";
 
 type Props = {
 	className?: string;

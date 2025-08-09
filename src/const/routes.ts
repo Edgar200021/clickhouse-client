@@ -8,6 +8,7 @@ export const Routes = {
 		AccountVerification: "/auth/account-verification",
 	},
 	Catalog: "/catalog",
+	SpecificCatalog: "/catalog/$catalogPath",
 	Delivery: "/delivery",
 	Payment: "/payment",
 	Conditions: "/conditions",
@@ -15,4 +16,13 @@ export const Routes = {
 	Favorite: "/favorite",
 	Basket: "/basket",
 	Profile: "/profile",
+	Admin: {
+		Base: "/admin",
+		Categories: "/admin/categories",
+		CategoriesCreate: "/admin/categories/create",
+		CategoriesUpdate: "/admin/categories/update/{-$categoryId}",
+		Products: "/admin/products",
+		ProductsCreate: "/admin/products/create",
+		ProductsUpdate: "/admin/products/update",
+	},
 } as const;

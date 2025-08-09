@@ -1,0 +1,12 @@
+import { createLazyFileRoute } from "@tanstack/react-router";
+import { Routes } from "@/const/routes";
+
+export const Route = createLazyFileRoute(`/_regularLayout${Routes.Conditions}`)(
+	{
+		component: RouteComponent,
+	},
+);
+
+function RouteComponent() {
+	return <div>Hello "/conditions"!</div>;
+}

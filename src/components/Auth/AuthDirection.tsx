@@ -16,9 +16,10 @@ import { Routes } from "@/const/routes";
 import { cn } from "@/lib/utils";
 import { authSelectors } from "@/store/auth/authSlice";
 import { useAppSelector } from "@/store/store";
-import { ForgotPasswordForm } from "../forms/ForgotPasswordForm";
-import { SignInForm } from "../forms/SignInForm";
-import { SignUpForm } from "../forms/SignUpForm";
+import { UserRole } from "@/types/user";
+import { ForgotPasswordForm } from "../forms/auth/ForgotPasswordForm";
+import { SignInForm } from "../forms/auth/SignInForm";
+import { SignUpForm } from "../forms/auth/SignUpForm";
 import { Notification, type NotificationVariants } from "../Notification";
 import { Button } from "../ui/button";
 import { OAuth2 } from "./OAuth2";
@@ -108,17 +109,20 @@ export const AuthDirection = ({ className }: Props) => {
 						)}
 						{type === "signIn" && (
 							<SignInForm
-								onSuccess={() => {
+								onSuccess={(user) => {
 									setOpen(false);
-									if (redirect) {
-										return navigate({
-											replace: true,
-											to: redirect,
-											search: (prev) => ({ ...prev, redirect: undefined }),
-										});
-									}
-
-									navigate({ to: Routes.Profile });
+									navigate({
+										to:
+											user.role === UserRole.Admin
+												? Routes.Admin.Base
+												: redirect
+													? redirect
+													: Routes.Profile,
+										replace: !!redirect,
+										...(redirect
+											? { search: (prev) => ({ ...prev, redirect: undefined }) }
+											: {}),
+									});
 								}}
 								className="px-0"
 							/>

@@ -42,7 +42,7 @@ const ClearSearch = ({
 					dispatch(productActions.setFiltersSearch(""));
 					navigate({
 						to: Routes.Catalog,
-						search: (prev) => ({ ...prev, search: undefined }),
+						// search: (prev) => ({ ...prev, search: undefined }),
 					});
 				}
 			}}
@@ -83,9 +83,7 @@ export const ProductSearch = ({ className }: Props) => {
 					className="top-[5%] bg-transparent shadow-none border-none items-start pt-0 p-0"
 				>
 					<DialogHeader className="!min-f-full !w-full">
-						<DialogTitle className="hidden">
-							Are you absolutely sure?
-						</DialogTitle>
+						<DialogTitle className="hidden">,,,</DialogTitle>
 						<DialogDescription className="hidden"></DialogDescription>
 					</DialogHeader>
 					<Button
@@ -104,7 +102,6 @@ export const ProductSearch = ({ className }: Props) => {
 							setOpen(false);
 							navigate({
 								to: Routes.Catalog,
-								search: (prev) => ({ ...prev, search }),
 							});
 						}}
 						className={cn(
