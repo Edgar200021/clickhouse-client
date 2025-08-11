@@ -38,7 +38,7 @@ export const useHandleError = <T extends string[]>(
 					? err.message
 					: "Что-то пошло не так",
 		);
-	}, [error, options.disabled]);
+	}, [error, options?.disabled]);
 
 	const setValidationError = useCallback((key: T[number], message: string) => {
 		setApiValidationErrors((prev) => ({ ...prev, [key]: message }));

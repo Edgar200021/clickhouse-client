@@ -1,8 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { FieldErrors } from "@/components/ui/FieldErrors";
 import { Input } from "@/components/ui/input";
+import { useHandleError } from "@/hooks/useHandleError";
 import { cn } from "@/lib/utils";
 import {
 	type ResetPasswordSchema,
@@ -29,8 +32,11 @@ export const ResetPasswordForm = ({ className, onSuccess, token }: Props) => {
 			token,
 		},
 	});
-
-	const [resetPassword, { isLoading }] = useResetPasswordMutation();
+	const [resetPassword, { isLoading, error }] = useResetPasswordMutation();
+	const { apiValidationErrors } =
+		useHandleError<(keyof Omit<ResetPasswordSchema, "newPasswordConfirm">)[]>(
+			error,
+		);
 
 	const onSubmit = async (data: ResetPasswordSchema) => {
 		await resetPassword({
@@ -39,6 +45,12 @@ export const ResetPasswordForm = ({ className, onSuccess, token }: Props) => {
 		}).unwrap();
 		onSuccess?.();
 	};
+
+	useEffect(() => {
+		if (!apiValidationErrors.token) return;
+
+		toast.error(apiValidationErrors.token);
+	}, [apiValidationErrors.token]);
 
 	return (
 		<form
@@ -69,8 +81,14 @@ export const ResetPasswordForm = ({ className, onSuccess, token }: Props) => {
 									}}
 									value={value}
 								/>
-								{errors.newPassword?.message && (
-									<FieldErrors error={errors.newPassword.message} />
+								{(errors.newPassword?.message ||
+									apiValidationErrors.newPassword) && (
+									<FieldErrors
+										error={
+											errors.newPassword?.message ||
+											apiValidationErrors.newPassword!
+										}
+									/>
 								)}
 							</div>
 						)}

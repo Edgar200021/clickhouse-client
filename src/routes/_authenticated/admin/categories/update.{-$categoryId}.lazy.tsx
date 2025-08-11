@@ -1,6 +1,8 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import toast from "react-hot-toast";
 import { AdminCategoryList } from "@/components/Admin/Category/AdminCategoryList";
 import { AdminCategorySearch } from "@/components/Admin/Category/AdminCategorySearch";
+import { UpdateCategoryForm } from "@/components/Admin/forms/category/UpdateCategoryForm";
 import { Routes } from "@/const/routes";
 import { categorySelectors } from "@/store/category/categorySlice";
 import { useAppSelector } from "@/store/store";
@@ -32,11 +34,13 @@ function RouteComponent() {
 			</div>
 		);
 	}
-
 	return (
 		<div className="flex flex-col gap-y-20">
 			<h1 className="text-4xl font-bold">Обновление категории</h1>
-			Hello "/_authenticated/admin/categories/update"!
+			<UpdateCategoryForm
+				category={category}
+				onSuccess={() => toast.success("Category successfully updated")}
+			/>
 		</div>
 	);
 }

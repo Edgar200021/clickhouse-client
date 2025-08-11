@@ -1,6 +1,7 @@
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { Toaster } from "react-hot-toast";
 import { Spinner } from "./components/ui/Spinner";
+import { useHandleError } from "./hooks/useHandleError";
 import { routeTree } from "./routeTree.gen";
 import { authSelectors } from "./store/auth/authSlice";
 import { useGetCategoriesQuery } from "./store/category/categoryApi";
@@ -21,7 +22,10 @@ declare module "@tanstack/react-router" {
 function App() {
 	const user = useAppSelector(authSelectors.getUser);
 	useGetCategoriesQuery(null);
-	const { isLoading } = useGetMeQuery(null);
+	const { isLoading, error } = useGetMeQuery(null);
+	useHandleError(error, {
+		disabled: error && (error as { status: number }).status === 401,
+	});
 
 	if (isLoading)
 		return (

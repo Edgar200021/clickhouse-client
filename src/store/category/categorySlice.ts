@@ -38,6 +38,12 @@ export const categorySlice = createSlice({
 		setCategory: (state, action: PayloadAction<Category>) => {
 			state.categories.push(action.payload);
 		},
+		updateCategory: (state, { payload }: PayloadAction<Category>) => {
+			const index = state.categories.findIndex((c) => c.id === payload.id);
+			if (index === -1) return;
+
+			state.categories[index] = payload;
+		},
 		setSearch: (state, action: PayloadAction<string>) => {
 			state.search = action.payload;
 

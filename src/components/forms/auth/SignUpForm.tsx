@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FieldErrors } from "@/components/ui/FieldErrors";
 import { Input } from "@/components/ui/input";
+import { useHandleError } from "@/hooks/useHandleError";
 import { cn } from "@/lib/utils";
 import {
 	type SignUpSchema,
@@ -31,7 +32,11 @@ export const SignUpForm = ({ className, onSuccess }: Props) => {
 		},
 	});
 
-	const [signUp, { isLoading }] = useSignUpMutation();
+	const [signUp, { isLoading, error }] = useSignUpMutation();
+	const { apiValidationErrors } =
+		useHandleError<
+			(keyof Omit<SignUpSchema, "passwordConfirm" | "personalDataConsent">)[]
+		>(error);
 
 	const onSubmit = async (data: SignUpSchema) => {
 		await signUp({ email: data.email, password: data.password }).unwrap();
@@ -59,8 +64,10 @@ export const SignUpForm = ({ className, onSuccess }: Props) => {
 									onChange={onChange}
 									value={value}
 								/>
-								{errors.email?.message && (
-									<FieldErrors error={errors.email.message} />
+								{(errors.email?.message || apiValidationErrors.email) && (
+									<FieldErrors
+										error={errors.email?.message || apiValidationErrors.email!}
+									/>
 								)}
 							</div>
 						)}
@@ -89,8 +96,12 @@ export const SignUpForm = ({ className, onSuccess }: Props) => {
 									value={value}
 								/>
 
-								{errors.password?.message && (
-									<FieldErrors error={errors.password.message} />
+								{(errors.password?.message || apiValidationErrors.password) && (
+									<FieldErrors
+										error={
+											errors.password?.message || apiValidationErrors.password!
+										}
+									/>
 								)}
 							</div>
 						)}

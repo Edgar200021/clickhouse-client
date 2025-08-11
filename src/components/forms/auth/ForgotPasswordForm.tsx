@@ -3,6 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { FieldErrors } from "@/components/ui/FieldErrors";
 import { Input } from "@/components/ui/input";
+import { useHandleError } from "@/hooks/useHandleError";
 import { cn } from "@/lib/utils";
 import {
 	type ForgotPasswordSchema,
@@ -26,8 +27,9 @@ export const ForgotPasswordForm = ({ className, onSuccess }: Props) => {
 			email: "",
 		},
 	});
-
-	const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+	const [forgotPassword, { isLoading, error }] = useForgotPasswordMutation();
+	const { apiValidationErrors } =
+		useHandleError<(keyof ForgotPasswordSchema)[]>(error);
 
 	const onSubmit = async (data: ForgotPasswordSchema) => {
 		await forgotPassword(data).unwrap();
@@ -55,8 +57,10 @@ export const ForgotPasswordForm = ({ className, onSuccess }: Props) => {
 									onChange={onChange}
 									value={value}
 								/>
-								{errors.email?.message && (
-									<FieldErrors error={errors.email.message} />
+								{(errors.email?.message || apiValidationErrors.email) && (
+									<FieldErrors
+										error={errors.email?.message || apiValidationErrors.email!}
+									/>
 								)}
 							</div>
 						)}

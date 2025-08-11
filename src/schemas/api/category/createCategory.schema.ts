@@ -13,7 +13,7 @@ export const createCategorySchema = z.object({
 			"Поле должно содержать одно слово или две части, разделённые точкой, только латинские буквы.",
 		)
 		.optional(),
-	file: z
+	image: z
 		.file()
 		.mime(["image/jpeg", "image/png", "image/webp"])
 		.max(CategoryImageMaxSize),

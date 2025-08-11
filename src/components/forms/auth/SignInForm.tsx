@@ -3,6 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { FieldErrors } from "@/components/ui/FieldErrors";
 import { Input } from "@/components/ui/input";
+import { useHandleError } from "@/hooks/useHandleError";
 import { cn } from "@/lib/utils";
 import {
 	type SignInSchema,
@@ -28,8 +29,8 @@ export const SignInForm = ({ className, onSuccess }: Props) => {
 			password: "",
 		},
 	});
-
-	const [signIn, { isLoading }] = useSignInMutation();
+	const [signIn, { isLoading, error }] = useSignInMutation();
+	const { apiValidationErrors } = useHandleError<(keyof SignInSchema)[]>(error);
 
 	const onSubmit = async (data: SignInSchema) => {
 		const { data: user } = await signIn(data).unwrap();
@@ -57,8 +58,10 @@ export const SignInForm = ({ className, onSuccess }: Props) => {
 									onChange={onChange}
 									value={value}
 								/>
-								{errors.email?.message && (
-									<FieldErrors error={errors.email.message} />
+								{(errors.email?.message || apiValidationErrors.email) && (
+									<FieldErrors
+										error={errors.email?.message || apiValidationErrors.email!}
+									/>
 								)}
 							</div>
 						)}
@@ -79,8 +82,12 @@ export const SignInForm = ({ className, onSuccess }: Props) => {
 									value={value}
 								/>
 
-								{errors.password?.message && (
-									<FieldErrors error={errors.password.message} />
+								{(errors.password?.message || apiValidationErrors.password) && (
+									<FieldErrors
+										error={
+											errors.password?.message || apiValidationErrors.password!
+										}
+									/>
 								)}
 							</div>
 						)}

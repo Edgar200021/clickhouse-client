@@ -16,42 +16,58 @@ import {
 import { CategoryImageMaxSize } from "@/const/schema";
 import { useHandleError } from "@/hooks/useHandleError";
 import { cn } from "@/lib/utils";
+
 import {
-	type CreateCategorySchema,
-	createCategorySchema,
-} from "@/schemas/api/category/createCategory.schema";
-import { useCreateCategoryMutation } from "@/store/admin/adminApi";
+	type UpdateCategorySchema,
+	updateCategorySchema,
+} from "@/schemas/api/category/updateCategory.schema";
+import { useUpdateCategoryMutation } from "@/store/admin/adminApi";
 import { categorySelectors } from "@/store/category/categorySlice";
 import { useAppSelector } from "@/store/store";
+import type { Category } from "@/types/category";
 
 type Props = {
 	className?: string;
 	onSuccess?: () => void;
+	category: Category;
 };
 
-export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
+export const UpdateCategoryForm = ({
+	className,
+	onSuccess,
+	category,
+}: Props) => {
 	const categories = useAppSelector(categorySelectors.getGroupedCategories);
+	const path = category.path.includes(".")
+		? category.path.slice(category.path.lastIndexOf(".") + 1)
+		: category.path;
+
+	const predefinedPath = category.path.includes(".")
+		? category.path.slice(0, category.path.lastIndexOf("."))
+		: undefined;
+
 	const {
 		handleSubmit,
 		formState: { errors },
 		resetField,
 		reset,
 		control,
-	} = useForm<CreateCategorySchema>({
-		resolver: zodResolver(createCategorySchema),
+	} = useForm<UpdateCategorySchema>({
+		resolver: zodResolver(updateCategorySchema),
 		defaultValues: {
-			name: "",
-			path: "",
-			predefinedPath: undefined,
+			categoryId: category.id,
+			name: category.name,
+			path,
+			predefinedPath,
 		},
 	});
 
-	const [createCategory, { isLoading, error }] = useCreateCategoryMutation();
+	const [updateCategory, { isLoading, error }] = useUpdateCategoryMutation();
 
 	const [step, setStep] = useState<1 | 2>(1);
-	const [image, setImage] = useState<string | null>(null);
+	const [image, setImage] = useState<string | null>(category.imageUrl ?? null);
 	const { apiValidationErrors, clearError } = useHandleError<
-		(keyof CreateCategorySchema)[]
+		(keyof UpdateCategorySchema)[]
 	>(error, {
 		validationErrorCb: (err) => {
 			if (err.name || err.predefinedPath || err.path) {
@@ -64,26 +80,38 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 		},
 	});
 
-	console.log(image);
-
-	const onSubmit = async (data: CreateCategorySchema) => {
+	const onSubmit = async (data: UpdateCategorySchema) => {
 		clearError();
-		await createCategory({
-			...{
-				path: data.path,
-				name: data.name,
-				image: data.image,
-			},
-			...(data.predefinedPath && data.predefinedPath !== "null"
+
+		const { data: updatedCategory } = await updateCategory({
+			categoryId: data.categoryId,
+			...(data.name && data.name !== category.name ? { name: data.name } : {}),
+			...(image ? { image: data.image } : {}),
+			...(data.path && data.path !== path ? { path: data.path } : {}),
+			...(data.predefinedPath &&
+			data.predefinedPath !== predefinedPath &&
+			data.predefinedPath !== "null"
 				? { predefinedPath: data.predefinedPath }
 				: {}),
 		}).unwrap();
-		reset({ image: undefined, name: "", path: "", predefinedPath: undefined });
 
-		if (image) {
+		reset({
+			categoryId: category.id,
+			image: undefined,
+			name: updatedCategory.name,
+			path: updatedCategory.path.includes(".")
+				? updatedCategory.path.slice(updatedCategory.path.lastIndexOf(".") + 1)
+				: updatedCategory.path,
+			predefinedPath: updatedCategory.path.includes(".")
+				? updatedCategory.path.slice(0, updatedCategory.path.lastIndexOf("."))
+				: undefined,
+		});
+
+		if (image?.startsWith("blob")) {
 			URL.revokeObjectURL(image);
-			setImage(null);
 		}
+
+		setImage(updatedCategory.imageUrl ?? null);
 
 		setStep(1);
 		onSuccess?.();
@@ -91,7 +119,7 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 
 	useEffect(() => {
 		return () => {
-			if (!image) return;
+			if (!image || !image.startsWith("blob")) return;
 			URL.revokeObjectURL(image);
 		};
 	}, []);
@@ -124,7 +152,6 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 								control={control}
 								render={({ field: { onChange, value } }) => (
 									<div className="flex flex-col gap-y-1">
-										{/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
 										<label className="flex flex-col gap-y-3">
 											<span className=" text-xltext-xl">Название</span>
 											<Input
@@ -150,7 +177,6 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 								control={control}
 								render={({ field: { onChange, value } }) => (
 									<div className="flex flex-col gap-y-1">
-										{/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
 										<label className="flex flex-col gap-y-3">
 											<span className=" text-xltext-xl">Путь</span>
 											<Input
@@ -177,7 +203,6 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 								control={control}
 								render={({ field: { onChange, value } }) => (
 									<div className="flex flex-col gap-y-1">
-										{/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
 										<label className="flex flex-col gap-y-3">
 											<span className=" text-xltext-xl">
 												Базовый путь (опционально)
@@ -228,11 +253,14 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 								<div className="h-[400px] w-full rounded-md overflow-hidden relative">
 									<img className="w-full h-full" src={image} alt="file" />
 									<Button
+										type="button"
 										variant="ghost"
 										className="p-0 w-10 h-10 bg-black text-white rounded-full absolute right-3 top-3 cursor-pointer font-black"
 										onClick={() => {
 											resetField("image");
-											URL.revokeObjectURL(image);
+											if (image.startsWith("blob")) {
+												URL.revokeObjectURL(image);
+											}
 											setImage(null);
 										}}
 									>
@@ -257,7 +285,7 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 											if (!e.target.files) return;
 											onChange(e.target.files[0]);
 
-											if (image) {
+											if (image?.startsWith("blob")) {
 												URL.revokeObjectURL(image);
 											}
 
@@ -268,7 +296,12 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 							/>
 						))}
 
-					<Buttons step={step} setStep={setStep} control={control} />
+					<Buttons
+						category={category}
+						step={step}
+						setStep={setStep}
+						control={control}
+					/>
 				</fieldset>
 			</form>
 		</>
@@ -279,14 +312,21 @@ const Buttons = ({
 	control,
 	setStep,
 	step,
+	category,
 }: {
-	control: Control<CreateCategorySchema>;
+	control: Control<UpdateCategorySchema>;
 	step: number;
 	setStep: React.Dispatch<React.SetStateAction<1 | 2>>;
+	category: Category;
 }) => {
-	const { name, path, image } = useWatch({ control });
+	const { name, path, image, predefinedPath } = useWatch({ control });
+	const fullPath = `${predefinedPath ? `${predefinedPath}.` : ""}${path}`;
 
-	const disabled = step === 1 ? !name || !path : !image;
+	const disabled =
+		step === 2 &&
+		!image &&
+		name === category.name &&
+		fullPath === category.path;
 
 	return (
 		<div className="flex items-center justify-between">
@@ -308,7 +348,7 @@ const Buttons = ({
 				variant="default"
 				className="block bg-orange-400 hover:bg-orange-500 cursor-pointer w-full !min-w-[150px] max-w-fit py-2 h-fit ml-auto text-xl"
 			>
-				{step === 1 ? "Далее" : "Создать категорию"}
+				{step === 1 ? "Далее" : "Обновить категорию"}
 			</Button>
 		</div>
 	);

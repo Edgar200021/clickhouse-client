@@ -11,7 +11,9 @@ export const Route = createLazyFileRoute(
 
 function RouteComponent() {
 	return (
-		<div className="pt-80">
+		<div className="flex flex-col gap-y-20">
+			<h1 className="text-4xl font-bold">Обновление категории</h1>
+
 			<CreateCategoryForm
 				onSuccess={() => toast.success("Category successfully created")}
 			/>
