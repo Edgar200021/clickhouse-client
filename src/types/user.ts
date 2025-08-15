@@ -11,5 +11,16 @@ export type User = {
 	updatetAt: string;
 	role: UserRole;
 	isVerified: boolean;
-	email: Nullable<string>;
+	email: string;
+};
+
+export type AdminUser = {
+	id: string;
+	createdAt: string;
+	updatetAt: string;
+	isVerified: boolean;
+	isBanned: boolean;
+	email: string;
+	googleId: Nullable<string>;
+	facebookId: Nullable<string>;
 };

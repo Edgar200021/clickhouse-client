@@ -31,11 +31,11 @@ const RegularLayoutContactsLazyRouteImport = createFileRoute(
 const RegularLayoutConditionsLazyRouteImport = createFileRoute(
   '/_regularLayout/conditions',
 )()
-const RegularLayoutCatalogRouteLazyRouteImport = createFileRoute(
-  '/_regularLayout/catalog',
-)()
 const AuthenticatedAdminRouteLazyRouteImport = createFileRoute(
   '/_authenticated/admin',
+)()
+const RegularLayoutCatalogIndexLazyRouteImport = createFileRoute(
+  '/_regularLayout/catalog/',
 )()
 const AuthenticatedAdminIndexLazyRouteImport = createFileRoute(
   '/_authenticated/admin/',
@@ -58,21 +58,33 @@ const RegularLayoutAuthenticatedFavoriteLazyRouteImport = createFileRoute(
 const RegularLayoutAuthenticatedBasketLazyRouteImport = createFileRoute(
   '/_regularLayout/_authenticated/basket',
 )()
+const AuthenticatedAdminUsersIndexLazyRouteImport = createFileRoute(
+  '/_authenticated/admin/users/',
+)()
 const AuthenticatedAdminProductsIndexLazyRouteImport = createFileRoute(
   '/_authenticated/admin/products/',
+)()
+const AuthenticatedAdminManufacturersIndexLazyRouteImport = createFileRoute(
+  '/_authenticated/admin/manufacturers/',
 )()
 const AuthenticatedAdminCategoriesIndexLazyRouteImport = createFileRoute(
   '/_authenticated/admin/categories/',
 )()
-const AuthenticatedAdminProductsUpdateLazyRouteImport = createFileRoute(
-  '/_authenticated/admin/products/update',
-)()
 const AuthenticatedAdminProductsCreateLazyRouteImport = createFileRoute(
   '/_authenticated/admin/products/create',
+)()
+const AuthenticatedAdminManufacturersCreateLazyRouteImport = createFileRoute(
+  '/_authenticated/admin/manufacturers/create',
 )()
 const AuthenticatedAdminCategoriesCreateLazyRouteImport = createFileRoute(
   '/_authenticated/admin/categories/create',
 )()
+const AuthenticatedAdminProductsUpdateChar123ProductIdChar125LazyRouteImport =
+  createFileRoute('/_authenticated/admin/products/update/{-$productId}')()
+const AuthenticatedAdminManufacturersUpdateChar123ManufacturerIdChar125LazyRouteImport =
+  createFileRoute(
+    '/_authenticated/admin/manufacturers/update/{-$manufacturerId}',
+  )()
 const AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRouteImport =
   createFileRoute('/_authenticated/admin/categories/update/{-$categoryId}')()
 
@@ -121,14 +133,6 @@ const RegularLayoutConditionsLazyRoute =
   } as any).lazy(() =>
     import('./routes/_regularLayout/conditions.lazy').then((d) => d.Route),
   )
-const RegularLayoutCatalogRouteLazyRoute =
-  RegularLayoutCatalogRouteLazyRouteImport.update({
-    id: '/catalog',
-    path: '/catalog',
-    getParentRoute: () => RegularLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_regularLayout/catalog/route.lazy').then((d) => d.Route),
-  )
 const AuthenticatedAdminRouteLazyRoute =
   AuthenticatedAdminRouteLazyRouteImport.update({
     id: '/admin',
@@ -142,6 +146,14 @@ const RegularLayoutAuthRouteRoute = RegularLayoutAuthRouteRouteImport.update({
   path: '/auth',
   getParentRoute: () => RegularLayoutRoute,
 } as any)
+const RegularLayoutCatalogIndexLazyRoute =
+  RegularLayoutCatalogIndexLazyRouteImport.update({
+    id: '/catalog/',
+    path: '/catalog/',
+    getParentRoute: () => RegularLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_regularLayout/catalog/index.lazy').then((d) => d.Route),
+  )
 const AuthenticatedAdminIndexLazyRoute =
   AuthenticatedAdminIndexLazyRouteImport.update({
     id: '/',
@@ -208,9 +220,9 @@ const RegularLayoutAuthenticatedBasketLazyRoute =
   )
 const RegularLayoutCatalogCatalogPathRoute =
   RegularLayoutCatalogCatalogPathRouteImport.update({
-    id: '/$catalogPath',
-    path: '/$catalogPath',
-    getParentRoute: () => RegularLayoutCatalogRouteLazyRoute,
+    id: '/catalog/$catalogPath',
+    path: '/catalog/$catalogPath',
+    getParentRoute: () => RegularLayoutRoute,
   } as any)
 const RegularLayoutAuthResetPasswordRoute =
   RegularLayoutAuthResetPasswordRouteImport.update({
@@ -224,6 +236,16 @@ const RegularLayoutAuthAccountVerificationRoute =
     path: '/account-verification',
     getParentRoute: () => RegularLayoutAuthRouteRoute,
   } as any)
+const AuthenticatedAdminUsersIndexLazyRoute =
+  AuthenticatedAdminUsersIndexLazyRouteImport.update({
+    id: '/users/',
+    path: '/users/',
+    getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/admin/users/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const AuthenticatedAdminProductsIndexLazyRoute =
   AuthenticatedAdminProductsIndexLazyRouteImport.update({
     id: '/products/',
@@ -231,6 +253,16 @@ const AuthenticatedAdminProductsIndexLazyRoute =
     getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
   } as any).lazy(() =>
     import('./routes/_authenticated/admin/products/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const AuthenticatedAdminManufacturersIndexLazyRoute =
+  AuthenticatedAdminManufacturersIndexLazyRouteImport.update({
+    id: '/manufacturers/',
+    path: '/manufacturers/',
+    getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/admin/manufacturers/index.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -244,16 +276,6 @@ const AuthenticatedAdminCategoriesIndexLazyRoute =
       (d) => d.Route,
     ),
   )
-const AuthenticatedAdminProductsUpdateLazyRoute =
-  AuthenticatedAdminProductsUpdateLazyRouteImport.update({
-    id: '/products/update',
-    path: '/products/update',
-    getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
-  } as any).lazy(() =>
-    import('./routes/_authenticated/admin/products/update.lazy').then(
-      (d) => d.Route,
-    ),
-  )
 const AuthenticatedAdminProductsCreateLazyRoute =
   AuthenticatedAdminProductsCreateLazyRouteImport.update({
     id: '/products/create',
@@ -261,6 +283,16 @@ const AuthenticatedAdminProductsCreateLazyRoute =
     getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
   } as any).lazy(() =>
     import('./routes/_authenticated/admin/products/create.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const AuthenticatedAdminManufacturersCreateLazyRoute =
+  AuthenticatedAdminManufacturersCreateLazyRouteImport.update({
+    id: '/manufacturers/create',
+    path: '/manufacturers/create',
+    getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/admin/manufacturers/create.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -273,6 +305,30 @@ const AuthenticatedAdminCategoriesCreateLazyRoute =
     import('./routes/_authenticated/admin/categories/create.lazy').then(
       (d) => d.Route,
     ),
+  )
+const AuthenticatedAdminProductsUpdateChar123ProductIdChar125LazyRoute =
+  AuthenticatedAdminProductsUpdateChar123ProductIdChar125LazyRouteImport.update(
+    {
+      id: '/products/update/{-$productId}',
+      path: '/products/update/{-$productId}',
+      getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+    } as any,
+  ).lazy(() =>
+    import(
+      './routes/_authenticated/admin/products/update.{-$productId}.lazy'
+    ).then((d) => d.Route),
+  )
+const AuthenticatedAdminManufacturersUpdateChar123ManufacturerIdChar125LazyRoute =
+  AuthenticatedAdminManufacturersUpdateChar123ManufacturerIdChar125LazyRouteImport.update(
+    {
+      id: '/manufacturers/update/{-$manufacturerId}',
+      path: '/manufacturers/update/{-$manufacturerId}',
+      getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+    } as any,
+  ).lazy(() =>
+    import(
+      './routes/_authenticated/admin/manufacturers/update.{-$manufacturerId}.lazy'
+    ).then((d) => d.Route),
   )
 const AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute =
   AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRouteImport.update(
@@ -290,7 +346,6 @@ const AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute =
 export interface FileRoutesByFullPath {
   '/auth': typeof RegularLayoutAuthRouteRouteWithChildren
   '/admin': typeof AuthenticatedAdminRouteLazyRouteWithChildren
-  '/catalog': typeof RegularLayoutCatalogRouteLazyRouteWithChildren
   '/conditions': typeof RegularLayoutConditionsLazyRoute
   '/contacts': typeof RegularLayoutContactsLazyRoute
   '/delivery': typeof RegularLayoutDeliveryLazyRoute
@@ -306,16 +361,20 @@ export interface FileRoutesByFullPath {
   '/auth/sign-in': typeof RegularLayoutAuthSignInLazyRoute
   '/auth/sign-up': typeof RegularLayoutAuthSignUpLazyRoute
   '/admin/': typeof AuthenticatedAdminIndexLazyRoute
+  '/catalog': typeof RegularLayoutCatalogIndexLazyRoute
   '/admin/categories/create': typeof AuthenticatedAdminCategoriesCreateLazyRoute
+  '/admin/manufacturers/create': typeof AuthenticatedAdminManufacturersCreateLazyRoute
   '/admin/products/create': typeof AuthenticatedAdminProductsCreateLazyRoute
-  '/admin/products/update': typeof AuthenticatedAdminProductsUpdateLazyRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesIndexLazyRoute
+  '/admin/manufacturers': typeof AuthenticatedAdminManufacturersIndexLazyRoute
   '/admin/products': typeof AuthenticatedAdminProductsIndexLazyRoute
+  '/admin/users': typeof AuthenticatedAdminUsersIndexLazyRoute
   '/admin/categories/update/{-$categoryId}': typeof AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute
+  '/admin/manufacturers/update/{-$manufacturerId}': typeof AuthenticatedAdminManufacturersUpdateChar123ManufacturerIdChar125LazyRoute
+  '/admin/products/update/{-$productId}': typeof AuthenticatedAdminProductsUpdateChar123ProductIdChar125LazyRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof RegularLayoutAuthRouteRouteWithChildren
-  '/catalog': typeof RegularLayoutCatalogRouteLazyRouteWithChildren
   '/conditions': typeof RegularLayoutConditionsLazyRoute
   '/contacts': typeof RegularLayoutContactsLazyRoute
   '/delivery': typeof RegularLayoutDeliveryLazyRoute
@@ -331,12 +390,17 @@ export interface FileRoutesByTo {
   '/auth/sign-in': typeof RegularLayoutAuthSignInLazyRoute
   '/auth/sign-up': typeof RegularLayoutAuthSignUpLazyRoute
   '/admin': typeof AuthenticatedAdminIndexLazyRoute
+  '/catalog': typeof RegularLayoutCatalogIndexLazyRoute
   '/admin/categories/create': typeof AuthenticatedAdminCategoriesCreateLazyRoute
+  '/admin/manufacturers/create': typeof AuthenticatedAdminManufacturersCreateLazyRoute
   '/admin/products/create': typeof AuthenticatedAdminProductsCreateLazyRoute
-  '/admin/products/update': typeof AuthenticatedAdminProductsUpdateLazyRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesIndexLazyRoute
+  '/admin/manufacturers': typeof AuthenticatedAdminManufacturersIndexLazyRoute
   '/admin/products': typeof AuthenticatedAdminProductsIndexLazyRoute
+  '/admin/users': typeof AuthenticatedAdminUsersIndexLazyRoute
   '/admin/categories/update/{-$categoryId}': typeof AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute
+  '/admin/manufacturers/update/{-$manufacturerId}': typeof AuthenticatedAdminManufacturersUpdateChar123ManufacturerIdChar125LazyRoute
+  '/admin/products/update/{-$productId}': typeof AuthenticatedAdminProductsUpdateChar123ProductIdChar125LazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -344,7 +408,6 @@ export interface FileRoutesById {
   '/_regularLayout': typeof RegularLayoutRouteWithChildren
   '/_regularLayout/auth': typeof RegularLayoutAuthRouteRouteWithChildren
   '/_authenticated/admin': typeof AuthenticatedAdminRouteLazyRouteWithChildren
-  '/_regularLayout/catalog': typeof RegularLayoutCatalogRouteLazyRouteWithChildren
   '/_regularLayout/conditions': typeof RegularLayoutConditionsLazyRoute
   '/_regularLayout/contacts': typeof RegularLayoutContactsLazyRoute
   '/_regularLayout/delivery': typeof RegularLayoutDeliveryLazyRoute
@@ -360,19 +423,23 @@ export interface FileRoutesById {
   '/_regularLayout/auth/sign-in': typeof RegularLayoutAuthSignInLazyRoute
   '/_regularLayout/auth/sign-up': typeof RegularLayoutAuthSignUpLazyRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexLazyRoute
+  '/_regularLayout/catalog/': typeof RegularLayoutCatalogIndexLazyRoute
   '/_authenticated/admin/categories/create': typeof AuthenticatedAdminCategoriesCreateLazyRoute
+  '/_authenticated/admin/manufacturers/create': typeof AuthenticatedAdminManufacturersCreateLazyRoute
   '/_authenticated/admin/products/create': typeof AuthenticatedAdminProductsCreateLazyRoute
-  '/_authenticated/admin/products/update': typeof AuthenticatedAdminProductsUpdateLazyRoute
   '/_authenticated/admin/categories/': typeof AuthenticatedAdminCategoriesIndexLazyRoute
+  '/_authenticated/admin/manufacturers/': typeof AuthenticatedAdminManufacturersIndexLazyRoute
   '/_authenticated/admin/products/': typeof AuthenticatedAdminProductsIndexLazyRoute
+  '/_authenticated/admin/users/': typeof AuthenticatedAdminUsersIndexLazyRoute
   '/_authenticated/admin/categories/update/{-$categoryId}': typeof AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute
+  '/_authenticated/admin/manufacturers/update/{-$manufacturerId}': typeof AuthenticatedAdminManufacturersUpdateChar123ManufacturerIdChar125LazyRoute
+  '/_authenticated/admin/products/update/{-$productId}': typeof AuthenticatedAdminProductsUpdateChar123ProductIdChar125LazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/auth'
     | '/admin'
-    | '/catalog'
     | '/conditions'
     | '/contacts'
     | '/delivery'
@@ -388,16 +455,20 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/admin/'
+    | '/catalog'
     | '/admin/categories/create'
+    | '/admin/manufacturers/create'
     | '/admin/products/create'
-    | '/admin/products/update'
     | '/admin/categories'
+    | '/admin/manufacturers'
     | '/admin/products'
+    | '/admin/users'
     | '/admin/categories/update/{-$categoryId}'
+    | '/admin/manufacturers/update/{-$manufacturerId}'
+    | '/admin/products/update/{-$productId}'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
-    | '/catalog'
     | '/conditions'
     | '/contacts'
     | '/delivery'
@@ -413,19 +484,23 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/admin'
+    | '/catalog'
     | '/admin/categories/create'
+    | '/admin/manufacturers/create'
     | '/admin/products/create'
-    | '/admin/products/update'
     | '/admin/categories'
+    | '/admin/manufacturers'
     | '/admin/products'
+    | '/admin/users'
     | '/admin/categories/update/{-$categoryId}'
+    | '/admin/manufacturers/update/{-$manufacturerId}'
+    | '/admin/products/update/{-$productId}'
   id:
     | '__root__'
     | '/_authenticated'
     | '/_regularLayout'
     | '/_regularLayout/auth'
     | '/_authenticated/admin'
-    | '/_regularLayout/catalog'
     | '/_regularLayout/conditions'
     | '/_regularLayout/contacts'
     | '/_regularLayout/delivery'
@@ -441,12 +516,17 @@ export interface FileRouteTypes {
     | '/_regularLayout/auth/sign-in'
     | '/_regularLayout/auth/sign-up'
     | '/_authenticated/admin/'
+    | '/_regularLayout/catalog/'
     | '/_authenticated/admin/categories/create'
+    | '/_authenticated/admin/manufacturers/create'
     | '/_authenticated/admin/products/create'
-    | '/_authenticated/admin/products/update'
     | '/_authenticated/admin/categories/'
+    | '/_authenticated/admin/manufacturers/'
     | '/_authenticated/admin/products/'
+    | '/_authenticated/admin/users/'
     | '/_authenticated/admin/categories/update/{-$categoryId}'
+    | '/_authenticated/admin/manufacturers/update/{-$manufacturerId}'
+    | '/_authenticated/admin/products/update/{-$productId}'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -505,13 +585,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegularLayoutConditionsLazyRouteImport
       parentRoute: typeof RegularLayoutRoute
     }
-    '/_regularLayout/catalog': {
-      id: '/_regularLayout/catalog'
-      path: '/catalog'
-      fullPath: '/catalog'
-      preLoaderRoute: typeof RegularLayoutCatalogRouteLazyRouteImport
-      parentRoute: typeof RegularLayoutRoute
-    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -524,6 +597,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof RegularLayoutAuthRouteRouteImport
+      parentRoute: typeof RegularLayoutRoute
+    }
+    '/_regularLayout/catalog/': {
+      id: '/_regularLayout/catalog/'
+      path: '/catalog'
+      fullPath: '/catalog'
+      preLoaderRoute: typeof RegularLayoutCatalogIndexLazyRouteImport
       parentRoute: typeof RegularLayoutRoute
     }
     '/_authenticated/admin/': {
@@ -577,10 +657,10 @@ declare module '@tanstack/react-router' {
     }
     '/_regularLayout/catalog/$catalogPath': {
       id: '/_regularLayout/catalog/$catalogPath'
-      path: '/$catalogPath'
+      path: '/catalog/$catalogPath'
       fullPath: '/catalog/$catalogPath'
       preLoaderRoute: typeof RegularLayoutCatalogCatalogPathRouteImport
-      parentRoute: typeof RegularLayoutCatalogRouteLazyRoute
+      parentRoute: typeof RegularLayoutRoute
     }
     '/_regularLayout/auth/reset-password': {
       id: '/_regularLayout/auth/reset-password'
@@ -596,11 +676,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegularLayoutAuthAccountVerificationRouteImport
       parentRoute: typeof RegularLayoutAuthRouteRoute
     }
+    '/_authenticated/admin/users/': {
+      id: '/_authenticated/admin/users/'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AuthenticatedAdminUsersIndexLazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
     '/_authenticated/admin/products/': {
       id: '/_authenticated/admin/products/'
       path: '/products'
       fullPath: '/admin/products'
       preLoaderRoute: typeof AuthenticatedAdminProductsIndexLazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
+    '/_authenticated/admin/manufacturers/': {
+      id: '/_authenticated/admin/manufacturers/'
+      path: '/manufacturers'
+      fullPath: '/admin/manufacturers'
+      preLoaderRoute: typeof AuthenticatedAdminManufacturersIndexLazyRouteImport
       parentRoute: typeof AuthenticatedAdminRouteLazyRoute
     }
     '/_authenticated/admin/categories/': {
@@ -610,13 +704,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminCategoriesIndexLazyRouteImport
       parentRoute: typeof AuthenticatedAdminRouteLazyRoute
     }
-    '/_authenticated/admin/products/update': {
-      id: '/_authenticated/admin/products/update'
-      path: '/products/update'
-      fullPath: '/admin/products/update'
-      preLoaderRoute: typeof AuthenticatedAdminProductsUpdateLazyRouteImport
-      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
-    }
     '/_authenticated/admin/products/create': {
       id: '/_authenticated/admin/products/create'
       path: '/products/create'
@@ -624,11 +711,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProductsCreateLazyRouteImport
       parentRoute: typeof AuthenticatedAdminRouteLazyRoute
     }
+    '/_authenticated/admin/manufacturers/create': {
+      id: '/_authenticated/admin/manufacturers/create'
+      path: '/manufacturers/create'
+      fullPath: '/admin/manufacturers/create'
+      preLoaderRoute: typeof AuthenticatedAdminManufacturersCreateLazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
     '/_authenticated/admin/categories/create': {
       id: '/_authenticated/admin/categories/create'
       path: '/categories/create'
       fullPath: '/admin/categories/create'
       preLoaderRoute: typeof AuthenticatedAdminCategoriesCreateLazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
+    '/_authenticated/admin/products/update/{-$productId}': {
+      id: '/_authenticated/admin/products/update/{-$productId}'
+      path: '/products/update/{-$productId}'
+      fullPath: '/admin/products/update/{-$productId}'
+      preLoaderRoute: typeof AuthenticatedAdminProductsUpdateChar123ProductIdChar125LazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
+    '/_authenticated/admin/manufacturers/update/{-$manufacturerId}': {
+      id: '/_authenticated/admin/manufacturers/update/{-$manufacturerId}'
+      path: '/manufacturers/update/{-$manufacturerId}'
+      fullPath: '/admin/manufacturers/update/{-$manufacturerId}'
+      preLoaderRoute: typeof AuthenticatedAdminManufacturersUpdateChar123ManufacturerIdChar125LazyRouteImport
       parentRoute: typeof AuthenticatedAdminRouteLazyRoute
     }
     '/_authenticated/admin/categories/update/{-$categoryId}': {
@@ -644,11 +752,15 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteLazyRouteChildren {
   AuthenticatedAdminIndexLazyRoute: typeof AuthenticatedAdminIndexLazyRoute
   AuthenticatedAdminCategoriesCreateLazyRoute: typeof AuthenticatedAdminCategoriesCreateLazyRoute
+  AuthenticatedAdminManufacturersCreateLazyRoute: typeof AuthenticatedAdminManufacturersCreateLazyRoute
   AuthenticatedAdminProductsCreateLazyRoute: typeof AuthenticatedAdminProductsCreateLazyRoute
-  AuthenticatedAdminProductsUpdateLazyRoute: typeof AuthenticatedAdminProductsUpdateLazyRoute
   AuthenticatedAdminCategoriesIndexLazyRoute: typeof AuthenticatedAdminCategoriesIndexLazyRoute
+  AuthenticatedAdminManufacturersIndexLazyRoute: typeof AuthenticatedAdminManufacturersIndexLazyRoute
   AuthenticatedAdminProductsIndexLazyRoute: typeof AuthenticatedAdminProductsIndexLazyRoute
+  AuthenticatedAdminUsersIndexLazyRoute: typeof AuthenticatedAdminUsersIndexLazyRoute
   AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute: typeof AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute
+  AuthenticatedAdminManufacturersUpdateChar123ManufacturerIdChar125LazyRoute: typeof AuthenticatedAdminManufacturersUpdateChar123ManufacturerIdChar125LazyRoute
+  AuthenticatedAdminProductsUpdateChar123ProductIdChar125LazyRoute: typeof AuthenticatedAdminProductsUpdateChar123ProductIdChar125LazyRoute
 }
 
 const AuthenticatedAdminRouteLazyRouteChildren: AuthenticatedAdminRouteLazyRouteChildren =
@@ -656,16 +768,24 @@ const AuthenticatedAdminRouteLazyRouteChildren: AuthenticatedAdminRouteLazyRoute
     AuthenticatedAdminIndexLazyRoute: AuthenticatedAdminIndexLazyRoute,
     AuthenticatedAdminCategoriesCreateLazyRoute:
       AuthenticatedAdminCategoriesCreateLazyRoute,
+    AuthenticatedAdminManufacturersCreateLazyRoute:
+      AuthenticatedAdminManufacturersCreateLazyRoute,
     AuthenticatedAdminProductsCreateLazyRoute:
       AuthenticatedAdminProductsCreateLazyRoute,
-    AuthenticatedAdminProductsUpdateLazyRoute:
-      AuthenticatedAdminProductsUpdateLazyRoute,
     AuthenticatedAdminCategoriesIndexLazyRoute:
       AuthenticatedAdminCategoriesIndexLazyRoute,
+    AuthenticatedAdminManufacturersIndexLazyRoute:
+      AuthenticatedAdminManufacturersIndexLazyRoute,
     AuthenticatedAdminProductsIndexLazyRoute:
       AuthenticatedAdminProductsIndexLazyRoute,
+    AuthenticatedAdminUsersIndexLazyRoute:
+      AuthenticatedAdminUsersIndexLazyRoute,
     AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute:
       AuthenticatedAdminCategoriesUpdateChar123CategoryIdChar125LazyRoute,
+    AuthenticatedAdminManufacturersUpdateChar123ManufacturerIdChar125LazyRoute:
+      AuthenticatedAdminManufacturersUpdateChar123ManufacturerIdChar125LazyRoute,
+    AuthenticatedAdminProductsUpdateChar123ProductIdChar125LazyRoute:
+      AuthenticatedAdminProductsUpdateChar123ProductIdChar125LazyRoute,
   }
 
 const AuthenticatedAdminRouteLazyRouteWithChildren =
@@ -710,48 +830,35 @@ const RegularLayoutAuthRouteRouteWithChildren =
     RegularLayoutAuthRouteRouteChildren,
   )
 
-interface RegularLayoutCatalogRouteLazyRouteChildren {
-  RegularLayoutCatalogCatalogPathRoute: typeof RegularLayoutCatalogCatalogPathRoute
-}
-
-const RegularLayoutCatalogRouteLazyRouteChildren: RegularLayoutCatalogRouteLazyRouteChildren =
-  {
-    RegularLayoutCatalogCatalogPathRoute: RegularLayoutCatalogCatalogPathRoute,
-  }
-
-const RegularLayoutCatalogRouteLazyRouteWithChildren =
-  RegularLayoutCatalogRouteLazyRoute._addFileChildren(
-    RegularLayoutCatalogRouteLazyRouteChildren,
-  )
-
 interface RegularLayoutRouteChildren {
   RegularLayoutAuthRouteRoute: typeof RegularLayoutAuthRouteRouteWithChildren
-  RegularLayoutCatalogRouteLazyRoute: typeof RegularLayoutCatalogRouteLazyRouteWithChildren
   RegularLayoutConditionsLazyRoute: typeof RegularLayoutConditionsLazyRoute
   RegularLayoutContactsLazyRoute: typeof RegularLayoutContactsLazyRoute
   RegularLayoutDeliveryLazyRoute: typeof RegularLayoutDeliveryLazyRoute
   RegularLayoutPaymentLazyRoute: typeof RegularLayoutPaymentLazyRoute
   RegularLayoutIndexRoute: typeof RegularLayoutIndexRoute
+  RegularLayoutCatalogCatalogPathRoute: typeof RegularLayoutCatalogCatalogPathRoute
   RegularLayoutAuthenticatedBasketLazyRoute: typeof RegularLayoutAuthenticatedBasketLazyRoute
   RegularLayoutAuthenticatedFavoriteLazyRoute: typeof RegularLayoutAuthenticatedFavoriteLazyRoute
   RegularLayoutAuthenticatedProfileLazyRoute: typeof RegularLayoutAuthenticatedProfileLazyRoute
+  RegularLayoutCatalogIndexLazyRoute: typeof RegularLayoutCatalogIndexLazyRoute
 }
 
 const RegularLayoutRouteChildren: RegularLayoutRouteChildren = {
   RegularLayoutAuthRouteRoute: RegularLayoutAuthRouteRouteWithChildren,
-  RegularLayoutCatalogRouteLazyRoute:
-    RegularLayoutCatalogRouteLazyRouteWithChildren,
   RegularLayoutConditionsLazyRoute: RegularLayoutConditionsLazyRoute,
   RegularLayoutContactsLazyRoute: RegularLayoutContactsLazyRoute,
   RegularLayoutDeliveryLazyRoute: RegularLayoutDeliveryLazyRoute,
   RegularLayoutPaymentLazyRoute: RegularLayoutPaymentLazyRoute,
   RegularLayoutIndexRoute: RegularLayoutIndexRoute,
+  RegularLayoutCatalogCatalogPathRoute: RegularLayoutCatalogCatalogPathRoute,
   RegularLayoutAuthenticatedBasketLazyRoute:
     RegularLayoutAuthenticatedBasketLazyRoute,
   RegularLayoutAuthenticatedFavoriteLazyRoute:
     RegularLayoutAuthenticatedFavoriteLazyRoute,
   RegularLayoutAuthenticatedProfileLazyRoute:
     RegularLayoutAuthenticatedProfileLazyRoute,
+  RegularLayoutCatalogIndexLazyRoute: RegularLayoutCatalogIndexLazyRoute,
 }
 
 const RegularLayoutRouteWithChildren = RegularLayoutRoute._addFileChildren(

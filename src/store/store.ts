@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
+import { adminSlice } from "./admin/adminSlice";
 import { authSlice } from "./auth/authSlice";
 import { baseApi } from "./baseApi";
 import { categorySlice } from "./category/categorySlice";
@@ -11,6 +12,7 @@ export const store = configureStore({
 		[authSlice.reducerPath]: authSlice.reducer,
 		[productSlice.reducerPath]: productSlice.reducer,
 		[categorySlice.reducerPath]: categorySlice.reducer,
+		[adminSlice.reducerPath]: adminSlice.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({ serializableCheck: false }).concat(

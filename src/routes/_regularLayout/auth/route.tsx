@@ -1,4 +1,4 @@
-import { Outlet, redirect, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { Routes } from "@/const/routes";
 
 export const Route = createFileRoute("/_regularLayout/auth")({
@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_regularLayout/auth")({
 		if (user)
 			return redirect({
 				to: Routes.Main,
-			})
+			});
 	},
 	component: () => <Outlet />,
 });

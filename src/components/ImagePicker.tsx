@@ -41,6 +41,7 @@ export const ImagePicker = ({
 						onClick={() => inputRef.current?.click()}
 						className="p-0 pl-2 text-orange-400 cursor-pointer text-xl"
 						variant="ghost"
+						type="button"
 					>
 						Выберите файл
 					</Button>

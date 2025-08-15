@@ -2,7 +2,7 @@ import z from "zod";
 import { CategoryImageMaxSize } from "@/const/schema";
 
 export const createCategorySchema = z.object({
-	name: z.string(),
+	name: z.string().nonempty(),
 	path: z
 		.string()
 		.regex(/^[a-z]+$/i, "Поле может содержать только латинские буквы"),

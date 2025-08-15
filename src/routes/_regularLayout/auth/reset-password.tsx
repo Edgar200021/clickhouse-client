@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { ResetPasswordForm } from "@/components/forms/ResetPasswordForm";
+import { ResetPasswordForm } from "@/components/forms/auth/ResetPasswordForm";
 import { Notification } from "@/components/Notification";
 import { Routes } from "@/const/routes";
 import { resetPasswordSearchParams } from "@/schemas/searchParams/resetPasswordSearchParams.schema";

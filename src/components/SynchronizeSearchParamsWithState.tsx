@@ -9,7 +9,7 @@ import { productActions } from "@/store/product/productSlice";
 import { useAppDispatch } from "@/store/store";
 
 type Props = {
-	from: (typeof Routes)["SpecificCatalog"];
+	from: `/_regularLayout${(typeof Routes)["SpecificCatalog"]}`;
 };
 
 export const SynchronizeSearchParamsWithState = ({ from }: Props) => {
@@ -21,7 +21,7 @@ export const SynchronizeSearchParamsWithState = ({ from }: Props) => {
 	useEffect(() => {
 		if (!params) return;
 
-		if (from === "/catalog/$catalogPath") {
+		if (from === "/_regularLayout/catalog/$catalogPath") {
 			const validKeys = Object.keys(getProductsFiltersSchema.shape);
 			const filtersFromSearch = Object.entries(params).reduce(
 				(acc: GetProductsFiltersSchema, [key, value]) => {

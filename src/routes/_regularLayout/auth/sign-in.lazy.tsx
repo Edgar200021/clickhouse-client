@@ -1,6 +1,6 @@
 import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { OAuth2 } from "@/components/Auth/OAuth2";
-import { SignInForm } from "@/components/forms/SignInForm";
+import { SignInForm } from "@/components/forms/auth/SignInForm";
 import { Routes } from "@/const/routes";
 import { UserRole } from "@/types/user";
 

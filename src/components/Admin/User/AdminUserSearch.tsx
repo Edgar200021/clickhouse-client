@@ -5,27 +5,28 @@ import searchIcon from "@/assets/icons/search.svg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import {
-	categoryActions,
-	categorySelectors,
-} from "@/store/category/categorySlice";
+import { adminActions, adminSelectors } from "@/store/admin/adminSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 
 type Props = {
 	className?: string;
 };
 
-export const AdminCategorySearch = ({ className }: Props) => {
-	const categorySearch = useAppSelector(categorySelectors.getSearch);
+export const AdminUserSearch = ({ className }: Props) => {
+	const userSearch = useAppSelector(adminSelectors.getUsersFiltersSerach);
 	const dispatch = useAppDispatch();
 	const [search, setSearch] = useState("");
 	const debounced = useDebounceValue(search, 500);
 
 	useEffect(() => {
-		if (!categorySearch.trim() && !debounced[0]) return;
-
-		dispatch(categoryActions.setSearch(debounced[0]));
-	}, [debounced]);
+		if (!userSearch?.trim() && !debounced[0]) return;
+		dispatch(
+			adminActions.setUsersFilters({
+				key: "search",
+				val: !debounced[0].trim() ? undefined : debounced[0],
+			}),
+		);
+	}, [userSearch, debounced]);
 
 	return (
 		<>
@@ -53,7 +54,7 @@ export const AdminCategorySearch = ({ className }: Props) => {
 				<Input
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
-					placeholder="Введите название или путь категории"
+					placeholder="Введите эл.почту пользователя"
 					className="placeholder:text-lg placeholder:text-[#7d7d7d] border-none focus:ring-0 focus-visible:ring-0 !bg-none "
 				/>
 

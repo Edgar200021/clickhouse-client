@@ -2,7 +2,7 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { CategoryList } from "@/components/Category/CategoryList";
 import { Routes } from "@/const/routes";
 
-export const Route = createLazyFileRoute(`/_regularLayout${Routes.Catalog}`)({
+export const Route = createLazyFileRoute(`/_regularLayout${Routes.Catalog}/`)({
 	component: RouteComponent,
 });
 

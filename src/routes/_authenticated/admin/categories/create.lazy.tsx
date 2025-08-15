@@ -15,7 +15,7 @@ function RouteComponent() {
 			<h1 className="text-4xl font-bold">Обновление категории</h1>
 
 			<CreateCategoryForm
-				onSuccess={() => toast.success("Category successfully created")}
+				onSuccess={() => toast.success("Категория успешно создан")}
 			/>
 		</div>
 	);

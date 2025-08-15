@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const CategoryList = ({ className }: Props) => {
-	const categories = useAppSelector(categorySelectors.getCategories);
+	const categories = useAppSelector(categorySelectors.getGroupedCategories);
 
 	if (!Object.keys(categories)) return null;
 
@@ -38,17 +38,28 @@ export const CategoryList = ({ className }: Props) => {
 						/>
 					</div>
 					<ul className="flex flex-col gap-y-4 max-w-[250px] w-full self-center">
-						{value.map((v, i) => (
-							<li
-								key={v.path}
-								className={
-									"text-lg hover:text-orange-400 duration-300 transition-colors ease " +
-									(i === 0 ? "font-bold hover:text-orange-500" : "")
-								}
-							>
-								<Link to={Routes.Catalog}>{v.name}</Link>
-							</li>
-						))}
+						{value
+							.filter(
+								(v) => !v.path.includes(".") || v.path.split(".").length === 2,
+							)
+							.map((v, i) => (
+								<li
+									key={v.path}
+									className={
+										"text-lg hover:text-orange-400 duration-300 transition-colors ease " +
+										(i === 0 ? "font-bold hover:text-orange-500" : "")
+									}
+								>
+									<Link
+										to={Routes.SpecificCatalog}
+										params={{
+											catalogPath: v.path,
+										}}
+									>
+										{v.name}
+									</Link>
+								</li>
+							))}
 					</ul>
 				</li>
 			))}

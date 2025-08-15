@@ -44,6 +44,11 @@ export const categorySlice = createSlice({
 
 			state.categories[index] = payload;
 		},
+
+		deleteCategory: (state, { payload }: PayloadAction<Category["id"]>) => {
+			const index = state.categories.findIndex((c) => c.id === payload);
+			if (index !== -1) state.categories.splice(index, 1);
+		},
 		setSearch: (state, action: PayloadAction<string>) => {
 			state.search = action.payload;
 
@@ -67,8 +72,17 @@ export const categorySlice = createSlice({
 	},
 	selectors: {
 		getCategories: (state) => state.categories,
-		getCategory: (state, categoryId: Category["id"]) =>
-			state.categories.find((c) => c.id === categoryId),
+		getCategory: (
+			state,
+			condition:
+				| { type: "id"; id: Category["id"] }
+				| { type: "path"; path: Category["path"] },
+		) =>
+			state.categories.find((c) =>
+				condition.type === "id"
+					? c.id === condition.id
+					: c.path === condition.path,
+			),
 		getGroupedCategories: (state) => state.groupedCategories,
 		getFilteredCategories: (state) => state.filteredCategories,
 		getSearch: (state) => state.search,

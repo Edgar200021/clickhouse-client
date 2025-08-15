@@ -13,31 +13,31 @@ import {
 } from "@/components/ui/dialog";
 import { Routes } from "@/const/routes";
 import { cn } from "@/lib/utils";
-import { useDeleteCategoryMutation } from "@/store/admin/adminApi";
-import type { Category } from "@/types/category";
+import { useDeleteManufacturerMutation } from "@/store/admin/adminApi";
+import type { Manufacturer } from "@/types/manufacturer";
 
 type Props = {
 	className?: string;
-	category: Category;
+	manufacturer: Manufacturer;
 };
 
-const DeleteCategory = ({ category }: Pick<Props, "category">) => {
+const DeleteManufacturer = ({ manufacturer }: Pick<Props, "manufacturer">) => {
 	const [open, setOpen] = useState(false);
-	const [deleteCategory, { isLoading }] = useDeleteCategoryMutation();
+	const [deleteManufacturer, { isLoading }] = useDeleteManufacturerMutation();
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<Button variant="ghost" className="cursor-pointer w-5 h-5 p-0">
-					<img className="w-full" src={trashIcon} alt="Удалить категорию" />
+					<img className="w-full" src={trashIcon} alt="Удалить производителя" />
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Удалить категорию?</DialogTitle>
+					<DialogTitle>Удалить производителя?</DialogTitle>
 					<DialogDescription>
-						Это действие нельзя отменить. Категория{" "}
-						<strong> {category.name}</strong> будет удалена без возможности
+						Это действие нельзя отменить. Производитель
+						<strong> {manufacturer.name}</strong> будет удалена без возможности
 						восстановления.
 					</DialogDescription>
 				</DialogHeader>
@@ -54,7 +54,9 @@ const DeleteCategory = ({ category }: Pick<Props, "category">) => {
 					<Button
 						variant="destructive"
 						onClick={async () => {
-							await deleteCategory({ categoryId: category.id }).unwrap();
+							await deleteManufacturer({
+								manufacturerId: manufacturer.id,
+							}).unwrap();
 							setOpen(false);
 						}}
 						disabled={isLoading}
@@ -68,48 +70,33 @@ const DeleteCategory = ({ category }: Pick<Props, "category">) => {
 	);
 };
 
-export const AdminCategory = ({ className, category }: Props) => {
+export const AdminManufacturer = ({ className, manufacturer }: Props) => {
 	return (
 		<div
 			className={cn(
-				"flex flex-col gap-y-4 rounded-lg border border-gray-200 pb-2 shadow-sm w-[400px]",
+				"flex flex-col gap-y-4 rounded-lg border border-gray-200 py-4 shadow-sm w-[400px]",
 				className,
 			)}
 		>
-			{category.imageUrl && (
-				<img
-					className=" w-full rounded-md object-cover shadow h-[200px] "
-					src={category.imageUrl}
-					alt={category.name}
-				/>
-			)}
-
-			<dl
-				className={cn("flex flex-col gap-y-2 text-sm sm:text-base px-4 mb-2", {
-					"pt-4": !category.imageUrl,
-				})}
-			>
+			<dl className={"flex flex-col gap-y-2 text-sm sm:text-base px-4 mb-2"}>
 				<div className="flex justify-between gap-x-4">
 					<dt className="font-medium text-gray-600">Название:</dt>
-					<dd className="text-gray-900 text-right">{category.name}</dd>
-				</div>
-
-				<div className="flex justify-between gap-x-4">
-					<dt className="font-medium text-gray-600">Путь:</dt>
-					<dd className="text-gray-900 text-right">{category.path}</dd>
+					<dd className="text-gray-900 text-right">{manufacturer.name}</dd>
 				</div>
 			</dl>
 			<div className="flex items-center gap-x-2 px-4">
 				<Link
-					to={Routes.Admin.CategoriesUpdate}
+					to={Routes.Admin.ManufacturersUpdate}
 					params={{
-						categoryId: String(category.id),
+						manufacturerId: String(manufacturer.id),
 					}}
 					className="cursor-pointer w-5 h-5 p-0"
 				>
-					<img className="w-full" src={penIcon} alt="Edit category" />
+					<img className="w-full" src={penIcon} alt="Edit manufacturer" />
 				</Link>
-				<DeleteCategory category={category} />
+				{manufacturer.id !== 1 && (
+					<DeleteManufacturer manufacturer={manufacturer} />
+				)}
 			</div>
 		</div>
 	);

@@ -16,7 +16,10 @@ export const Route = createLazyFileRoute(
 function RouteComponent() {
 	const { categoryId } = Route.useParams();
 	const category = useAppSelector((state) =>
-		categorySelectors.getCategory(state, Number(categoryId) || -1),
+		categorySelectors.getCategory(state, {
+			type: "id",
+			id: Number(categoryId) || -1,
+		}),
 	);
 
 	if (!categoryId || !category) {
@@ -39,7 +42,7 @@ function RouteComponent() {
 			<h1 className="text-4xl font-bold">Обновление категории</h1>
 			<UpdateCategoryForm
 				category={category}
-				onSuccess={() => toast.success("Category successfully updated")}
+				onSuccess={() => toast.success("Категория успешно обновлен")}
 			/>
 		</div>
 	);

@@ -341,15 +341,27 @@ const Buttons = ({
 					Назад
 				</Button>
 			)}
-			<Button
-				disabled={disabled}
-				onClick={step === 1 ? () => setStep(2) : undefined}
-				type={step === 1 ? "button" : "submit"}
-				variant="default"
-				className="block bg-orange-400 hover:bg-orange-500 cursor-pointer w-full !min-w-[150px] max-w-fit py-2 h-fit ml-auto text-xl"
-			>
-				{step === 1 ? "Далее" : "Обновить категорию"}
-			</Button>
+
+			{step === 1 ? (
+				<Button
+					disabled={disabled}
+					onClick={() => setStep(2)}
+					variant="default"
+					type="button"
+					className="block bg-orange-400 hover:bg-orange-500 cursor-pointer w-full !min-w-[150px] max-w-fit py-2 h-fit ml-auto text-xl"
+				>
+					Далее
+				</Button>
+			) : (
+				<Button
+					disabled={disabled}
+					type={"submit"}
+					variant="default"
+					className="block bg-orange-400 hover:bg-orange-500 cursor-pointer w-full !min-w-[150px] max-w-fit py-2 h-fit ml-auto text-xl"
+				>
+					Обновить категорию
+				</Button>
+			)}
 		</div>
 	);
 };

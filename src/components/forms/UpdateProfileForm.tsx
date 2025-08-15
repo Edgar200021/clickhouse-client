@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import { Controller, useForm } from "react-hook-form";
 import { Routes } from "@/const/routes";
+import { useHandleError } from "@/hooks/useHandleError";
 import { cn } from "@/lib/utils";
 import {
 	type UpdateProfileSchema,
@@ -30,8 +31,10 @@ export const UpdateProfileForm = ({ className }: Props) => {
 		},
 	});
 
-	const [logout, { isLoading }] = useLogoutMutation();
+	const [logout, { isLoading, error }] = useLogoutMutation();
 	const navigate = useNavigate();
+
+	useHandleError(error);
 
 	const handleLogout = async () => {
 		await logout(null).unwrap();

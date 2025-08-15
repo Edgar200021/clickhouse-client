@@ -1,7 +1,7 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { OAuth2 } from "@/components/Auth/OAuth2";
-import { SignUpForm } from "@/components/forms/SignUpForm";
+import { SignUpForm } from "@/components/forms/auth/SignUpForm";
 import { Notification } from "@/components/Notification";
 import { Routes } from "@/const/routes";
 

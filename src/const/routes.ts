@@ -23,6 +23,10 @@ export const Routes = {
 		CategoriesUpdate: "/admin/categories/update/{-$categoryId}",
 		Products: "/admin/products",
 		ProductsCreate: "/admin/products/create",
-		ProductsUpdate: "/admin/products/update",
+		ProductsUpdate: "/admin/products/update/{-$productId}",
+		Manufacturers: "/admin/manufacturers",
+		ManufacturersCreate: "/admin/manufacturers/create",
+		ManufacturersUpdate: "/admin/manufacturers/update/{-$manufacturerId}",
+		Users: "/admin/users",
 	},
 } as const;

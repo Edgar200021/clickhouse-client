@@ -1,6 +1,6 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ForgotPasswordForm } from "@/components/forms/ForgotPasswordForm";
+import { ForgotPasswordForm } from "@/components/forms/auth/ForgotPasswordForm";
 import { Notification } from "@/components/Notification";
 import { Routes } from "@/const/routes";
 
