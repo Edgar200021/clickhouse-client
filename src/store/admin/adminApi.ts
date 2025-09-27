@@ -9,20 +9,56 @@ import type {
 	CreateCategoryResponse,
 	CreateManufacturerRequest,
 	CreateManufacturerResponse,
+	CreateProductRequest,
+	CreateProductResponse,
+	CreateProductSkuRequest,
+	CreateProductSkuResponse,
+	CreatePromocodeRequest,
+	CreatePromocodeResponse,
 	DeleteCategoryRequest,
 	DeleteCategoryResponse,
 	DeleteManufacturerRequest,
 	DeleteManufacturerResponse,
+	DeleteProductRequest,
+	DeleteProductResponse,
+	DeleteProductSkuRequest,
+	DeleteProductSkuResponse,
+	DeletePromocodeRequest,
+	DeletePromocodeResponse,
 	GetManufacturerRequest,
 	GetManufacturerResponse,
 	GetManufacturersRequest,
 	GetManufacturersResponse,
+	GetProductRequest,
+	GetProductResponse,
+	GetProductSkuRequest,
+	GetProductSkuResponse,
+	GetProductsRequest,
+	GetProductsResponse,
+	GetProductsSkusAdminRequest,
+	GetProductsSkusAdminResponse,
+	GetPromocodeRequest,
+	GetPromocodeResponse,
+	GetPromocodesRequest,
+	GetPromocodesResponse,
 	GetUsersRequest,
 	GetUsersResponse,
+	RemoveProductAssemblyInstructionRequest,
+	RemoveProductAssemblyInstructionResponse,
+	RemoveProductSkuImageRequest,
+	RemoveProductSkuImageResponse,
+	RemoveProductSkuPackageRequest,
+	RemoveProductSkuPackageResponse,
 	UpdateCategoryRequest,
 	UpdateCategoryResponse,
 	UpdateManufacturerRequest,
 	UpdateManufacturerResponse,
+	UpdateProductRequest,
+	UpdateProductResponse,
+	UpdateProductSkuRequest,
+	UpdateProductSkuResponse,
+	UpdatePromocodeRequest,
+	UpdatePromocodeResponse,
 } from "./types";
 
 export const adminApi = baseApi.injectEndpoints({
@@ -216,6 +252,459 @@ export const adminApi = baseApi.injectEndpoints({
 				);
 			},
 		}),
+
+		// Products
+
+		getProducts: builder.query<GetProductsResponse, GetProductsRequest>({
+			query: (body) => {
+				return { url: "/admin/products", params: body };
+			},
+			onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+				const { data } = await queryFulfilled;
+				dispatch(adminActions.setProducts(data.data.products));
+			},
+		}),
+
+		getProduct: builder.query<GetProductResponse, GetProductRequest>({
+			query: (body) => {
+				return { url: `/admin/products/${body.productId}` };
+			},
+		}),
+
+		createProduct: builder.mutation<
+			CreateProductResponse,
+			CreateProductRequest
+		>({
+			query: (body) => {
+				const formData = new FormData();
+
+				for (const key in body) {
+					//@ts-expect-error ...
+					formData.append(key, body[key]);
+				}
+
+				return {
+					url: `/admin/products`,
+					method: "POST",
+					body: formData,
+				};
+			},
+			onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+				const { data } = await queryFulfilled;
+				dispatch(adminActions.setProduct(data.data));
+			},
+		}),
+
+		updateProduct: builder.mutation<
+			UpdateProductResponse,
+			UpdateProductRequest
+		>({
+			query: (body) => {
+				const formData = new FormData();
+
+				for (const key in body) {
+					if (!body[key as keyof UpdateProductRequest]) continue;
+					//@ts-expect-error ...
+					formData.append(key, body[key as keyof UpdateProductRequest]);
+				}
+
+				return {
+					url: `/admin/products/${body.productId}`,
+					method: "PATCH",
+					body: formData,
+				};
+			},
+			onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+				const { data } = await queryFulfilled;
+				dispatch(adminActions.updateProduct(data.data));
+			},
+		}),
+
+		deleteProduct: builder.mutation<
+			DeleteProductResponse,
+			DeleteProductRequest
+		>({
+			query: ({ productId }) => ({
+				url: `/admin/products/${productId}`,
+				method: "DELETE",
+			}),
+			onQueryStarted: async (arg, { dispatch, queryFulfilled, getState }) => {
+				await queryFulfilled;
+				dispatch(
+					adminApi.util.updateQueryData(
+						"getProducts",
+						(getState() as RootState).admin.productFilters,
+						(draft) => {
+							const index = draft.data.products.findIndex(
+								(p) => p.id === arg.productId,
+							);
+							if (index === -1) return;
+							draft.data.products[index] = {
+								...draft.data.products[index],
+								isDeleted: true,
+							};
+						},
+					),
+				);
+			},
+		}),
+
+		deleteProductAssemblyInstruction: builder.mutation<
+			RemoveProductAssemblyInstructionResponse,
+			RemoveProductAssemblyInstructionRequest
+		>({
+			query: ({ productId, fileId }) => {
+				return {
+					url: `/admin/products/${productId}/assembly-instruction`,
+					method: "DELETE",
+					body: {
+						fileId,
+					},
+				};
+			},
+			onQueryStarted: async (arg, { dispatch, queryFulfilled, getState }) => {
+				await queryFulfilled;
+				dispatch(
+					adminApi.util.updateQueryData(
+						"getProducts",
+						(getState() as RootState).admin.productFilters,
+						(draft) => {
+							const index = draft.data.products.findIndex(
+								(p) => p.id === arg.productId,
+							);
+							if (index === -1) return;
+							draft.data.products[index] = {
+								...draft.data.products[index],
+								assemblyInstructionFileId: null,
+								assemblyInstructionFileUrl: null,
+							};
+						},
+					),
+				);
+			},
+		}),
+
+		getProductsSkus: builder.query<
+			GetProductsSkusAdminResponse,
+			GetProductsSkusAdminRequest
+		>({
+			query: (params) => {
+				return { url: "/admin/products-sku", params };
+			},
+			onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+				const { data } = await queryFulfilled;
+				dispatch(adminActions.setProductsSkus(data.data.productsSkus));
+			},
+		}),
+
+		getProductSkuAdmin: builder.query<
+			GetProductSkuResponse,
+			GetProductSkuRequest
+		>({
+			query: (body) => {
+				return { url: `/admin/products-sku/${body.productSkuId}` };
+			},
+			providesTags: ["productSku"],
+		}),
+
+		createProductSku: builder.mutation<
+			CreateProductSkuResponse,
+			CreateProductSkuRequest
+		>({
+			query: (body) => {
+				const formData = new FormData();
+
+				for (const key in body) {
+					//@ts-expect-error ...
+					if (!body[key]) continue;
+
+					if ((key as keyof CreateProductSkuRequest) === "images") {
+						const images = body.images;
+
+						for (const { file } of images) {
+							formData.append(key, file);
+						}
+
+						continue;
+					}
+
+					if ((key as keyof CreateProductSkuRequest) === "packages") {
+						//@ts-expect-error ...
+						for (const pkg of body.packages) {
+							const { id, ...rest } = pkg;
+							formData.append(key, JSON.stringify(rest));
+						}
+
+						continue;
+					}
+
+					const value = body[key as keyof CreateProductSkuRequest];
+					if (value !== undefined && value !== null) {
+						formData.append(key, value as string);
+					}
+				}
+
+				return {
+					url: `/admin/products-sku`,
+					method: "POST",
+					body: formData,
+				};
+			},
+		}),
+
+		updateProductSku: builder.mutation<
+			UpdateProductSkuResponse,
+			UpdateProductSkuRequest
+		>({
+			query: (body) => {
+				const formData = new FormData();
+
+				for (const key in body) {
+					//@ts-expect-error ...
+					if (!body[key]) continue;
+
+					if (
+						(key as keyof UpdateProductSkuRequest) === "images" &&
+						body.images
+					) {
+						const images = body.images;
+
+						for (const { file } of images) {
+							formData.append(key, file);
+						}
+
+						continue;
+					}
+
+					if (
+						(key as keyof UpdateProductSkuRequest) === "packages" &&
+						body.packages
+					) {
+						for (const pkg of body.packages) {
+							const { id, ...rest } = pkg;
+							formData.append(key, JSON.stringify(rest));
+						}
+
+						continue;
+					}
+
+					const value = body[key as keyof UpdateProductSkuRequest];
+					if (value !== undefined && value !== null) {
+						formData.append(key, value as string);
+					}
+				}
+
+				return {
+					url: `/admin/products-sku/${body.productSkuId}`,
+					method: "PATCH",
+					body: formData,
+				};
+			},
+			onQueryStarted: async (arg, { dispatch, queryFulfilled, getState }) => {
+				const {
+					data: { data: productSku },
+				} = await queryFulfilled;
+
+				dispatch(
+					adminActions.setProductsSkus(
+						(getState() as RootState).admin.productsSkus?.filter(
+							(p) => p.id !== arg.productSkuId,
+						) ?? [],
+					),
+				);
+				dispatch(
+					adminApi.util.updateQueryData(
+						"getProductsSkus",
+						(getState() as RootState).admin.productsSkusFilters,
+						(draft) => {
+							const index = draft.data.productsSkus.findIndex(
+								(u) => u.id === arg.productSkuId,
+							);
+
+							if (index === -1) return;
+							draft.data.productsSkus[index] = {
+								...draft.data.productsSkus[index],
+								...productSku,
+							};
+						},
+					),
+				);
+			},
+			invalidatesTags: ["productSku"],
+		}),
+
+		deleteProductSku: builder.mutation<
+			DeleteProductSkuResponse,
+			DeleteProductSkuRequest
+		>({
+			query: ({ productSkuId }) => ({
+				url: `/admin/products-sku/${productSkuId}`,
+				method: "DELETE",
+			}),
+			onQueryStarted: async (arg, { dispatch, queryFulfilled, getState }) => {
+				await queryFulfilled;
+				dispatch(
+					adminApi.util.updateQueryData(
+						"getProductsSkus",
+						(getState() as RootState).admin.productsSkusFilters,
+						(draft) => {
+							draft.data.productsSkus = draft.data.productsSkus.filter(
+								(p) => p.id !== arg.productSkuId,
+							);
+						},
+					),
+				);
+			},
+		}),
+
+		deleteProductSkuImage: builder.mutation<
+			RemoveProductSkuImageResponse,
+			RemoveProductSkuImageRequest
+		>({
+			query: (body) => {
+				return {
+					url: `/admin/products-sku/${body.productSkuId}/images/${body.imageId}`,
+					method: "DELETE",
+				};
+			},
+			onQueryStarted: async (arg, { queryFulfilled, dispatch, getState }) => {
+				await queryFulfilled;
+
+				dispatch(
+					adminApi.util.updateQueryData(
+						"getProductsSkus",
+						(getState() as RootState).admin.productsSkusFilters,
+						(draft) => {
+							const index = draft.data.productsSkus.findIndex(
+								(p) => p.id === arg.productSkuId,
+							);
+							if (index === -1) return;
+							draft.data.productsSkus[index] = {
+								...draft.data.productsSkus[index],
+								images: draft.data.productsSkus[index].images.filter(
+									(image) => image.id !== arg.imageId,
+								),
+							};
+						},
+					),
+				);
+			},
+		}),
+
+		deleteProductSkuPackage: builder.mutation<
+			RemoveProductSkuPackageResponse,
+			RemoveProductSkuPackageRequest
+		>({
+			query: (body) => {
+				return {
+					url: `/admin/products-sku/${body.productSkuId}/packages/${body.packageId}`,
+					method: "DELETE",
+				};
+			},
+			onQueryStarted: async (arg, { queryFulfilled, dispatch, getState }) => {
+				await queryFulfilled;
+
+				dispatch(
+					adminActions.setProductsSkus(
+						(getState() as RootState).admin.productsSkus?.filter(
+							(p) => p.id !== arg.productSkuId,
+						) ?? [],
+					),
+				);
+
+				dispatch(
+					adminApi.util.updateQueryData(
+						"getProductsSkus",
+						(getState() as RootState).admin.productsSkusFilters,
+						(draft) => {
+							const index = draft.data.productsSkus.findIndex(
+								(p) => p.id === arg.productSkuId,
+							);
+							if (index === -1) return;
+							draft.data.productsSkus[index] = {
+								...draft.data.productsSkus[index],
+								packages: draft.data.productsSkus[index].packages.filter(
+									(pkg) => pkg.id !== arg.packageId,
+								),
+							};
+						},
+					),
+				);
+			},
+			invalidatesTags: ["productSku"],
+		}),
+
+		// Promocodes
+
+		getPromocodes: builder.query<GetPromocodesResponse, GetPromocodesRequest>({
+			query: (params) => {
+				return {
+					url: "/admin/promocode",
+					params,
+				};
+			},
+		}),
+
+		getPromocode: builder.query<GetPromocodeResponse, GetPromocodeRequest>({
+			query: (body) => {
+				return { url: `/admin/promocode/${body.promocodeId}` };
+			},
+		}),
+
+		createPromocode: builder.mutation<
+			CreatePromocodeResponse,
+			CreatePromocodeRequest
+		>({
+			query: (body) => {
+				return {
+					url: "/admin/promocode",
+					method: "POST",
+					body,
+				};
+			},
+			invalidatesTags: ["promocode"],
+		}),
+
+		updatePromocode: builder.mutation<
+			UpdatePromocodeResponse,
+			UpdatePromocodeRequest
+		>({
+			query: (body) => {
+				return {
+					url: `/admin/promocode/${body.promocodeId}`,
+					method: "PATCH",
+					body,
+				};
+			},
+			invalidatesTags: ["promocode"],
+		}),
+
+		deletePromocode: builder.mutation<
+			DeletePromocodeResponse,
+			DeletePromocodeRequest
+		>({
+			query: (body) => {
+				return {
+					url: `/admin/promocode/${body.promocodeId}`,
+					method: "DELETE",
+				};
+			},
+			onQueryStarted: async (arg, { queryFulfilled, dispatch, getState }) => {
+				await queryFulfilled;
+
+				dispatch(
+					adminApi.util.updateQueryData(
+						"getPromocodes",
+						(getState() as RootState).admin.promocodesFilters,
+						(draft) => {
+							draft.data.promocodes = draft.data.promocodes.filter(
+								(p) => p.id !== arg.promocodeId,
+							);
+						},
+					),
+				);
+			},
+		}),
 	}),
 });
 
@@ -230,4 +719,22 @@ export const {
 	useDeleteManufacturerMutation,
 	useLazyGetUsersQuery,
 	useBlockToggleMutation,
+	useGetProductsQuery,
+	useLazyGetProductQuery,
+	useCreateProductMutation,
+	useUpdateProductMutation,
+	useDeleteProductMutation,
+	useDeleteProductAssemblyInstructionMutation,
+	useGetProductsSkusQuery,
+	useLazyGetProductSkuAdminQuery,
+	useCreateProductSkuMutation,
+	useUpdateProductSkuMutation,
+	useDeleteProductSkuMutation,
+	useDeleteProductSkuImageMutation,
+	useDeleteProductSkuPackageMutation,
+	useGetPromocodesQuery,
+	useLazyGetPromocodeQuery,
+	useCreatePromocodeMutation,
+	useUpdatePromocodeMutation,
+	useDeletePromocodeMutation,
 } = adminApi;

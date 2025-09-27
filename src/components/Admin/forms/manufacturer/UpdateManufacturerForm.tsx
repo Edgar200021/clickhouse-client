@@ -67,7 +67,7 @@ export const UpdateManufacturerForm = ({
 						<div className="flex flex-col gap-y-1">
 							{/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
 							<label className="flex flex-col gap-y-3">
-								<span className=" text-xltext-xl">Название</span>
+								<span className="text-xl">Название</span>
 								<Input
 									className="border-[1px] border-[#dbdcde] !text-2xl text-[#89868d] py-8 px-6 rounded-md bg-[#f4f5f9] focus:border-[1px] focus-visible:ring-0 "
 									required

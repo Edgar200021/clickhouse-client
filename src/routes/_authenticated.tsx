@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_authenticated")({
 				search: {
 					redirect: location.pathname,
 				},
-			})
+			});
 		}
 	},
 });

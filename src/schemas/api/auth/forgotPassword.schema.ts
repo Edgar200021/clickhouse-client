@@ -11,4 +11,4 @@ export const forgotPassowrdSchema = z.object({
 	}),
 });
 
-export type ForgotPasswordSchema = z.infer<typeof forgotPassowrdSchema>;
+export type ForgotPasswordSchema = z.Infer<typeof forgotPassowrdSchema>;

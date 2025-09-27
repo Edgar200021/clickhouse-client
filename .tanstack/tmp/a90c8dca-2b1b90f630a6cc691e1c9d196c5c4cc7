@@ -1,0 +1,11 @@
+import { createLazyFileRoute } from '@tanstack/react-router'
+
+export const Route = createLazyFileRoute('/_regularLayout/_authenticated/cart')(
+  {
+    component: RouteComponent,
+  },
+)
+
+function RouteComponent() {
+  return <div>Hello "/_regularLayout/_authenticated/cart"!</div>
+}

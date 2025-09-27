@@ -1,9 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { type Control, Controller, useForm, useWatch } from "react-hook-form";
-import { ImagePicker } from "@/components/ImagePicker";
+import { useState } from "react";
+import {
+	type Control,
+	Controller,
+	type UseFormResetField,
+	useForm,
+	useWatch,
+} from "react-hook-form";
+import { FilePicker } from "@/components/FilePicker";
+import { ImageFilePreview } from "@/components/FilePreview/FilePreview";
+import { MultiStepFormButtons } from "@/components/MultiStepFormButtons";
 import { Steps } from "@/components/Steps";
-import { Button } from "@/components/ui/button";
 import { FieldErrors } from "@/components/ui/FieldErrors";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,7 +23,6 @@ import {
 import { CategoryImageMaxSize } from "@/const/schema";
 import { useHandleError } from "@/hooks/useHandleError";
 import { cn } from "@/lib/utils";
-
 import {
 	type UpdateCategorySchema,
 	updateCategorySchema,
@@ -63,9 +69,7 @@ export const UpdateCategoryForm = ({
 	});
 
 	const [updateCategory, { isLoading, error }] = useUpdateCategoryMutation();
-
-	const [step, setStep] = useState<1 | 2>(1);
-	const [image, setImage] = useState<string | null>(category.imageUrl ?? null);
+	const [step, setStep] = useState(1);
 	const { apiValidationErrors, clearError } = useHandleError<
 		(keyof UpdateCategorySchema)[]
 	>(error, {
@@ -86,7 +90,7 @@ export const UpdateCategoryForm = ({
 		const { data: updatedCategory } = await updateCategory({
 			categoryId: data.categoryId,
 			...(data.name && data.name !== category.name ? { name: data.name } : {}),
-			...(image ? { image: data.image } : {}),
+			...(data.image ? { image: data.image } : {}),
 			...(data.path && data.path !== path ? { path: data.path } : {}),
 			...(data.predefinedPath &&
 			data.predefinedPath !== predefinedPath &&
@@ -107,22 +111,9 @@ export const UpdateCategoryForm = ({
 				: undefined,
 		});
 
-		if (image?.startsWith("blob")) {
-			URL.revokeObjectURL(image);
-		}
-
-		setImage(updatedCategory.imageUrl ?? null);
-
 		setStep(1);
 		onSuccess?.();
 	};
-
-	useEffect(() => {
-		return () => {
-			if (!image || !image.startsWith("blob")) return;
-			URL.revokeObjectURL(image);
-		};
-	}, []);
 
 	return (
 		<>
@@ -132,7 +123,7 @@ export const UpdateCategoryForm = ({
 				currentStep={step}
 			/>
 			<form
-				onSubmit={handleSubmit(onSubmit)}
+				// onSubmit={handleSubmit(onSubmit)}
 				className={cn(
 					"p-8 max-w-[1050px] w-full mx-auto rounded-xl shadow-md bg-white",
 					className,
@@ -152,8 +143,9 @@ export const UpdateCategoryForm = ({
 								control={control}
 								render={({ field: { onChange, value } }) => (
 									<div className="flex flex-col gap-y-1">
+										{/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
 										<label className="flex flex-col gap-y-3">
-											<span className=" text-xltext-xl">Название</span>
+											<span className="text-xl">Название</span>
 											<Input
 												className="border-[1px] border-[#dbdcde] !text-2xl text-[#89868d] py-8 px-6 rounded-md bg-[#f4f5f9] focus:border-[1px] focus-visible:ring-0 "
 												required
@@ -177,8 +169,9 @@ export const UpdateCategoryForm = ({
 								control={control}
 								render={({ field: { onChange, value } }) => (
 									<div className="flex flex-col gap-y-1">
+										{/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
 										<label className="flex flex-col gap-y-3">
-											<span className=" text-xltext-xl">Путь</span>
+											<span className="text-xl">Путь</span>
 											<Input
 												className="border-[1px] border-[#dbdcde] text-[#89868d] !text-2xl py-8 px-6 rounded-md bg-[#f4f5f9] focus:border-[1px] focus-visible:ring-0 "
 												required
@@ -203,8 +196,9 @@ export const UpdateCategoryForm = ({
 								control={control}
 								render={({ field: { onChange, value } }) => (
 									<div className="flex flex-col gap-y-1">
+										{/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
 										<label className="flex flex-col gap-y-3">
-											<span className=" text-xltext-xl">
+											<span className="text-xl">
 												Базовый путь (опционально)
 											</span>
 											<Select
@@ -247,60 +241,31 @@ export const UpdateCategoryForm = ({
 							/>
 						</div>
 					)}
-					{step === 2 &&
-						(image ? (
-							<div className="flex flex-col gap-y-2">
-								<div className="h-[400px] w-full rounded-md overflow-hidden relative">
-									<img className="w-full h-full" src={image} alt="file" />
-									<Button
-										type="button"
-										variant="ghost"
-										className="p-0 w-10 h-10 bg-black text-white rounded-full absolute right-3 top-3 cursor-pointer font-black"
-										onClick={() => {
-											resetField("image");
-											if (image.startsWith("blob")) {
-												URL.revokeObjectURL(image);
-											}
-											setImage(null);
-										}}
-									>
-										&#x2715;
-									</Button>
-								</div>
-								{(errors.image?.message || apiValidationErrors.image) && (
-									<FieldErrors
-										error={errors.image?.message || apiValidationErrors.image!}
-									/>
-								)}
-							</div>
-						) : (
-							<Controller
-								name="image"
-								control={control}
-								render={({ field: { onChange } }) => (
-									<ImagePicker
-										className="shadow-none pt-0 mx-auto"
-										max={CategoryImageMaxSize}
-										onChange={(e) => {
-											if (!e.target.files) return;
-											onChange(e.target.files[0]);
+					{step === 2 && (
+						<ImagePicker
+							control={control}
+							error={errors.image?.message || apiValidationErrors.image}
+							imageUrl={category.imageUrl}
+							resetField={resetField}
+						/>
+					)}
 
-											if (image?.startsWith("blob")) {
-												URL.revokeObjectURL(image);
-											}
-
-											setImage(URL.createObjectURL(e.target.files[0]));
-										}}
-									/>
-								)}
-							/>
-						))}
-
-					<Buttons
-						category={category}
+					<MultiStepFormButtons
 						step={step}
+						maxStep={2}
 						setStep={setStep}
 						control={control}
+						getDisabled={(val) => {
+							const fullPath = `${val.predefinedPath ? `${val.predefinedPath}.` : ""}${val.path}`;
+							return (
+								step === 2 &&
+								!val.image &&
+								val.name === category.name &&
+								fullPath === category.path
+							);
+						}}
+						finalLabel="Обновить категорию"
+						onFinalClick={handleSubmit(onSubmit)}
 					/>
 				</fieldset>
 			</form>
@@ -308,60 +273,47 @@ export const UpdateCategoryForm = ({
 	);
 };
 
-const Buttons = ({
+const ImagePicker = ({
 	control,
-	setStep,
-	step,
-	category,
+	imageUrl,
+	resetField,
+	error,
 }: {
 	control: Control<UpdateCategorySchema>;
-	step: number;
-	setStep: React.Dispatch<React.SetStateAction<1 | 2>>;
-	category: Category;
+	resetField: UseFormResetField<UpdateCategorySchema>;
+	imageUrl: Category["imageUrl"];
+	error?: string;
 }) => {
-	const { name, path, image, predefinedPath } = useWatch({ control });
-	const fullPath = `${predefinedPath ? `${predefinedPath}.` : ""}${path}`;
+	const { image: file } = useWatch({ control });
+	const [hasPreview, setHasPreview] = useState(imageUrl !== null);
 
-	const disabled =
-		step === 2 &&
-		!image &&
-		name === category.name &&
-		fullPath === category.path;
-
-	return (
-		<div className="flex items-center justify-between">
-			{step > 1 && (
-				<Button
-					onClick={() => setStep((prev) => (prev - 1) as 1 | 2)}
-					type={"button"}
-					disabled={step === 1}
-					variant="default"
-					className="block bg-orange-400 hover:bg-orange-500 cursor-pointer w-[150px] py-2 h-fit text-xl"
-				>
-					Назад
-				</Button>
-			)}
-
-			{step === 1 ? (
-				<Button
-					disabled={disabled}
-					onClick={() => setStep(2)}
-					variant="default"
-					type="button"
-					className="block bg-orange-400 hover:bg-orange-500 cursor-pointer w-full !min-w-[150px] max-w-fit py-2 h-fit ml-auto text-xl"
-				>
-					Далее
-				</Button>
-			) : (
-				<Button
-					disabled={disabled}
-					type={"submit"}
-					variant="default"
-					className="block bg-orange-400 hover:bg-orange-500 cursor-pointer w-full !min-w-[150px] max-w-fit py-2 h-fit ml-auto text-xl"
-				>
-					Обновить категорию
-				</Button>
-			)}
+	return file || hasPreview ? (
+		<div className="flex flex-col gap-y-2">
+			<ImageFilePreview
+				file={file}
+				imageUrl={imageUrl || undefined}
+				onDeleteClick={() => {
+					resetField("image");
+				}}
+				hasPreview={(val) => setHasPreview(val)}
+			/>
+			{error && <FieldErrors error={error} />}
 		</div>
+	) : (
+		<Controller
+			name="image"
+			control={control}
+			render={({ field: { onChange } }) => (
+				<FilePicker
+					className="shadow-none pt-0 mx-auto"
+					max={CategoryImageMaxSize}
+					accept=".jpg,.jpeg,.png,.webp"
+					onChange={(e) => {
+						if (!e.target.files) return;
+						onChange(e.target.files[0]);
+					}}
+				/>
+			)}
+		/>
 	);
 };

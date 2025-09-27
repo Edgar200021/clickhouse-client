@@ -1,4 +1,4 @@
-import z from "zod/v3";
+import z from "zod";
 
 export const baseSearchParams = z.object({
 	redirect: z.string().trim().optional(),

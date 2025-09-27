@@ -41,8 +41,6 @@ export const AdminUserList = () => {
 
 	if (!data) return null;
 
-	console.log(data);
-
 	return (
 		<ul className="flex flex-wrap gap-10">
 			{data.data.users.map((user) => {

@@ -1,8 +1,8 @@
+import z from "zod";
 import {
 	SignUpPasswordMaxLength,
 	SignUpPasswordMinLength,
 } from "@/const/schema";
-import z from "zod";
 
 export const signUpSchema = z
 	.object({
@@ -51,4 +51,4 @@ export const signUpSchema = z
 		error: "Пароли не совпадают.",
 	});
 
-export type SignUpSchema = z.infer<typeof signUpSchema>;
+export type SignUpSchema = z.Infer<typeof signUpSchema>;

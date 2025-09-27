@@ -5,9 +5,9 @@ import {
 	type FetchBaseQueryError,
 	fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-
-import { authActions } from "./auth/authSlice";
 import { API_BASE_URL } from "@/const/api";
+import { TagTypes } from "@/const/redux";
+import { authActions } from "./auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: API_BASE_URL,
@@ -39,5 +39,5 @@ export const baseApi = createApi({
 			}),
 		}),
 	}),
-	tagTypes: [],
+	tagTypes: TagTypes,
 });

@@ -43,7 +43,6 @@ export const AdminUserBlock = ({ user }: Props) => {
 						{user.isBanned
 							? "Пользователь будет разблокирован и сможет снова заходить в систему."
 							: "Пользователь будет заблокирован и не сможет входить в систему до разблокировки."}
-						1
 					</DialogDescription>
 				</DialogHeader>
 				<div className="flex justify-end gap-x-2 mt-4">

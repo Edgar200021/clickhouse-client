@@ -1,17 +1,24 @@
 import z from "zod";
-import { CategoryImageMaxSize } from "@/const/schema";
+import {
+	CategoryImageMaxSize,
+	CategoryNameMaxLength,
+	CategoryPathMaxLength,
+	CategoryPredefinedPathMaxLength,
+} from "@/const/schema";
 
 export const createCategorySchema = z.object({
-	name: z.string().nonempty(),
+	name: z.string().nonempty().max(CategoryNameMaxLength),
 	path: z
 		.string()
-		.regex(/^[a-z]+$/i, "Поле может содержать только латинские буквы"),
+		.regex(/^[a-z]+$/i, "Поле может содержать только латинские буквы")
+		.max(CategoryPathMaxLength),
 	predefinedPath: z
 		.string()
 		.regex(
 			/^[a-z]+(\.[a-z]+)?$/i,
 			"Поле должно содержать одно слово или две части, разделённые точкой, только латинские буквы.",
 		)
+		.max(CategoryPredefinedPathMaxLength)
 		.optional(),
 	image: z
 		.file()
@@ -19,4 +26,4 @@ export const createCategorySchema = z.object({
 		.max(CategoryImageMaxSize),
 });
 
-export type CreateCategorySchema = z.infer<typeof createCategorySchema>;
+export type CreateCategorySchema = z.Infer<typeof createCategorySchema>;

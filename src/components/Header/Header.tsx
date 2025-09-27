@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Routes } from "@/const/routes";
 import { cn } from "@/lib/utils";
 import { Menu } from "../Menu";
-import { ProductSearch } from "../Product/ProductSearch";
+import { ProductSkuSearch } from "../ProductSku/ProductSkuSearch";
 import { Logo } from "../ui/Logo";
 import { HeaderPart } from "./HeaderPart";
 
@@ -16,7 +16,7 @@ export const Header = ({ className }: Props) => {
 			<div className={"flex items-center justify-between gap-x-5 "}>
 				<Menu className="min-[800px]:hidden" />
 				<Logo className="max-[800px]:self-center max-[800px]:justify-self-center" />
-				<ProductSearch className="min-[800px]:hidden" />
+				<ProductSkuSearch className="min-[800px]:hidden" />
 				<nav className="max-[800px]:hidden">
 					<ul className="flex items-center gap-x-4">
 						<li>
@@ -78,7 +78,7 @@ export const Header = ({ className }: Props) => {
 			<div className="flex items-center justify-between gap-x-6 max-[800px]:hidden">
 				<div className="flex items-center gap-x-22 w-2/3">
 					<Menu />
-					<ProductSearch />
+					<ProductSkuSearch />
 				</div>
 				<HeaderPart className="ml-auto" />
 			</div>

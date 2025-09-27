@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { type Control, Controller, useForm, useWatch } from "react-hook-form";
-import { ImagePicker } from "@/components/ImagePicker";
+import { Controller, useForm } from "react-hook-form";
+import { FilePicker } from "@/components/FilePicker";
+import { ImageFilePreview } from "@/components/FilePreview/FilePreview";
+import { MultiStepFormButtons } from "@/components/MultiStepFormButtons";
 import { Steps } from "@/components/Steps";
-import { Button } from "@/components/ui/button";
 import { FieldErrors } from "@/components/ui/FieldErrors";
 import { Input } from "@/components/ui/input";
 import {
@@ -37,6 +38,7 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 		resetField,
 		reset,
 		control,
+		watch,
 	} = useForm<CreateCategorySchema>({
 		resolver: zodResolver(createCategorySchema),
 		defaultValues: {
@@ -48,7 +50,7 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 
 	const [createCategory, { isLoading, error }] = useCreateCategoryMutation();
 
-	const [step, setStep] = useState<1 | 2>(1);
+	const [step, setStep] = useState(1);
 	const [image, setImage] = useState<string | null>(null);
 	const { apiValidationErrors, clearError } = useHandleError<
 		(keyof CreateCategorySchema)[]
@@ -64,6 +66,8 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 		},
 	});
 
+	const file = watch("image");
+
 	const onSubmit = async (data: CreateCategorySchema) => {
 		clearError();
 		await createCategory({
@@ -78,21 +82,9 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 		}).unwrap();
 		reset({ image: undefined, name: "", path: "", predefinedPath: undefined });
 
-		if (image) {
-			URL.revokeObjectURL(image);
-			setImage(null);
-		}
-
 		setStep(1);
 		onSuccess?.();
 	};
-
-	useEffect(() => {
-		return () => {
-			if (!image) return;
-			URL.revokeObjectURL(image);
-		};
-	}, []);
 
 	return (
 		<>
@@ -102,7 +94,6 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 				currentStep={step}
 			/>
 			<form
-				onSubmit={handleSubmit(onSubmit)}
 				className={cn(
 					"p-8 max-w-[1050px] w-full mx-auto rounded-xl shadow-md bg-white",
 					className,
@@ -124,7 +115,7 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 									<div className="flex flex-col gap-y-1">
 										{/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
 										<label className="flex flex-col gap-y-3">
-											<span className=" text-xltext-xl">Название</span>
+											<span className="text-xl">Название</span>
 											<Input
 												className="border-[1px] border-[#dbdcde] !text-2xl text-[#89868d] py-8 px-6 rounded-md bg-[#f4f5f9] focus:border-[1px] focus-visible:ring-0 "
 												required
@@ -150,7 +141,7 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 									<div className="flex flex-col gap-y-1">
 										{/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
 										<label className="flex flex-col gap-y-3">
-											<span className=" text-xltext-xl">Путь</span>
+											<span className="text-xl">Путь</span>
 											<Input
 												className="border-[1px] border-[#dbdcde] text-[#89868d] !text-2xl py-8 px-6 rounded-md bg-[#f4f5f9] focus:border-[1px] focus-visible:ring-0 "
 												required
@@ -177,7 +168,7 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 									<div className="flex flex-col gap-y-1">
 										{/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
 										<label className="flex flex-col gap-y-3">
-											<span className=" text-xltext-xl">
+											<span className="text-xl">
 												Базовый путь (опционально)
 											</span>
 											<Select
@@ -221,22 +212,14 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 						</div>
 					)}
 					{step === 2 &&
-						(image ? (
+						(file ? (
 							<div className="flex flex-col gap-y-2">
-								<div className="h-[400px] w-full rounded-md overflow-hidden relative">
-									<img className="w-full h-full" src={image} alt="file" />
-									<Button
-										variant="ghost"
-										className="p-0 w-10 h-10 bg-black text-white rounded-full absolute right-3 top-3 cursor-pointer font-black"
-										onClick={() => {
-											resetField("image");
-											URL.revokeObjectURL(image);
-											setImage(null);
-										}}
-									>
-										&#x2715;
-									</Button>
-								</div>
+								<ImageFilePreview
+									file={file}
+									onDeleteClick={() => {
+										resetField("image");
+									}}
+								/>
 								{(errors.image?.message || apiValidationErrors.image) && (
 									<FieldErrors
 										error={errors.image?.message || apiValidationErrors.image!}
@@ -248,8 +231,9 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 								name="image"
 								control={control}
 								render={({ field: { onChange } }) => (
-									<ImagePicker
+									<FilePicker
 										className="shadow-none pt-0 mx-auto"
+										accept=".jpg,.jpeg,.png,.webp"
 										max={CategoryImageMaxSize}
 										onChange={(e) => {
 											if (!e.target.files) return;
@@ -266,59 +250,19 @@ export const CreateCategoryForm = ({ className, onSuccess }: Props) => {
 							/>
 						))}
 
-					<Buttons step={step} setStep={setStep} control={control} />
+					<MultiStepFormButtons
+						step={step}
+						maxStep={2}
+						setStep={setStep}
+						control={control}
+						getDisabled={(val) =>
+							step === 1 ? !val.name || !val.path : !val.image
+						}
+						finalLabel="Создать категорию"
+						onFinalClick={handleSubmit(onSubmit)}
+					/>
 				</fieldset>
 			</form>
 		</>
-	);
-};
-
-const Buttons = ({
-	control,
-	setStep,
-	step,
-}: {
-	control: Control<CreateCategorySchema>;
-	step: number;
-	setStep: React.Dispatch<React.SetStateAction<1 | 2>>;
-}) => {
-	const { name, path, image } = useWatch({ control });
-
-	const disabled = step === 1 ? !name || !path : !image;
-
-	return (
-		<div className="flex items-center justify-between">
-			{step > 1 && (
-				<Button
-					onClick={() => setStep((prev) => (prev - 1) as 1 | 2)}
-					type={"button"}
-					disabled={step === 1}
-					variant="default"
-					className="block bg-orange-400 hover:bg-orange-500 cursor-pointer w-[150px] py-2 h-fit text-xl"
-				>
-					Назад
-				</Button>
-			)}
-			{step === 1 ? (
-				<Button
-					disabled={disabled}
-					onClick={() => setStep(2)}
-					type={"button"}
-					variant="default"
-					className="block bg-orange-400 hover:bg-orange-500 cursor-pointer w-full !min-w-[150px] max-w-fit py-2 h-fit ml-auto text-xl"
-				>
-					Далее
-				</Button>
-			) : (
-				<Button
-					disabled={disabled}
-					type={"submit"}
-					variant="default"
-					className="block bg-orange-400 hover:bg-orange-500 cursor-pointer w-full !min-w-[150px] max-w-fit py-2 h-fit ml-auto text-xl"
-				>
-					Создать категорию
-				</Button>
-			)}
-		</div>
 	);
 };

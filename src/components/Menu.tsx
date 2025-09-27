@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/drawer";
 import { Routes } from "@/const/routes";
 import { cn } from "@/lib/utils";
+import { productSkuActions } from "@/store/product-sku/productSkuSlice";
+import { useAppDispatch } from "@/store/store";
 import { HeaderPart } from "./Header/HeaderPart";
 import { Button } from "./ui/button";
 import { Logo } from "./ui/Logo";
@@ -22,6 +24,9 @@ type Props = {
 
 export const Menu = ({ className }: Props) => {
 	const [open, setOpen] = useState(false);
+	const onNavigate = () => setOpen(false);
+	const dispatch = useAppDispatch();
+
 	return (
 		<Drawer open={open} onOpenChange={setOpen} direction="left">
 			<DrawerTrigger asChild>
@@ -58,25 +63,65 @@ export const Menu = ({ className }: Props) => {
 				<nav>
 					<ul className="flex flex-col gap-y-5">
 						<li className="hover:text-orange-400 hover:translate-x-2 transition-all duration-300 ease  text-3xl font-bold">
-							<Link to={Routes.Catalog}>Каталог</Link>
+							<Link onClick={onNavigate} to={Routes.Catalog}>
+								Каталог
+							</Link>
 						</li>
 						<li className="hover:text-orange-400 hover:translate-x-2 transition-all duration-300 ease  text-3xl font-bold">
-							<Link to={Routes.Catalog}>Товары в наличии</Link>
+							<Link
+								onClick={() => {
+									// dispatch(
+									// 	productSkuActions.setFilters({
+									// 		type: "single",
+									// 		key: "inStock",
+									// 		val: true,
+									// 	}),
+									// );
+									onNavigate();
+								}}
+								to={Routes.Catalog}
+								search={{ inStock: true }}
+							>
+								Товары в наличии
+							</Link>
 						</li>
 						<li className="hover:text-orange-400 hover:translate-x-2 transition-all duration-300 ease  text-3xl font-bold">
-							<Link to={Routes.Catalog}>Скидки</Link>
+							<Link
+								onClick={() => {
+									// dispatch(
+									// 	productSkuActions.setFilters({
+									// 		type: "single",
+									// 		key: "withDistount",
+									// 		val: true,
+									// 	}),
+									// );
+									onNavigate();
+								}}
+								to={Routes.Catalog}
+								search={{ withDistount: true }}
+							>
+								Скидки
+							</Link>
 						</li>
 						<li className="hover:text-orange-400 hover:translate-x-2 transition-all duration-300 ease">
-							<Link to={Routes.Delivery}>Доставка</Link>
+							<Link onClick={onNavigate} to={Routes.Delivery}>
+								Доставка
+							</Link>
 						</li>
 						<li className="hover:text-orange-400 hover:translate-x-2 transition-all duration-300 ease">
-							<Link to={Routes.Payment}>Оплата</Link>
+							<Link onClick={onNavigate} to={Routes.Payment}>
+								Оплата
+							</Link>
 						</li>
 						<li className="hover:text-orange-400 hover:translate-x-2 transition-all duration-300 ease">
-							<Link to={Routes.Conditions}>Условия</Link>
+							<Link onClick={onNavigate} to={Routes.Conditions}>
+								Условия
+							</Link>
 						</li>
 						<li className="hover:text-orange-400 hover:translate-x-2 transition-all duration-300 ease">
-							<Link to={Routes.Contacts}>Контакты</Link>
+							<Link onClick={onNavigate} to={Routes.Contacts}>
+								Контакты
+							</Link>
 						</li>
 					</ul>
 				</nav>

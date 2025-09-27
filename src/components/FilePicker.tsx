@@ -6,18 +6,9 @@ import { Input } from "./ui/input";
 
 type Props = {
 	className?: string;
-	withButton?: {
-		onClick: () => void | Promise<void>;
-		text: string;
-	};
 } & ComponentProps<"input">;
 
-export const ImagePicker = ({
-	className,
-	withButton,
-	setImages,
-	...rest
-}: Props) => {
+export const FilePicker = ({ className, ...rest }: Props) => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
 
 	return (
@@ -36,36 +27,28 @@ export const ImagePicker = ({
 					height={48}
 				/>
 				<p className="font-medium text-xl">
-					Перетащите изображение сюда или
+					Перетащите {rest.multiple ? "файлы" : "файл"} сюда или
 					<Button
 						onClick={() => inputRef.current?.click()}
 						className="p-0 pl-2 text-orange-400 cursor-pointer text-xl"
 						variant="ghost"
 						type="button"
 					>
-						Выберите файл
+						Выберите {rest.multiple ? "файлы" : "файл"}
 					</Button>
 				</p>
-				<p className="text-lg text-[#89868d]">
-					Поддерживаются форматы: JPG, JPEG, PNG, WEBP
-				</p>
-				<Input
-					ref={inputRef}
-					{...rest}
-					className="hidden"
-					// accept=".jpg,.jpeg,.png,.webp"
-					type="file"
-				/>
+				{rest.accept && (
+					<p className="text-lg text-[#89868d]">
+						Поддерживаются форматы:{" "}
+						{rest.accept
+							.split(",")
+							.map((v) => v.slice(1).toUpperCase())
+							.join(", ")}
+					</p>
+				)}
+
+				<Input ref={inputRef} {...rest} className="hidden" type="file" />
 			</div>
-			{withButton && (
-				<Button
-					variant="default"
-					className="bg-orange-400 hover:bg-orange-500 cursor-pointer w-[100px] py-2 self-end"
-					onClick={withButton.onClick}
-				>
-					{withButton.text}
-				</Button>
-			)}
 		</div>
 	);
 };

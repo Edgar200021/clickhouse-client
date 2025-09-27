@@ -1,0 +1,16 @@
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { Routes } from "@/const/routes";
+
+export const Route = createFileRoute("/_regularLayout/_authenticated")({
+	beforeLoad: ({ context, location }) => {
+		const { user } = context;
+		if (!user) {
+			return redirect({
+				to: window.innerWidth < 800 ? Routes.Auth.SignIn : Routes.Main,
+				search: {
+					redirect: location.pathname,
+				},
+			})
+		}
+	},
+});

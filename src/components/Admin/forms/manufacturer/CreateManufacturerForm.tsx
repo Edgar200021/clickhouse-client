@@ -63,7 +63,7 @@ export const CreateManufacturerForm = ({ className, onSuccess }: Props) => {
 						<div className="flex flex-col gap-y-1">
 							{/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
 							<label className="flex flex-col gap-y-3">
-								<span className=" text-xltext-xl">Название</span>
+								<span className="text-xl">Название</span>
 								<Input
 									className="border-[1px] border-[#dbdcde] !text-2xl text-[#89868d] py-8 px-6 rounded-md bg-[#f4f5f9] focus:border-[1px] focus-visible:ring-0 "
 									required
@@ -81,7 +81,7 @@ export const CreateManufacturerForm = ({ className, onSuccess }: Props) => {
 				/>
 
 				<Button
-					disabled={!isValid}
+					disabled={!isValid || isLoading}
 					type={"submit"}
 					variant="default"
 					className="block bg-orange-400 hover:bg-orange-500 cursor-pointer w-full !min-w-[150px] max-w-fit py-2 h-fit ml-auto text-xl"

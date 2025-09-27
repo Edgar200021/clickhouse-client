@@ -13,6 +13,10 @@ export type ApiValidationErrorResponse<T extends string[]> = {
 	errors: Partial<Record<T[number], string>>;
 };
 
-export type WithCountResponse<T, K extends string> = {
-	totalCount: number;
+export type WithPageCountResponse<T, K extends string> = {
+	pageCount: number;
+} & Record<K, T>;
+
+export type Combined<O extends Record<string, unknown>, T, K extends string> = {
+	[key in keyof O]: O[key];
 } & Record<K, T>;

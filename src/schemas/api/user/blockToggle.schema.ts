@@ -5,4 +5,4 @@ export const blockToggleSchema = z.object({
 	type: z.enum(["lock", "unlock"]),
 });
 
-export type BlockToggleSchema = z.infer<typeof blockToggleSchema>;
+export type BlockToggleSchema = z.Infer<typeof blockToggleSchema>;

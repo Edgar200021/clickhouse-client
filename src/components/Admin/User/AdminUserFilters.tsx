@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import sortIcon from "@/assets/icons/sort.svg";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,12 +18,13 @@ import {
 } from "@/components/ui/select";
 import { adminActions, adminSelectors } from "@/store/admin/adminSlice";
 import type { GetUsersRequest } from "@/store/admin/types";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 
 export const AdminUserFilters = () => {
-	const dispatch = useDispatch();
-	const isBanned = useSelector(adminSelectors.getUsersFiltersIsBanned);
-	const isVerified = useSelector(adminSelectors.getUsersFiltersIsVerified);
-	const limit = useSelector(adminSelectors.getUsersFiltersLimit);
+	const dispatch = useAppDispatch();
+	const isBanned = useAppSelector(adminSelectors.getUsersFiltersIsBanned);
+	const isVerified = useAppSelector(adminSelectors.getUsersFiltersIsVerified);
+	const limit = useAppSelector(adminSelectors.getUsersFiltersLimit);
 
 	const handleChange = <
 		T extends keyof Pick<GetUsersRequest, "isBanned" | "isVerified" | "limit">,
@@ -67,6 +68,7 @@ export const AdminUserFilters = () => {
 					Показывать на странице
 				</span>
 				<Select
+					defaultValue={limit?.toString() ?? ""}
 					value={limit?.toString() ?? ""}
 					onValueChange={(val) =>
 						handleChange("limit", val ? Number(val) : undefined)

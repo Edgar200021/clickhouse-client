@@ -12,6 +12,7 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Routes } from "@/const/routes";
+import { useHandleError } from "@/hooks/useHandleError";
 import { cn } from "@/lib/utils";
 import { useDeleteCategoryMutation } from "@/store/admin/adminApi";
 import type { Category } from "@/types/category";
@@ -23,7 +24,9 @@ type Props = {
 
 const DeleteCategory = ({ category }: Pick<Props, "category">) => {
 	const [open, setOpen] = useState(false);
-	const [deleteCategory, { isLoading }] = useDeleteCategoryMutation();
+	const [deleteCategory, { isLoading, error }] = useDeleteCategoryMutation();
+
+	useHandleError(error);
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -36,9 +39,9 @@ const DeleteCategory = ({ category }: Pick<Props, "category">) => {
 				<DialogHeader>
 					<DialogTitle>Удалить категорию?</DialogTitle>
 					<DialogDescription>
-						Это действие нельзя отменить. Категория{" "}
-						<strong> {category.name}</strong> будет удалена без возможности
-						восстановления.
+						Это действие нельзя отменить. Категория
+						<strong className="px-1"> {category.name}</strong> будет удалена без
+						возможности восстановления.
 					</DialogDescription>
 				</DialogHeader>
 				<div className="flex justify-end gap-x-2 mt-4">
@@ -89,6 +92,10 @@ export const AdminCategory = ({ className, category }: Props) => {
 					"pt-4": !category.imageUrl,
 				})}
 			>
+				<div className="flex justify-between gap-x-4">
+					<dt className="font-medium text-gray-600">ID:</dt>
+					<dd className="text-gray-900 text-right">{category.id}</dd>
+				</div>
 				<div className="flex justify-between gap-x-4">
 					<dt className="font-medium text-gray-600">Название:</dt>
 					<dd className="text-gray-900 text-right">{category.name}</dd>

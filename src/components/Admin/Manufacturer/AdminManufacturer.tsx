@@ -37,8 +37,8 @@ const DeleteManufacturer = ({ manufacturer }: Pick<Props, "manufacturer">) => {
 					<DialogTitle>Удалить производителя?</DialogTitle>
 					<DialogDescription>
 						Это действие нельзя отменить. Производитель
-						<strong> {manufacturer.name}</strong> будет удалена без возможности
-						восстановления.
+						<strong className="px-1">{manufacturer.name}</strong> будет удалена
+						без возможности восстановления.
 					</DialogDescription>
 				</DialogHeader>
 				<div className="flex justify-end gap-x-2 mt-4">
@@ -79,6 +79,10 @@ export const AdminManufacturer = ({ className, manufacturer }: Props) => {
 			)}
 		>
 			<dl className={"flex flex-col gap-y-2 text-sm sm:text-base px-4 mb-2"}>
+				<div className="flex justify-between gap-x-4">
+					<dt className="font-medium text-gray-600">ID:</dt>
+					<dd className="text-gray-900 text-right">{manufacturer.id}</dd>
+				</div>
 				<div className="flex justify-between gap-x-4">
 					<dt className="font-medium text-gray-600">Название:</dt>
 					<dd className="text-gray-900 text-right">{manufacturer.name}</dd>

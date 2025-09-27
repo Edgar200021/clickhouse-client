@@ -5,10 +5,7 @@ import { UpdateManufacturerForm } from "@/components/Admin/forms/manufacturer/Up
 import { AdminManufacturerList } from "@/components/Admin/Manufacturer/AdminManufacturerList";
 import { Spinner } from "@/components/ui/Spinner";
 import { Routes } from "@/const/routes";
-import { useHandleError } from "@/hooks/useHandleError";
-import { useLazyGetManufacturerQuery } from "@/store/admin/adminApi";
-import { adminSelectors } from "@/store/admin/adminSlice";
-import { useAppSelector } from "@/store/store";
+import { useGetManufacturer } from "@/hooks/useGetManufacturer";
 
 export const Route = createLazyFileRoute(
 	`/_authenticated${Routes.Admin.ManufacturersUpdate}`,
@@ -18,18 +15,9 @@ export const Route = createLazyFileRoute(
 
 function RouteComponent() {
 	const { manufacturerId } = Route.useParams();
-	const manufacturer = useAppSelector((state) =>
-		adminSelectors.getManufacturer(state, Number(manufacturerId)),
+	const { manufacturer, isLoading } = useGetManufacturer(
+		Number(manufacturerId),
 	);
-	const [getManufacturer, { data, error, isLoading }] =
-		useLazyGetManufacturerQuery();
-
-	useHandleError(error);
-
-	useEffect(() => {
-		if (!manufacturerId || manufacturer) return;
-		getManufacturer({ manufacturerId: Number(manufacturerId) });
-	}, [manufacturer, manufacturerId]);
 
 	if (isLoading)
 		return (
@@ -38,7 +26,7 @@ function RouteComponent() {
 			</div>
 		);
 
-	if (!manufacturerId || (!manufacturer && !data?.data)) {
+	if (!manufacturer) {
 		return (
 			<div className="flex flex-col gap-y-20">
 				<div className="flex justify-between items-center gap-x-10">
@@ -56,7 +44,7 @@ function RouteComponent() {
 		<div className="flex flex-col gap-y-20">
 			<h1 className="text-4xl font-bold">Обновление производителя</h1>
 			<UpdateManufacturerForm
-				manufacturer={manufacturer || data.data}
+				manufacturer={manufacturer}
 				onSuccess={() => toast.success("Производитель успешно обновлен")}
 			/>
 		</div>

@@ -47,4 +47,4 @@ export const resetPasswordSchema = z
 		error: "Пароли не совпадают.",
 	});
 
-export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
+export type ResetPasswordSchema = z.Infer<typeof resetPasswordSchema>;

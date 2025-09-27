@@ -2,14 +2,16 @@ import { useSearch } from "@tanstack/react-router";
 import { useEffect } from "react";
 import type { Routes } from "@/const/routes";
 import {
-	type GetProductsFiltersSchema,
-	getProductsFiltersSchema,
-} from "@/schemas/api/products/getProducts.schema";
-import { productActions } from "@/store/product/productSlice";
+	type GetProductsSkusSchema,
+	getProductsSkusSchema,
+} from "@/schemas/api/productSku/getProductsSkus.schema";
+import { productSkuActions } from "@/store/product-sku/productSkuSlice";
 import { useAppDispatch } from "@/store/store";
 
 type Props = {
-	from: `/_regularLayout${(typeof Routes)["SpecificCatalog"]}`;
+	from:
+		| `/_regularLayout${(typeof Routes)["SpecificCatalog"]}`
+		| `/_regularLayout${(typeof Routes)["Catalog"]}/`;
 };
 
 export const SynchronizeSearchParamsWithState = ({ from }: Props) => {
@@ -21,21 +23,30 @@ export const SynchronizeSearchParamsWithState = ({ from }: Props) => {
 	useEffect(() => {
 		if (!params) return;
 
-		if (from === "/_regularLayout/catalog/$catalogPath") {
-			const validKeys = Object.keys(getProductsFiltersSchema.shape);
+		if (
+			from === "/_regularLayout/catalog/$catalogPath" ||
+			from === "/_regularLayout/catalog/"
+		) {
+			const validKeys = Object.keys(getProductsSkusSchema.shape);
+
 			const filtersFromSearch = Object.entries(params).reduce(
-				(acc: GetProductsFiltersSchema, [key, value]) => {
+				(acc: GetProductsSkusSchema, [key, value]) => {
 					if (validKeys.includes(key)) {
-						acc[key as keyof GetProductsFiltersSchema] = value;
+						acc[key as keyof GetProductsSkusSchema] = value;
 					}
 					return acc;
 				},
-				{} as GetProductsFiltersSchema,
+				{} as GetProductsSkusSchema,
 			);
 
-			dispatch(productActions.setFilters(filtersFromSearch));
+			dispatch(
+				productSkuActions.setFilters({
+					type: "multiple",
+					values: filtersFromSearch,
+				}),
+			);
 		}
-	}, []);
+	}, [from]);
 
 	return null;
 };

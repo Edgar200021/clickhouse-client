@@ -11,6 +11,6 @@ export const accountVerificationSchema = z.object({
 	}),
 });
 
-export type AccountVerificationSchema = z.infer<
+export type AccountVerificationSchema = z.Infer<
 	typeof accountVerificationSchema
 >;

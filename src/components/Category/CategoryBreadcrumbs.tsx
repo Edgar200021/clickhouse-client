@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { Fragment } from "react/jsx-runtime";
 import arrowIcon from "@/assets/icons/arrow.svg";
 import { Routes } from "@/const/routes";
-import { cn } from "@/lib/utils";
 import { categorySelectors } from "@/store/category/categorySlice";
 import { useAppSelector } from "@/store/store";
 import type { Category } from "@/types/category";
@@ -21,8 +20,8 @@ export const CategoryBreadcrumbs = ({ className, category }: Props) => {
 	].filter((val) => category.path.includes(val.path));
 
 	return (
-		<>
-			<div className={cn("flex items-center gap-x-2 pb-3", className)}>
+		<div className={className}>
+			<div className={"flex items-center gap-x-2 pb-3"}>
 				{breadCrumbs.map((v, i) => (
 					<Fragment key={v.id}>
 						{v.path === category.path ? (
@@ -49,6 +48,6 @@ export const CategoryBreadcrumbs = ({ className, category }: Props) => {
 				))}
 			</div>
 			<hr className="h-[1px] border-0 border-b-[1px] border-[#e9e5e5] w-full" />
-		</>
+		</div>
 	);
 };

@@ -23,7 +23,7 @@ export const HeaderPart = ({ className }: Props) => {
 					<use xlinkHref={`${sprites}#facebook`} />
 				</svg>*/}
 			</Link>
-			<Link className="w-6 h-6 " to={Routes.Basket}>
+			<Link className="w-6 h-6 " to={Routes.Cart}>
 				<img
 					className="w-full h-full object-contain"
 					alt="Favorite"

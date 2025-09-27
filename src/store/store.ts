@@ -4,13 +4,13 @@ import { adminSlice } from "./admin/adminSlice";
 import { authSlice } from "./auth/authSlice";
 import { baseApi } from "./baseApi";
 import { categorySlice } from "./category/categorySlice";
-import { productSlice } from "./product/productSlice";
+import { productSkuSlice } from "./product-sku/productSkuSlice";
 
 export const store = configureStore({
 	reducer: {
 		[baseApi.reducerPath]: baseApi.reducer,
 		[authSlice.reducerPath]: authSlice.reducer,
-		[productSlice.reducerPath]: productSlice.reducer,
+		[productSkuSlice.reducerPath]: productSkuSlice.reducer,
 		[categorySlice.reducerPath]: categorySlice.reducer,
 		[adminSlice.reducerPath]: adminSlice.reducer,
 	},

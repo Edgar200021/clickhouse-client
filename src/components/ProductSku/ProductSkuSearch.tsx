@@ -13,7 +13,10 @@ import {
 } from "@/components/ui/dialog";
 import { Routes } from "@/const/routes";
 import { cn } from "@/lib/utils";
-import { productActions, productSelectors } from "@/store/product/productSlice";
+import {
+	productSkuActions,
+	productSkuSelectors,
+} from "@/store/product-sku/productSkuSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -39,7 +42,13 @@ const ClearSearch = ({
 			onClick={() => {
 				onClick();
 				if (location.pathname === Routes.Catalog) {
-					dispatch(productActions.setFiltersSearch(""));
+					dispatch(
+						productSkuActions.setFilters({
+							type: "single",
+							key: "search",
+							val: "",
+						}),
+					);
 					navigate({
 						to: Routes.Catalog,
 						// search: (prev) => ({ ...prev, search: undefined }),
@@ -48,7 +57,7 @@ const ClearSearch = ({
 			}}
 			disabled={disabled}
 			variant="ghost"
-			className="p-0 cursor-pointer"
+			className="p-0 cursor-pointer !bg-transparent"
 		>
 			<img
 				src={closeIcon}
@@ -61,9 +70,10 @@ const ClearSearch = ({
 	);
 };
 
-export const ProductSearch = ({ className }: Props) => {
+export const ProductSkuSearch = ({ className }: Props) => {
 	const [open, setOpen] = useState(false);
-	const search = useAppSelector(productSelectors.getFiltersSearch);
+	const stateSearch = useAppSelector(productSkuSelectors.getFiltersSearch);
+	const [search, setSearch] = useState(() => stateSearch || "");
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
@@ -105,33 +115,44 @@ export const ProductSearch = ({ className }: Props) => {
 							});
 						}}
 						className={cn(
-							"flex items-center justify-between !max-w-[650px] rounded-4xl py-2 px-5 focus-within:ring-1 !min-w-full",
+							"flex items-center justify-between !max-w-[650px] rounded-4xl py-2 px-5 focus-within:ring-1 !min-w-full gap-x-2",
 							className,
 						)}
 					>
 						<ClearSearch
-							onClick={() => dispatch(productActions.setFiltersSearch(""))}
-							disabled={!search?.trim().length}
+							onClick={() => {
+								setSearch("");
+								dispatch(
+									productSkuActions.setFilters({
+										type: "single",
+										key: "search",
+										val: "",
+									}),
+								);
+							}}
+							disabled={!search.trim().length}
 						/>
 						<Input
 							value={search}
-							onChange={(e) =>
-								dispatch(productActions.setFiltersSearch(e.target.value))
-							}
+							onChange={(e) => setSearch(e.target.value)}
 							placeholder="Что желаете найти?"
-							className="placeholder:text-lg placeholder:text-[#7d7d7d] border-none focus:ring-0 focus-visible:ring-0"
+							className="placeholder:text-lg placeholder:text-[#7d7d7d] border-none focus:ring-0 focus-visible:ring-0 shadow-none"
 						/>
 						<Link
-							disabled={!search?.trim().length}
+							disabled={!search.trim().length}
 							to={Routes.Catalog}
 							onClick={() => {
-								if (!search?.trim().length) return;
+								if (!search.trim().length) return;
+								dispatch(
+									productSkuActions.setFilters({
+										type: "single",
+										key: "search",
+										val: search,
+									}),
+								);
 								setOpen(false);
 							}}
-							search={(prev) => ({
-								...prev,
-								search,
-							})}
+							search={{ search }}
 						>
 							<img src={searchIcon} alt="Search" />
 						</Link>
@@ -154,30 +175,43 @@ export const ProductSearch = ({ className }: Props) => {
 					});
 				}}
 				className={cn(
-					"flex items-center justify-between max-w-[650px] rounded-4xl py-2 px-5 w-full focus-within:ring-1",
+					"flex items-center justify-between max-w-[650px] rounded-4xl py-2 px-5 w-full focus-within:ring-1 gap-x-2",
 					className,
 					2,
 				)}
 			>
 				<ClearSearch
-					onClick={() => dispatch(productActions.setFiltersSearch(""))}
+					onClick={() =>
+						dispatch(
+							productSkuActions.setFilters({
+								type: "single",
+								key: "search",
+								val: "",
+							}),
+						)
+					}
 					disabled={!search?.trim().length}
 				/>
 				<Input
 					value={search}
-					onChange={(e) =>
-						dispatch(productActions.setFiltersSearch(e.target.value))
-					}
+					onChange={(e) => setSearch(e.target.value)}
 					placeholder="Что желаете найти?"
-					className="placeholder:text-lg placeholder:text-[#7d7d7d] border-none focus:ring-0 focus-visible:ring-0"
+					className="placeholder:text-lg placeholder:text-[#7d7d7d] border-none focus:ring-0 focus-visible:ring-0 shadow-none"
 				/>
 				<Link
 					disabled={!search?.trim().length}
 					to={Routes.Catalog}
-					search={(prev) => ({
-						...prev,
-						search,
-					})}
+					search={{ search }}
+					onClick={() => {
+						if (!search.trim().length) return;
+						dispatch(
+							productSkuActions.setFilters({
+								type: "single",
+								key: "search",
+								val: search,
+							}),
+						);
+					}}
 				>
 					<img src={searchIcon} alt="Search" />
 				</Link>

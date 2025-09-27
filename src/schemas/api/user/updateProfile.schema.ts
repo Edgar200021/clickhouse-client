@@ -59,4 +59,4 @@ export const updateProfileSchema = z
 		}
 	});
 
-export type UpdateProfileSchema = z.infer<typeof updateProfileSchema>;
+export type UpdateProfileSchema = z.Infer<typeof updateProfileSchema>;

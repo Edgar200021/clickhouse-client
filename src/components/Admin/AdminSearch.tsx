@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { type ComponentProps, useEffect, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 import closeIcon from "@/assets/icons/close.svg";
 import searchIcon from "@/assets/icons/search.svg";
@@ -10,23 +10,52 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 
 type Props = {
 	className?: string;
-};
+	type: Extract<
+		keyof typeof adminSelectors,
+		| "getUsersFiltersSearch"
+		| "getProductFiltersSearch"
+		| "getProductsSkusFiltersSearch"
+		| "getPromocodesFiltersSearch"
+	>;
+} & ComponentProps<"input">;
 
-export const AdminUserSearch = ({ className }: Props) => {
-	const userSearch = useAppSelector(adminSelectors.getUsersFiltersSerach);
+export const AdminSearch = ({ className, type, ...rest }: Props) => {
+	const userSearch = useAppSelector(adminSelectors[type]) as string;
 	const dispatch = useAppDispatch();
 	const [search, setSearch] = useState("");
 	const debounced = useDebounceValue(search, 500);
 
 	useEffect(() => {
 		if (!userSearch?.trim() && !debounced[0]) return;
-		dispatch(
-			adminActions.setUsersFilters({
-				key: "search",
-				val: !debounced[0].trim() ? undefined : debounced[0],
-			}),
-		);
-	}, [userSearch, debounced]);
+		const value = !debounced[0].trim() ? undefined : debounced[0];
+
+		let fn: (typeof adminActions)[
+			| "setUsersFilters"
+			| "setProductFilters"
+			| "setProductsSkusFilters"
+			| "setPromocodesFilters"];
+
+		switch (type) {
+			case "getUsersFiltersSearch":
+				fn = adminActions.setUsersFilters;
+				break;
+			case "getProductFiltersSearch":
+				fn = adminActions.setProductFilters;
+				break;
+			case "getProductsSkusFiltersSearch":
+				fn = adminActions.setProductsSkusFilters;
+				break;
+			case "getPromocodesFiltersSearch":
+				fn = adminActions.setPromocodesFilters;
+				break;
+			default: {
+				const x: never = type;
+				break;
+			}
+		}
+
+		dispatch(fn!({ key: "search", val: value }));
+	}, [type, userSearch, debounced]);
 
 	return (
 		<>
@@ -52,9 +81,10 @@ export const AdminUserSearch = ({ className }: Props) => {
 					/>
 				</Button>
 				<Input
+					{...rest}
+					type="text"
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
-					placeholder="Введите эл.почту пользователя"
 					className="placeholder:text-lg placeholder:text-[#7d7d7d] border-none focus:ring-0 focus-visible:ring-0 !bg-none "
 				/>
 
