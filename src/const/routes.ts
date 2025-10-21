@@ -17,6 +17,8 @@ export const Routes = {
 	Cart: "/cart",
 	Profile: "/profile",
 	Product: "/product/$productSkuId",
+	Orders: "/orders",
+	SpecificOrder: "/orders/{$orderNumber}",
 	Admin: {
 		Base: "/admin",
 		Categories: "/admin/categories",

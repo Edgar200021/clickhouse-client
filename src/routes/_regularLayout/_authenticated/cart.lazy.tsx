@@ -1,6 +1,7 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { AddCartItemBySku } from "@/components/Cart/AddCartItemBySku";
+import { CartCurrency } from "@/components/Cart/CartCurrency";
 import { CartItemList } from "@/components/Cart/CartItemList";
 import { ProductSkuList } from "@/components/ProductSku/ProductSkuList";
 import { Routes } from "@/const/routes";
@@ -30,6 +31,8 @@ function RouteComponent() {
 					</span>
 					<AddCartItemBySku />
 				</div>
+				<CartCurrency />
+
 				<CartItemList className="w-full" />
 			</div>
 			<div className="flex flex-col gap-y-[22px] lg:w-fit w-full">
@@ -50,6 +53,7 @@ function RouteComponent() {
 					baseFilters={{
 						limit: 3,
 						categoryId: randomCategory?.id ?? undefined,
+						inStock: true,
 					}}
 				/>
 				<Link

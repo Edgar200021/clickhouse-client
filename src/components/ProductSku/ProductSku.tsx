@@ -6,6 +6,7 @@ import { CartItemMaxQuantityPerProduct } from "@/const/schema";
 import { useAddCartItem } from "@/hooks/useAddCartItem";
 import { calculateDiscount, cn } from "@/lib/utils";
 import type { Combined } from "@/types/api";
+import { Currency } from "@/types/currency.enum";
 import type { Product, ProductSku as PS } from "@/types/product";
 import { Slider } from "../Slider";
 import { Button } from "../ui/button";
@@ -142,16 +143,16 @@ export const ProductSku = ({ className, productSku, type = "base" }: Props) => {
 							{productSku.salePrice && (
 								<span className="text-sm text-[#7d7d7d] line-through">
 									{productSku.price}
-									{productSku.currency.slice(0, 1)}
-									{productSku.currency.slice(1).toLowerCase()}
+									{Currency.Rub.slice(0, 1)}
+									{Currency.Rub.slice(1).toLowerCase()}
 								</span>
 							)}
 							<div className="flex items-center justify-between gap-x-5 mb-2">
 								<span className="text-[30px] font-bold leading-[100%]">
 									{productSku.salePrice || productSku.price}
 									<span className="text-sm pl-1">
-										{productSku.currency.slice(0, 1)}
-										{productSku.currency.slice(1).toLowerCase()}
+										{Currency.Rub.slice(0, 1)}
+										{Currency.Rub.slice(1).toLowerCase()}
 									</span>
 								</span>
 
@@ -172,14 +173,14 @@ export const ProductSku = ({ className, productSku, type = "base" }: Props) => {
 							)}
 							<span className="font-bold text-lg leading-[100%]">
 								{productSku.salePrice ?? productSku.price}&nbsp;
-								{productSku.currency.slice(0, 1)}
-								{productSku.currency.slice(1).toLowerCase()}
+								{Currency.Rub.slice(0, 1)}
+								{Currency.Rub.slice(1).toLowerCase()}
 							</span>
 							{productSku.salePrice && (
 								<span className="text-xs text-[#7d7d7d] line-through">
 									{productSku.price}
-									{productSku.currency.slice(0, 1)}
-									{productSku.currency.slice(1).toLowerCase()}
+									{Currency.Rub.slice(0, 1)}
+									{Currency.Rub.slice(1).toLowerCase()}
 								</span>
 							)}
 						</div>

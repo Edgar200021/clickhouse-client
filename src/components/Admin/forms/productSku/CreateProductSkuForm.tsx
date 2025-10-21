@@ -92,7 +92,7 @@ export const CreateProductSkuForm = ({
 				setStep(1);
 			}
 
-			if (err.price || err.salePrice || err.currency) {
+			if (err.price || err.salePrice) {
 				setStep(2);
 			}
 
@@ -417,44 +417,6 @@ export const CreateProductSkuForm = ({
 									</div>
 								)}
 							/>
-							<Controller
-								name="currency"
-								control={control}
-								render={({ field: { onChange, value } }) => (
-									<div className="flex flex-col gap-y-1">
-										{/** biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
-										<label className="flex flex-col gap-y-3">
-											<span className="text-xl">Валюта</span>
-											<Select onValueChange={onChange} value={value ?? ""}>
-												<SelectTrigger className="w-full cursor-pointer py-8 px-6 text-2xl text-[#89868d] bg-[#f4f5f9]">
-													<SelectValue placeholder="Выберите валюту" />
-												</SelectTrigger>
-												<SelectContent>
-													{Object.values(Currency).map((cur) => (
-														<SelectItem
-															key={cur}
-															value={cur}
-															className="text-2xl"
-														>
-															{cur}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-										</label>
-
-										{(errors.currency?.message ||
-											apiValidationErrors.currency) && (
-											<FieldErrors
-												error={
-													errors.currency?.message ||
-													apiValidationErrors.currency!
-												}
-											/>
-										)}
-									</div>
-								)}
-							/>
 						</div>
 					)}
 					{step === 4 && (
@@ -498,8 +460,7 @@ export const CreateProductSkuForm = ({
 											)
 									: step === 3
 										? !val.price ||
-											(val.salePrice && val.salePrice >= val.price) ||
-											!val.currency
+											(val.salePrice && val.salePrice >= val.price)
 										: !val.images ||
 											!val.images.length ||
 											val.images.length > ProductSkuImagesMaxLength ||

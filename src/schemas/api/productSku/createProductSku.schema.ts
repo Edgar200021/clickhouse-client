@@ -6,7 +6,6 @@ import {
 	ProductSkuPackagesMaxLength,
 	ProductSkuPackagesMinLength,
 } from "@/const/schema";
-import { Currency } from "@/types/currency.enum";
 
 export const productSkuPackageSchema = z.object({
 	id: z.uuid(),
@@ -21,7 +20,6 @@ export const createProductSkuSchema = z
 	.object({
 		productId: z.number().positive(),
 		quantity: z.number().positive(),
-		currency: z.enum(Currency),
 		price: z.number().positive(),
 		salePrice: z
 			.number()

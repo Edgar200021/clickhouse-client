@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Controller, useForm } from "react-hook-form";
 import { Routes } from "@/const/routes";
 import { useHandleError } from "@/hooks/useHandleError";
@@ -138,13 +138,22 @@ export const UpdateProfileForm = ({ className }: Props) => {
 					Сохранить
 				</Button>
 
-				<Button
-					onClick={handleLogout}
-					className="cursor-pointer text-[#5a5a5a] hover:text-orange-400"
-					variant="ghost"
-				>
-					Выход
-				</Button>
+				<div className="flex items-center justify-between gap-x-4">
+					<Link
+						to={Routes.Orders}
+						className="cursor-pointer text-[#5a5a5a] hover:text-orange-400"
+						// variant="ghost"
+					>
+						Мои заказы
+					</Link>
+					<Button
+						onClick={handleLogout}
+						className="cursor-pointer text-[#5a5a5a] hover:text-orange-400"
+						variant="ghost"
+					>
+						Выход
+					</Button>
+				</div>
 			</fieldset>
 		</form>
 	);

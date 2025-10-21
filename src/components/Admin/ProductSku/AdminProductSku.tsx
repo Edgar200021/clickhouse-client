@@ -18,6 +18,7 @@ import { useHandleError } from "@/hooks/useHandleError";
 import { cn } from "@/lib/utils";
 import { useDeleteProductSkuMutation } from "@/store/admin/adminApi";
 import type { Combined } from "@/types/api";
+import { Currency } from "@/types/currency.enum";
 import type { ProductAdmin, ProductSkuAdmin } from "@/types/product";
 
 type Props = {
@@ -77,6 +78,7 @@ const DeleteProductSku = ({ productSku }: Pick<Props, "productSku">) => {
 export const AdminProductSku = ({ className, productSku }: Props) => {
 	const { product, ...sku } = productSku;
 
+	console.log(productSku);
 	return (
 		<div
 			className={cn(
@@ -120,7 +122,7 @@ export const AdminProductSku = ({ className, productSku }: Props) => {
 				</div>
 				<div className="flex justify-between gap-x-4">
 					<dt className="font-medium text-gray-600">Валюта:</dt>
-					<dd className="text-gray-900 text-right">{sku.currency}</dd>
+					<dd className="text-gray-900 text-right">{Currency.Rub}</dd>
 				</div>
 
 				<div className="flex justify-between gap-x-4">

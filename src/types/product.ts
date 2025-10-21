@@ -1,5 +1,4 @@
 import type { Nullable } from "./base";
-import type { Currency } from "./currency.enum";
 
 export type Product = {
 	name: string;
@@ -43,7 +42,6 @@ export type ProductSku = {
 	id: number;
 	sku: string;
 	quantity: number;
-	currency: Currency;
 	price: number;
 	salePrice: Nullable<number>;
 	attributes: {

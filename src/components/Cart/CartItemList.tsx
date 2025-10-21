@@ -3,6 +3,10 @@ import cartImg from "@/assets/images/cart.jpg";
 import { useHandleError } from "@/hooks/useHandleError";
 import { cn } from "@/lib/utils";
 import { useGetCartQuery } from "@/store/cart/cartApi";
+import { cartSelectors } from "@/store/cart/cartSlice";
+import { useAppSelector } from "@/store/store";
+import { Currency } from "@/types/currency.enum";
+import { CreateOrderForm } from "../forms/order/CreateOrderForm";
 import { Spinner } from "../ui/Spinner";
 import { AddCartPromocode } from "./AddCartPromocode";
 import { CartItem } from "./CartItem";
@@ -13,7 +17,8 @@ type Props = {
 };
 
 export const CartItemList = ({ className }: Props) => {
-	const { data, isLoading, error } = useGetCartQuery(null);
+	const filters = useAppSelector(cartSelectors.getFilters);
+	const { data, isLoading, error } = useGetCartQuery(filters);
 	useHandleError(error);
 
 	if (isLoading)
@@ -54,13 +59,20 @@ export const CartItemList = ({ className }: Props) => {
 								className="py-[18px] border-b-[2px] border-b-[#e9e5e5] w-full"
 								key={c.id}
 							>
-								<CartItem className="max-w-full" cartItem={c} />
+								<CartItem
+									className="max-w-full"
+									cartItem={c}
+									currency={data.data.currency}
+								/>
 							</li>
 						))}
 					</ul>
 					<div className=" border-b-[2px] border-b-[#e9e5e5] pb-8">
 						<AddCartPromocode
-							promocode={data.data.promocode ?? undefined}
+							cart={{
+								promocode: data.data.promocode,
+								currency: data.data.currency,
+							}}
 							className="ml-auto "
 						/>
 					</div>
@@ -72,14 +84,20 @@ export const CartItemList = ({ className }: Props) => {
 								{data.data.totalPrice}
 							</span>
 							&nbsp;
-							{data.data.cartItems[0]?.currency.slice(0, 1)}
-							{data.data.cartItems[0]?.currency.slice(1).toLowerCase()}
+							{data.data.currency.slice(0, 1)}
+							{data.data.currency.slice(1).toLowerCase()}
 						</span>
 					</div>
-					<ClearCart
-						className="ml-auto justify-end"
-						onSuccess={() => toast.success("Корзина успешно очищена")}
-					/>
+					<div className="flex items-center gap-x-8 max-w-[550px] w-full ml-auto justify-between">
+						<ClearCart
+							className="ml-auto justify-end"
+							onSuccess={() => toast.success("Корзина успешно очищена")}
+						/>
+						<CreateOrderForm
+							currency={filters.currencyTo || Currency.Rub}
+							total={data.data.totalPrice}
+						/>
+					</div>
 				</>
 			)}
 		</div>

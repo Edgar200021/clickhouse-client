@@ -13,6 +13,7 @@ import {
 	useUpdateCartItemMutation,
 } from "@/store/cart/cartApi";
 import type { CartItemCombined } from "@/types/cart";
+import type { Currency } from "@/types/currency.enum";
 import { Button } from "../ui/button";
 import { Counter } from "../ui/Counter";
 import {
@@ -35,6 +36,7 @@ import {
 type Props = {
 	className?: string;
 	cartItem: CartItemCombined;
+	currency: Currency;
 };
 
 const DeleteCartItem = ({ id }: Pick<Props["cartItem"], "id">) => {
@@ -197,7 +199,7 @@ const Actions = ({ cartItem }: Pick<Props, "cartItem">) => {
 	);
 };
 
-export const CartItem = ({ className, cartItem }: Props) => {
+export const CartItem = ({ className, cartItem, currency }: Props) => {
 	return (
 		<div
 			className={cn(
@@ -245,8 +247,8 @@ export const CartItem = ({ className, cartItem }: Props) => {
 								-{calculateDiscount(cartItem.price, cartItem.salePrice)}%
 							</span>
 							<span className="line-through text-[#7d7d7d] text-sm">
-								{cartItem.price} {cartItem.currency.slice(0, 1)}
-								{cartItem.currency.slice(1).toLowerCase()}
+								{cartItem.price} {currency.slice(0, 1)}
+								{currency.slice(1).toLowerCase()}
 							</span>
 						</span>
 					)}
@@ -254,8 +256,8 @@ export const CartItem = ({ className, cartItem }: Props) => {
 					<span className="text-lg md:text-2xl font-bold mb-2 leading-[100%]">
 						{cartItem.salePrice ?? cartItem.price}
 						<span className="text-sm pl-1">
-							{cartItem.currency.slice(0, 1)}
-							{cartItem.currency.slice(1).toLowerCase()}
+							{currency.slice(0, 1)}
+							{currency.slice(1).toLowerCase()}
 						</span>
 					</span>
 				</div>

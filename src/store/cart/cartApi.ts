@@ -1,6 +1,9 @@
 import { CartItemMaxQuantityPerProduct } from "@/const/schema";
 import { applyPromocode } from "@/lib/utils";
+import { Currency } from "@/types/currency.enum";
+import { PromocodeType } from "@/types/promocode";
 import { baseApi } from "../baseApi";
+import type { RootState } from "../store";
 import type {
 	AddCartItemReponse,
 	AddCartItemRequest,
@@ -10,6 +13,8 @@ import type {
 	ClearCartResponse,
 	DeleteCartItemRequest,
 	DeleteCartItemResponse,
+	DeleteCartPromocodeReponse,
+	DeleteCartPromocodeRequest,
 	GetCartRequest,
 	GetCartResponse,
 	UpdateCartItemRequest,
@@ -19,8 +24,8 @@ import type {
 export const cartApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
 		getCart: builder.query<GetCartResponse, GetCartRequest>({
-			query: () => {
-				return { url: "/cart" };
+			query: (params) => {
+				return { url: "/cart", params };
 			},
 			providesTags: ["cart"],
 		}),
@@ -36,19 +41,20 @@ export const cartApi = baseApi.injectEndpoints({
 					body,
 				};
 			},
-			onQueryStarted: async (_, { queryFulfilled, dispatch }) => {
-				const { data } = await queryFulfilled;
+			invalidatesTags: ["cart"],
+		}),
 
-				dispatch(
-					cartApi.util.updateQueryData("getCart", null, (draft) => {
-						draft.data.promocode = data.data;
-						draft.data.totalPrice = applyPromocode(
-							draft.data.totalPrice,
-							data.data,
-						);
-					}),
-				);
+		deleteCartPromocode: builder.mutation<
+			DeleteCartPromocodeReponse,
+			DeleteCartPromocodeRequest
+		>({
+			query: () => {
+				return {
+					url: "/cart/promocode",
+					method: "DELETE",
+				};
 			},
+			invalidatesTags: ["cart"],
 		}),
 
 		addCartItem: builder.mutation<AddCartItemReponse, AddCartItemRequest>({
@@ -73,11 +79,13 @@ export const cartApi = baseApi.injectEndpoints({
 					body,
 				};
 			},
-			onQueryStarted: async (arg, { queryFulfilled, dispatch }) => {
+			onQueryStarted: async (arg, { queryFulfilled, dispatch, getState }) => {
 				await queryFulfilled;
 
+				const cartFilters = (getState() as RootState).cart.filters;
+
 				dispatch(
-					cartApi.util.updateQueryData("getCart", null, (draft) => {
+					cartApi.util.updateQueryData("getCart", cartFilters, (draft) => {
 						const index = draft.data.cartItems.findIndex(
 							(i) => i.id === arg.cartItemId,
 						);
@@ -107,7 +115,8 @@ export const cartApi = baseApi.injectEndpoints({
 							quantity: newSafeQuantity,
 						};
 
-						draft.data.totalPrice += delta;
+						draft.data.totalPrice += Number(delta.toFixed(2));
+						draft.data.totalPrice = Number(draft.data.totalPrice.toFixed(2));
 					}),
 				);
 			},
@@ -123,11 +132,13 @@ export const cartApi = baseApi.injectEndpoints({
 					method: "DELETE",
 				};
 			},
-			onQueryStarted: async (arg, { queryFulfilled, dispatch }) => {
+			onQueryStarted: async (arg, { queryFulfilled, dispatch, getState }) => {
 				await queryFulfilled;
 
+				const cartFilters = (getState() as RootState).cart.filters;
+
 				dispatch(
-					cartApi.util.updateQueryData("getCart", null, (draft) => {
+					cartApi.util.updateQueryData("getCart", cartFilters, (draft) => {
 						const index = draft.data.cartItems.findIndex(
 							(i) => i.id === arg.cartItemId,
 						);
@@ -152,6 +163,8 @@ export const cartApi = baseApi.injectEndpoints({
 								cartItem.productSkuQuantity,
 								CartItemMaxQuantityPerProduct,
 							);
+
+						draft.data.totalPrice = Number(draft.data.totalPrice.toFixed(2));
 					}),
 				);
 			},
@@ -164,11 +177,13 @@ export const cartApi = baseApi.injectEndpoints({
 					method: "POST",
 				};
 			},
-			onQueryStarted: async (_, { queryFulfilled, dispatch }) => {
+			onQueryStarted: async (_, { queryFulfilled, dispatch, getState }) => {
 				await queryFulfilled;
 
+				const cartFilters = (getState() as RootState).cart.filters;
+
 				dispatch(
-					cartApi.util.updateQueryData("getCart", null, (draft) => {
+					cartApi.util.updateQueryData("getCart", cartFilters, (draft) => {
 						draft.data.cartItems = [];
 						draft.data.totalPrice = 0;
 					}),
@@ -181,6 +196,7 @@ export const cartApi = baseApi.injectEndpoints({
 export const {
 	useGetCartQuery,
 	useAddCartPromocodeMutation,
+	useDeleteCartPromocodeMutation,
 	useAddCartItemMutation,
 	useUpdateCartItemMutation,
 	useDeleteCartItemMutation,

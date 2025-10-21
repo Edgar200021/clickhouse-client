@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute(
 
 function RouteComponent() {
 	return (
-		<div className="flex h-full items-center pt-48 flex-col gap-y-5 max-w-[600px] mx-auto  max-[800px]:pt-32">
+		<div className="flex h-full items-center pt-48 flex-col gap-y-5 max-w-[600px] mx-auto max-[800px]:pt-32">
 			<UpdateProfileForm />
 		</div>
 	);

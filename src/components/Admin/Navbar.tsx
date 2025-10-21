@@ -195,7 +195,7 @@ export const Navbar = ({ className }: Props) => {
 	return (
 		<div
 			className={cn(
-				"flex flex-col gap-y-12 w-[240px] text-[#3a3541] bg-white p-10",
+				"flex flex-col gap-y-12 w-[240px] text-[#3a3541] bg-white p-10 sticky top-0 left-0 h-screen",
 				className,
 			)}
 		>

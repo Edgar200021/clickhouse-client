@@ -4,6 +4,7 @@ import { CartItemMaxQuantityPerProduct } from "@/const/schema";
 import { useAddCartItem } from "@/hooks/useAddCartItem";
 import { calculateDiscount, cn } from "@/lib/utils";
 import type { Combined } from "@/types/api";
+import { Currency } from "@/types/currency.enum";
 import type { Product, ProductSku as PS } from "@/types/product";
 import { Button } from "../ui/button";
 import {
@@ -48,8 +49,8 @@ const AddToCart = ({ productSku, className }: Props) => {
 						-{calculateDiscount(productSku.price, productSku.salePrice)}%
 					</span>
 					<span className="line-through text-[#7d7d7d] text-sm">
-						{productSku.price} {productSku.currency.slice(0, 1)}
-						{productSku.currency.slice(1).toLowerCase()}
+						{productSku.price} {Currency.Rub.slice(0, 1)}
+						{Currency.Rub.slice(1).toLowerCase()}
 					</span>
 				</span>
 			)}
@@ -57,8 +58,8 @@ const AddToCart = ({ productSku, className }: Props) => {
 				<span className="text-[30px] font-bold mb-2">
 					{productSku.salePrice ?? productSku.price}
 					<span className="text-sm pl-1">
-						{productSku.currency.slice(0, 1)}
-						{productSku.currency.slice(1).toLowerCase()}
+						{Currency.Rub.slice(0, 1)}
+						{Currency.Rub.slice(1).toLowerCase()}
 					</span>
 				</span>
 				<Select

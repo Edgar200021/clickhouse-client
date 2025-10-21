@@ -45,24 +45,14 @@ export const ClearCart = ({ className, onSuccess }: Props) => {
 	if (matches) {
 		return (
 			<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-				<div
-					className={cn(
-						"flex items-center gap-x-8 max-w-[550px] w-full",
-						className,
-					)}
-				>
-					<DialogTrigger asChild>
-						<Button
-							variant="ghost"
-							className="cursor-pointer p-0 underline text-xs hover:bg-transparent lg:text-lg"
-						>
-							Очистить корзину
-						</Button>
-					</DialogTrigger>
-					<Button className="py-3 px-8 rounded-[115px] cursor-pointer text-xs hover:bg-orange-500 bg-orange-400 text-white sm:w-2/3 lg:text-lg lg:py-6">
-						Оформить заказ
+				<DialogTrigger asChild>
+					<Button
+						variant="ghost"
+						className="cursor-pointer p-0 underline text-xs hover:bg-transparent lg:text-lg"
+					>
+						Очистить корзину
 					</Button>
-				</div>
+				</DialogTrigger>
 
 				<DialogContent
 					showCloseButton={false}
@@ -108,24 +98,14 @@ export const ClearCart = ({ className, onSuccess }: Props) => {
 
 	return (
 		<Drawer direction="right" open={drawerOpen} onOpenChange={setDrawerOpen}>
-			<div
-				className={cn(
-					"flex items-center gap-x-8 max-w-[550px] w-full",
-					className,
-				)}
-			>
-				<DrawerTrigger asChild>
-					<Button
-						variant="ghost"
-						className="cursor-pointer p-0 underline text-xs hover:bg-transparent lg:text-lg"
-					>
-						Очистить корзину
-					</Button>
-				</DrawerTrigger>
-				<Button className="py-3 px-8 rounded-[115px] cursor-pointer text-xs hover:bg-orange-500 bg-orange-400 text-white sm:w-2/3 lg:text-lg lg:py-6">
-					Оформить заказ
+			<DrawerTrigger asChild>
+				<Button
+					variant="ghost"
+					className="cursor-pointer p-0 underline text-xs hover:bg-transparent lg:text-lg"
+				>
+					Очистить корзину
 				</Button>
-			</div>
+			</DrawerTrigger>
 
 			<DrawerContent className="px-4 pt-10 !max-w-[454px]">
 				<DrawerHeader className="mb-8 p-0">

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { adminSlice } from "./admin/adminSlice";
 import { authSlice } from "./auth/authSlice";
 import { baseApi } from "./baseApi";
+import { cartSlice } from "./cart/cartSlice";
 import { categorySlice } from "./category/categorySlice";
 import { productSkuSlice } from "./product-sku/productSkuSlice";
 
@@ -12,6 +13,7 @@ export const store = configureStore({
 		[authSlice.reducerPath]: authSlice.reducer,
 		[productSkuSlice.reducerPath]: productSkuSlice.reducer,
 		[categorySlice.reducerPath]: categorySlice.reducer,
+		[cartSlice.reducerPath]: cartSlice.reducer,
 		[adminSlice.reducerPath]: adminSlice.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>

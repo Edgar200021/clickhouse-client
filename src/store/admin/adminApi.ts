@@ -289,7 +289,7 @@ export const adminApi = baseApi.injectEndpoints({
 					body: formData,
 				};
 			},
-			onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+			onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
 				const { data } = await queryFulfilled;
 				dispatch(adminActions.setProduct(data.data));
 			},
