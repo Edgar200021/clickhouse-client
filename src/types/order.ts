@@ -1,7 +1,8 @@
 import type { Nullable } from "./base";
 import type { Currency } from "./currency.enum";
-import type { Product } from "./product";
-import type { Promocode } from "./promocode";
+import type { Product, ProductSkuAdmin } from "./product";
+import type { PromocodeAdmin } from "./promocode";
+import type { User } from "./user";
 
 export enum OrderStatus {
 	Cancelled = "cancelled",
@@ -11,10 +12,13 @@ export enum OrderStatus {
 	Shipped = "shipped",
 }
 
-export type Order = {
+export type AdminOrder = {
+	id: number;
+	userId: User["id"];
+	createdAt: string;
+	updatedAt: string;
 	number: string;
 	name: string;
-	createdAt: string;
 	email: string;
 	currency: Currency;
 	total: number;
@@ -28,19 +32,36 @@ export type Order = {
 	deliveryAddressStreet: string;
 	deliveryAddressHome: string;
 	deliveryAddressApartment: string;
-	promocode: Nullable<Pick<Promocode, "code" | "type" | "discountValue">>;
+	promocode: Nullable<
+		Pick<PromocodeAdmin, "id" | "code" | "type" | "discountValue">
+	>;
 	preview: {
 		imageUrL: string;
 		orderItemCount: number;
 	};
 };
 
-export type SpecificOrder = Omit<Order, "preview"> & {
+export type Order = Omit<
+	AdminOrder,
+	"id" | "promocodeId" | "userId" | "updatedAt" | "promcoode"
+> & { promocode: Omit<AdminOrder["promocode"], "id"> };
+
+export type SpecificAdminOrder = Omit<Order, "preview"> & {
+	orderItems: {
+		productSkuId: ProductSkuAdmin["id"];
+		name: Product["name"];
+		quantity: number;
+		price: number;
+		image: string;
+	}[];
+};
+
+export type SpecificOrder = Omit<SpecificAdminOrder, "orderItems"> & {
+	paymentTimeoutInMinutes: number;
 	orderItems: {
 		name: Product["name"];
 		quantity: number;
 		price: number;
 		image: string;
 	}[];
-	paymentTimeoutInMinutes: number;
 };

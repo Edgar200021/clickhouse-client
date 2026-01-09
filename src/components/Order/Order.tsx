@@ -3,11 +3,13 @@ import { format } from "date-fns";
 import {
 	ArrowRight,
 	Calendar,
+	Copy,
 	MapPin,
 	Package,
 	ShoppingBag,
 	TicketPercent,
 } from "lucide-react";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,16 +21,55 @@ import {
 } from "@/components/ui/card";
 import { Routes } from "@/const/routes";
 import { cn } from "@/lib/utils";
-import type { Order as TOrder } from "@/types/order";
+import type { AdminOrder, Order as TOrder } from "@/types/order";
+import { UserRole } from "@/types/user";
 
 interface Props {
 	className?: string;
-	order: TOrder;
+	type:
+		| { role: UserRole.Regular; order: TOrder }
+		| { role: UserRole.Admin; order: AdminOrder };
 }
 
-export const Order = ({ className, order }: Props) => {
+export const OrderNumber = ({ number }: { number: TOrder["number"] }) => {
+	const [copied, setCopied] = useState(false);
+
+	const handleCopy = async (e: React.MouseEvent) => {
+		e.stopPropagation();
+		try {
+			await navigator.clipboard.writeText(String(number));
+			setCopied(true);
+			setTimeout(() => setCopied(false), 1000);
+		} catch {
+			console.error("Не удалось скопировать номер заказа");
+		}
+	};
+
+	return (
+		<div
+			className="flex flex-col gap-2 select-text"
+			onClick={(e) => e.stopPropagation()}
+		>
+			<Button
+				type="button"
+				onClick={handleCopy}
+				onMouseDown={(e) => e.stopPropagation()}
+				className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition cursor-pointer w-fit"
+				title="Скопировать номер заказа"
+				variant="ghost"
+			>
+				<Copy size={14} />
+				{copied ? "Скопировано" : "Копировать"}
+			</Button>
+			<CardTitle className="text-lg font-semibold tracking-tight relative z-20">
+				Заказ <span className="font-mono">#{number}</span>
+			</CardTitle>
+		</div>
+	);
+};
+
+export const Order = ({ className, type: { order, role } }: Props) => {
 	const navigate = useNavigate();
-	const formattedDate = format(new Date(order.createdAt), "dd MMM yyyy");
 	const status = getStatusData(order.status);
 
 	return (
@@ -39,19 +80,37 @@ export const Order = ({ className, order }: Props) => {
 			)}
 			onClick={() =>
 				navigate({
-					to: `${Routes.SpecificOrder}`,
+					to:
+						role === UserRole.Regular
+							? Routes.Orders.SpecificOrder
+							: Routes.Admin.SpecificOrder,
 					params: { orderNumber: order.number },
 				})
 			}
 		>
-			<CardHeader className="flex flex-row items-center justify-between border-b bg-muted/20 py-3 px-5">
+			<CardHeader className="flex flex-row justify-between border-b bg-muted/20 py-3 px-5">
 				<div>
-					<CardTitle className="text-lg font-semibold tracking-tight">
-						Заказ #{order.number.slice(0, 8)}
-					</CardTitle>
+					<OrderNumber number={order.number} />
 					<div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
 						<Calendar size={14} />
-						<span>{formattedDate}</span>
+						{role === UserRole.Admin ? (
+							<div className="flex flex-col gap-y-1">
+								<div className="flex gap-x-1">
+									<span>Создано -</span>
+									<span>
+										{format(new Date(order.createdAt), "dd MMM yyyy")}
+									</span>
+								</div>
+								<div className="flex gap-x-1">
+									<span>Обновлено -</span>
+									<span>
+										{format(new Date(order.updatedAt), "dd MMM yyyy")}
+									</span>
+								</div>
+							</div>
+						) : (
+							<span>{format(new Date(order.createdAt), "dd MMM yyyy")}</span>
+						)}
 					</div>
 				</div>
 				<Badge
@@ -106,7 +165,6 @@ export const Order = ({ className, order }: Props) => {
 						</div>
 					</div>
 				</div>
-
 				<div className="flex items-center gap-3">
 					<div className="text-lg font-semibold whitespace-nowrap">
 						{order.total.toLocaleString()} {order.currency}
@@ -120,6 +178,39 @@ export const Order = ({ className, order }: Props) => {
 					</Button>
 				</div>
 			</CardContent>
+
+			{role === "admin" && (
+				<div className="border-t border-border/50 pt-4 text-sm text-muted-foreground px-6">
+					<div className="flex flex-col gap-1">
+						<div>
+							<span className="font-medium text-foreground">ID:</span>
+							{order.id}
+						</div>
+						<div>
+							<span className="font-medium text-foreground">
+								Пользователь ID:
+							</span>
+							{order.userId}
+						</div>
+						<div>
+							<span className="font-medium text-foreground">Промокод ID:</span>
+							{order.promocode?.id ?? "—"}
+						</div>
+						<div>
+							<span className="font-medium text-foreground">Имя:</span>
+							{order.name}
+						</div>
+						<div>
+							<span className="font-medium text-foreground">Email:</span>
+							{order.email}
+						</div>
+						<div>
+							<span className="font-medium text-foreground">Телефон:</span>
+							{order.phoneNumber}
+						</div>
+					</div>
+				</div>
+			)}
 
 			{order.promocode && (
 				<CardFooter className="border-t bg-muted/10 px-6 py-3 flex items-center flex-wrap gap-2 text-sm text-muted-foreground">

@@ -2,15 +2,27 @@ import { CreditCard, MapPin, Tag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { StatusLabels } from "@/const/order";
 import { cn } from "@/lib/utils";
 import {
 	OrderStatus,
+	type SpecificAdminOrder,
 	type SpecificOrder as TSpecificOrder,
 } from "@/types/order";
+import { UserRole } from "@/types/user";
+import { CreatePayment } from "./CreatePayment";
 
 interface Props {
 	className?: string;
-	order: TSpecificOrder;
+	type:
+		| {
+				role: UserRole.Regular;
+				order: TSpecificOrder;
+		  }
+		| {
+				role: UserRole.Admin;
+				order: SpecificAdminOrder;
+		  };
 }
 
 const statusStyles: Record<string, string> = {
@@ -21,14 +33,6 @@ const statusStyles: Record<string, string> = {
 	cancelled: "bg-rose-100 text-rose-800",
 };
 
-const statusLabels: Record<string, string> = {
-	pending: "Ожидает оплаты",
-	paid: "Оплачен",
-	shipped: "Отправлен",
-	delivered: "Доставлен",
-	cancelled: "Отменён",
-};
-
 const formatCurrency = (currency: string, value: number) =>
 	`${currency} ${value.toFixed(2)}`;
 
@@ -37,8 +41,9 @@ const Timer = ({
 	paymentTimeoutInMinutes,
 	status,
 	onTimeExpire,
-}: Pick<Props["order"], "paymentTimeoutInMinutes" | "createdAt" | "status"> & {
+}: Pick<Props["type"]["order"], "createdAt" | "status"> & {
 	onTimeExpire: (val: boolean) => void;
+	paymentTimeoutInMinutes: TSpecificOrder["paymentTimeoutInMinutes"];
 }) => {
 	const [timeLeft, setTimeLeft] = useState<number>(() => {
 		const created = new Date(createdAt).getTime();
@@ -85,7 +90,7 @@ const Timer = ({
 	);
 };
 
-export const SpecificOrder = ({ className, order }: Props) => {
+export const SpecificOrder = ({ className, type: { order, role } }: Props) => {
 	const [isTimeExpired, setIsTimeExpired] = useState(false);
 
 	const subtotal = order.orderItems.reduce(
@@ -114,7 +119,7 @@ export const SpecificOrder = ({ className, order }: Props) => {
 						aria-live="polite"
 					>
 						<span className="capitalize">
-							{statusLabels[order.status] ?? order.status}
+							{StatusLabels[order.status] ?? order.status}
 						</span>
 					</span>
 				</div>
@@ -134,9 +139,13 @@ export const SpecificOrder = ({ className, order }: Props) => {
 							</div>
 
 							<div className="flex-1 min-w-0">
+								{role === UserRole.Admin && (
+									//@ts-expect-error ...
+									<p className="font-medium">ID-{item.productSkuId}</p>
+								)}
 								<p className="font-medium truncate">{item.name}</p>
 								<p className="text-sm text-muted-foreground">
-									Количество:{" "}
+									Количество:
 									<span className="font-medium">{item.quantity}</span>
 								</p>
 								<div className="mt-2 flex items-center gap-2 text-sm">
@@ -252,36 +261,39 @@ export const SpecificOrder = ({ className, order }: Props) => {
 							<div className="mt-2 text-xs text-muted-foreground">
 								Телефон: {order.phoneNumber}
 							</div>
+							<div className="mt-2 text-xs text-muted-foreground">
+								Эл. Почта: {order.email}
+							</div>
 						</div>
 					</CardContent>
 				</Card>
 
-				<div className="space-y-2">
-					<Timer
-						createdAt={order.createdAt}
-						paymentTimeoutInMinutes={order.paymentTimeoutInMinutes}
-						status={order.status}
-						onTimeExpire={setIsTimeExpired}
-					/>
-					<Button
-						className="w-full flex items-center justify-center gap-2 bg-orange-400 cursor-pointer py-5 rounded-3xl hover:bg-orange-500"
-						disabled={order.status !== "pending" || isTimeExpired}
-						aria-disabled={order.status !== "pending"}
-					>
-						<CreditCard className="w-4 h-4" />
-						{order.status === "pending" ? "Оплатить" : "Оплата недоступна"}
-					</Button>
+				{role === UserRole.Regular && (
+					<div className="space-y-2">
+						<Timer
+							createdAt={order.createdAt}
+							paymentTimeoutInMinutes={order.paymentTimeoutInMinutes}
+							status={order.status}
+							onTimeExpire={setIsTimeExpired}
+						/>
+						<CreatePayment
+							orderNumber={order.number}
+							orderStatus={order.status}
+							disabled={order.status !== "pending" || isTimeExpired}
+							aria-disabled={order.status !== "pending"}
+						/>
 
-					<button
-						className="w-full text-sm underline text-muted-foreground"
-						type="button"
-						onClick={() => {
-							void 0;
-						}}
-					>
-						Скачать счёт
-					</button>
-				</div>
+						<button
+							className="w-full text-sm underline text-muted-foreground"
+							type="button"
+							onClick={() => {
+								void 0;
+							}}
+						>
+							Скачать счёт
+						</button>
+					</div>
+				)}
 			</aside>
 		</div>
 	);

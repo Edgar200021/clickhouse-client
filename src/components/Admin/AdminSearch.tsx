@@ -16,6 +16,7 @@ type Props = {
 		| "getProductFiltersSearch"
 		| "getProductsSkusFiltersSearch"
 		| "getPromocodesFiltersSearch"
+		| "getAdminOrdersFiltersSearch"
 	>;
 } & ComponentProps<"input">;
 
@@ -33,7 +34,8 @@ export const AdminSearch = ({ className, type, ...rest }: Props) => {
 			| "setUsersFilters"
 			| "setProductFilters"
 			| "setProductsSkusFilters"
-			| "setPromocodesFilters"];
+			| "setPromocodesFilters"
+			| "setOrdersFilters"];
 
 		switch (type) {
 			case "getUsersFiltersSearch":
@@ -48,11 +50,16 @@ export const AdminSearch = ({ className, type, ...rest }: Props) => {
 			case "getPromocodesFiltersSearch":
 				fn = adminActions.setPromocodesFilters;
 				break;
+			case "getAdminOrdersFiltersSearch":
+				fn = adminActions.setOrdersFilters;
+				break;
 			default: {
 				const x: never = type;
-				break;
+				return x;
 			}
 		}
+
+		console.log(fn);
 
 		dispatch(fn!({ key: "search", val: value }));
 	}, [type, userSearch, debounced]);
@@ -85,7 +92,7 @@ export const AdminSearch = ({ className, type, ...rest }: Props) => {
 					type="text"
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
-					className="placeholder:text-lg placeholder:text-[#7d7d7d] border-none focus:ring-0 focus-visible:ring-0 !bg-none "
+					className="placeholder:text-lg placeholder:text-[#7d7d7d] border-none focus:ring-0 focus-visible:ring-0  !shadow-none"
 				/>
 
 				<img src={searchIcon} alt="Search" />

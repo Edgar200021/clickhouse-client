@@ -34,6 +34,7 @@ import {
 import { useCreateOrderMutation } from "@/store/order/orderApi";
 import type { FieldPaths } from "@/types/base";
 import type { Currency } from "@/types/currency.enum";
+import { Order } from "../../Order/Order";
 
 interface Props {
 	className?: string;
@@ -80,7 +81,7 @@ export const CreateOrderForm = ({ className, currency, total }: Props) => {
 			data: { orderNumber },
 		} = await createOrder(data).unwrap();
 		navigate({
-			to: Routes.SpecificOrder,
+			to: Routes.Orders.SpecificOrder,
 			params: { orderNumber },
 		});
 	};

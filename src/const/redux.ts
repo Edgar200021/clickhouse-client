@@ -1,1 +1,1 @@
-export const TagTypes = ["productSku", "cart", "promocode"] as const;
+export const TagTypes = ["productSku", "cart", "promocode", "order"] as const;

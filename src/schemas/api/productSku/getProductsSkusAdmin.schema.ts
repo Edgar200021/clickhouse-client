@@ -8,12 +8,20 @@ export const getProductsSkusAdminSchema = z
 		page: z.coerce.number().positive().optional(),
 		isDeleted: z.coerce.boolean().optional(),
 		inStock: z.coerce.boolean().optional(),
-		withDistount: z.coerce.boolean().optional(),
+		withDiscount: z.coerce.boolean().optional(),
 		sku: z.string().optional(),
 		minPrice: z.number().gte(0).optional(),
 		maxPrice: z.number().positive().optional(),
 		minSalePrice: z.number().gte(0).optional(),
 		maxSalePrice: z.number().positive().optional(),
+		sort: z
+			.literal([
+				"priceASC",
+				"priceDESC",
+				"alphabetASC",
+				"alphabetDESC",
+			])
+			.optional(),
 	})
 	.refine((schema) => {
 		if (schema.minPrice && schema.maxPrice)

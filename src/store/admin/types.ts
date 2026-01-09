@@ -2,6 +2,7 @@ import type { CreateCategorySchema } from "@/schemas/api/category/createCategory
 import type { UpdateCategorySchema } from "@/schemas/api/category/updateCategory.schema";
 import type { CreateManufacturerSchema } from "@/schemas/api/manufacturer/createManufacturer.schema";
 import type { UpdateManufacturerSchema } from "@/schemas/api/manufacturer/updateManufacturer.schema";
+import type { GetAdminOrdersSchema } from "@/schemas/api/order/getAdminOrders.schema";
 import type { CreateProductSkuSchema } from "@/schemas/api/productSku/createProductSku.schema";
 import type { GetProductsSkusAdminSchema } from "@/schemas/api/productSku/getProductsSkusAdmin.schema";
 import type { UpdateProductSkuSchema } from "@/schemas/api/productSku/updateProductSku.schema";
@@ -17,6 +18,7 @@ import type { GetUsersSchema } from "@/schemas/api/user/getUsers.schema";
 import type { ApiSuccessResponse, WithPageCountResponse } from "@/types/api";
 import type { Category } from "@/types/category";
 import type { Manufacturer } from "@/types/manufacturer";
+import type { AdminOrder, SpecificAdminOrder } from "@/types/order";
 import type {
 	ProductAdmin,
 	ProductSkuAdmin,
@@ -143,3 +145,14 @@ export type DeletePromocodeRequest = {
 	promocodeId: PromocodeAdmin["id"];
 };
 export type DeletePromocodeResponse = ApiSuccessResponse<null>;
+
+export type GetAdminOrdersRequest = GetAdminOrdersSchema;
+export type GetAdminOrdersResponse = ApiSuccessResponse<
+	WithPageCountResponse<AdminOrder[], "orders">
+>;
+
+export type GetAdminOrderRequest = {
+	orderNumber: string;
+};
+
+export type GetAdminOrderResponse = ApiSuccessResponse<SpecificAdminOrder>;

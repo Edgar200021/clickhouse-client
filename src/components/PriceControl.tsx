@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 import { Slider } from "./ui/slider";
 
 type PriceControlProps = {
@@ -9,6 +10,7 @@ type PriceControlProps = {
 	step?: number;
 	onChange?: (values: [number, number]) => void;
 	className?: string;
+	type?: "minimal" | "full";
 };
 
 export const PriceControl = ({
@@ -18,6 +20,7 @@ export const PriceControl = ({
 	minStepsBetweenThumbs = 0,
 	step = 1,
 	onChange,
+	type = "full",
 	className = "",
 }: PriceControlProps) => {
 	const [values, setValues] = useState<[number, number]>(
@@ -50,15 +53,58 @@ export const PriceControl = ({
 		onChange?.(newValues);
 	};
 
+	if (type === "full")
+		return (
+			<div
+				className={cn(
+					"grid gap-4 p-4 w-full max-w-80 bg-white border border-[#14424C]/20 rounded-[12px]",
+					className,
+				)}
+			>
+				<Slider
+					min={min}
+					max={max}
+					step={step}
+					value={values}
+					minStepsBetweenThumbs={minStepsBetweenThumbs}
+					onValueChange={handleSliderChange}
+					className="w-full"
+					trackClassName="bg-orange-200 h-2 rounded"
+					rangeClassName="bg-orange-500 h-2 rounded"
+					thumbClassName="w-4 h-4 bg-orange-500 border-2 border-white rounded-full ring-orange-600 "
+				/>
+				<div className="flex gap-2 flex-wrap">
+					{values.map((val, index) => (
+						<div
+							key={index}
+							className="flex items-center justify-between w-full border px-3 h-10 rounded-md"
+						>
+							<span>{index === 0 ? "Мин" : "Макс"}</span>
+							<input
+								type="text"
+								value={val.toString()}
+								onChange={(e) =>
+									handleInputChange(index as 0 | 1, e.target.value)
+								}
+								className="w-24 bg-transparent text-right outline-none border-none"
+							/>
+						</div>
+					))}
+				</div>
+			</div>
+		);
+
 	return (
-		<div
-			className={`grid gap-4 p-4 w-full max-w-80 bg-white border border-[#14424C]/20 rounded-[12px] ${className}`}
-		>
+		<div className={cn("flex flex-col gap-y-4 max-w-80 bg-white", className)}>
+			<div className="flex items-center justify-between">
+				<span className="text-sm">Минимум: {values[0]}</span>
+				<span className="text-sm">Максимум: {values[1]}</span>
+			</div>
 			<Slider
 				min={min}
 				max={max}
 				step={step}
-				defaultValue={values}
+				value={values}
 				minStepsBetweenThumbs={minStepsBetweenThumbs}
 				onValueChange={handleSliderChange}
 				className="w-full"
@@ -66,24 +112,6 @@ export const PriceControl = ({
 				rangeClassName="bg-orange-500 h-2 rounded"
 				thumbClassName="w-4 h-4 bg-orange-500 border-2 border-white rounded-full ring-orange-600 "
 			/>
-			<div className="flex gap-2 flex-wrap">
-				{values.map((val, index) => (
-					<div
-						key={index}
-						className="flex items-center justify-between w-full border px-3 h-10 rounded-md"
-					>
-						<span>{index === 0 ? "Мин" : "Макс"}</span>
-						<input
-							type="text"
-							value={val.toString()}
-							onChange={(e) =>
-								handleInputChange(index as 0 | 1, e.target.value)
-							}
-							className="w-24 bg-transparent text-right outline-none border-none"
-						/>
-					</div>
-				))}
-			</div>
 		</div>
 	);
 };

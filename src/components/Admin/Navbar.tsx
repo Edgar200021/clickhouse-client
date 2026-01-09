@@ -1,9 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { ReactElement } from "react";
 import arrowIcon from "@/assets/icons/arrow.svg";
-import categoryIcon from "@/assets/icons/category.svg";
 import logoutIcon from "@/assets/icons/logout.svg";
-import sprites from "@/assets/icons/sprites.svg";
 import {
 	Collapsible,
 	CollapsibleContent,
@@ -127,6 +125,17 @@ export const Navbar = ({ className }: Props) => {
 					id: "promocode-update",
 					label: "Обновить промокод",
 					to: Routes.Admin.PromocodeUpdate,
+				},
+			],
+		},
+		{
+			id: "order",
+			label: "Заказы",
+			children: [
+				{
+					id: "promocode-list",
+					label: "Список заказов",
+					to: Routes.Admin.Orders,
 				},
 			],
 		},

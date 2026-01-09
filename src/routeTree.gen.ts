@@ -20,6 +20,7 @@ import { Route as RegularLayoutCatalogIndexRouteImport } from './routes/_regular
 import { Route as RegularLayoutCatalogCatalogPathRouteImport } from './routes/_regularLayout/catalog/$catalogPath'
 import { Route as RegularLayoutAuthResetPasswordRouteImport } from './routes/_regularLayout/auth/reset-password'
 import { Route as RegularLayoutAuthAccountVerificationRouteImport } from './routes/_regularLayout/auth/account-verification'
+import { Route as RegularLayoutAuthenticatedOrdersChar123orderNumberChar125RouteImport } from './routes/_regularLayout/_authenticated/orders/{$orderNumber}'
 
 const RegularLayoutPaymentLazyRouteImport = createFileRoute(
   '/_regularLayout/payment',
@@ -72,20 +73,23 @@ const AuthenticatedAdminPromocodeIndexLazyRouteImport = createFileRoute(
 const AuthenticatedAdminProductsIndexLazyRouteImport = createFileRoute(
   '/_authenticated/admin/products/',
 )()
+const AuthenticatedAdminOrdersIndexLazyRouteImport = createFileRoute(
+  '/_authenticated/admin/orders/',
+)()
 const AuthenticatedAdminManufacturersIndexLazyRouteImport = createFileRoute(
   '/_authenticated/admin/manufacturers/',
 )()
 const AuthenticatedAdminCategoriesIndexLazyRouteImport = createFileRoute(
   '/_authenticated/admin/categories/',
 )()
-const RegularLayoutAuthenticatedOrdersChar123orderNumberChar125LazyRouteImport =
-  createFileRoute('/_regularLayout/_authenticated/orders/{$orderNumber}')()
 const AuthenticatedAdminPromocodeCreateLazyRouteImport = createFileRoute(
   '/_authenticated/admin/promocode/create',
 )()
 const AuthenticatedAdminProductsCreateLazyRouteImport = createFileRoute(
   '/_authenticated/admin/products/create',
 )()
+const AuthenticatedAdminOrdersChar123orderNumberChar125LazyRouteImport =
+  createFileRoute('/_authenticated/admin/orders/{$orderNumber}')()
 const AuthenticatedAdminManufacturersCreateLazyRouteImport = createFileRoute(
   '/_authenticated/admin/manufacturers/create',
 )()
@@ -310,6 +314,16 @@ const AuthenticatedAdminProductsIndexLazyRoute =
       (d) => d.Route,
     ),
   )
+const AuthenticatedAdminOrdersIndexLazyRoute =
+  AuthenticatedAdminOrdersIndexLazyRouteImport.update({
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/admin/orders/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const AuthenticatedAdminManufacturersIndexLazyRoute =
   AuthenticatedAdminManufacturersIndexLazyRouteImport.update({
     id: '/manufacturers/',
@@ -330,18 +344,6 @@ const AuthenticatedAdminCategoriesIndexLazyRoute =
       (d) => d.Route,
     ),
   )
-const RegularLayoutAuthenticatedOrdersChar123orderNumberChar125LazyRoute =
-  RegularLayoutAuthenticatedOrdersChar123orderNumberChar125LazyRouteImport.update(
-    {
-      id: '/orders/{$orderNumber}',
-      path: '/orders/{$orderNumber}',
-      getParentRoute: () => RegularLayoutAuthenticatedRoute,
-    } as any,
-  ).lazy(() =>
-    import(
-      './routes/_regularLayout/_authenticated/orders/{$orderNumber}.lazy'
-    ).then((d) => d.Route),
-  )
 const AuthenticatedAdminPromocodeCreateLazyRoute =
   AuthenticatedAdminPromocodeCreateLazyRouteImport.update({
     id: '/promocode/create',
@@ -359,6 +361,16 @@ const AuthenticatedAdminProductsCreateLazyRoute =
     getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
   } as any).lazy(() =>
     import('./routes/_authenticated/admin/products/create.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const AuthenticatedAdminOrdersChar123orderNumberChar125LazyRoute =
+  AuthenticatedAdminOrdersChar123orderNumberChar125LazyRouteImport.update({
+    id: '/orders/{$orderNumber}',
+    path: '/orders/{$orderNumber}',
+    getParentRoute: () => AuthenticatedAdminRouteLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/admin/orders/{$orderNumber}.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -382,6 +394,12 @@ const AuthenticatedAdminCategoriesCreateLazyRoute =
       (d) => d.Route,
     ),
   )
+const RegularLayoutAuthenticatedOrdersChar123orderNumberChar125Route =
+  RegularLayoutAuthenticatedOrdersChar123orderNumberChar125RouteImport.update({
+    id: '/orders/{$orderNumber}',
+    path: '/orders/{$orderNumber}',
+    getParentRoute: () => RegularLayoutAuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminPromocodeUpdateChar123PromocodeIdChar125LazyRoute =
   AuthenticatedAdminPromocodeUpdateChar123PromocodeIdChar125LazyRouteImport.update(
     {
@@ -473,13 +491,15 @@ export interface FileRoutesByFullPath {
   '/product/$productSkuId': typeof RegularLayoutProductProductSkuIdLazyRoute
   '/catalog': typeof RegularLayoutCatalogIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexLazyRoute
+  '/orders/{$orderNumber}': typeof RegularLayoutAuthenticatedOrdersChar123orderNumberChar125Route
   '/admin/categories/create': typeof AuthenticatedAdminCategoriesCreateLazyRoute
   '/admin/manufacturers/create': typeof AuthenticatedAdminManufacturersCreateLazyRoute
+  '/admin/orders/{$orderNumber}': typeof AuthenticatedAdminOrdersChar123orderNumberChar125LazyRoute
   '/admin/products/create': typeof AuthenticatedAdminProductsCreateLazyRoute
   '/admin/promocode/create': typeof AuthenticatedAdminPromocodeCreateLazyRoute
-  '/orders/{$orderNumber}': typeof RegularLayoutAuthenticatedOrdersChar123orderNumberChar125LazyRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesIndexLazyRoute
   '/admin/manufacturers': typeof AuthenticatedAdminManufacturersIndexLazyRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersIndexLazyRoute
   '/admin/products': typeof AuthenticatedAdminProductsIndexLazyRoute
   '/admin/promocode': typeof AuthenticatedAdminPromocodeIndexLazyRoute
   '/admin/users': typeof AuthenticatedAdminUsersIndexLazyRoute
@@ -510,13 +530,15 @@ export interface FileRoutesByTo {
   '/product/$productSkuId': typeof RegularLayoutProductProductSkuIdLazyRoute
   '/catalog': typeof RegularLayoutCatalogIndexRoute
   '/admin': typeof AuthenticatedAdminIndexLazyRoute
+  '/orders/{$orderNumber}': typeof RegularLayoutAuthenticatedOrdersChar123orderNumberChar125Route
   '/admin/categories/create': typeof AuthenticatedAdminCategoriesCreateLazyRoute
   '/admin/manufacturers/create': typeof AuthenticatedAdminManufacturersCreateLazyRoute
+  '/admin/orders/{$orderNumber}': typeof AuthenticatedAdminOrdersChar123orderNumberChar125LazyRoute
   '/admin/products/create': typeof AuthenticatedAdminProductsCreateLazyRoute
   '/admin/promocode/create': typeof AuthenticatedAdminPromocodeCreateLazyRoute
-  '/orders/{$orderNumber}': typeof RegularLayoutAuthenticatedOrdersChar123orderNumberChar125LazyRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesIndexLazyRoute
   '/admin/manufacturers': typeof AuthenticatedAdminManufacturersIndexLazyRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersIndexLazyRoute
   '/admin/products': typeof AuthenticatedAdminProductsIndexLazyRoute
   '/admin/promocode': typeof AuthenticatedAdminPromocodeIndexLazyRoute
   '/admin/users': typeof AuthenticatedAdminUsersIndexLazyRoute
@@ -552,13 +574,15 @@ export interface FileRoutesById {
   '/_regularLayout/product/$productSkuId': typeof RegularLayoutProductProductSkuIdLazyRoute
   '/_regularLayout/catalog/': typeof RegularLayoutCatalogIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexLazyRoute
+  '/_regularLayout/_authenticated/orders/{$orderNumber}': typeof RegularLayoutAuthenticatedOrdersChar123orderNumberChar125Route
   '/_authenticated/admin/categories/create': typeof AuthenticatedAdminCategoriesCreateLazyRoute
   '/_authenticated/admin/manufacturers/create': typeof AuthenticatedAdminManufacturersCreateLazyRoute
+  '/_authenticated/admin/orders/{$orderNumber}': typeof AuthenticatedAdminOrdersChar123orderNumberChar125LazyRoute
   '/_authenticated/admin/products/create': typeof AuthenticatedAdminProductsCreateLazyRoute
   '/_authenticated/admin/promocode/create': typeof AuthenticatedAdminPromocodeCreateLazyRoute
-  '/_regularLayout/_authenticated/orders/{$orderNumber}': typeof RegularLayoutAuthenticatedOrdersChar123orderNumberChar125LazyRoute
   '/_authenticated/admin/categories/': typeof AuthenticatedAdminCategoriesIndexLazyRoute
   '/_authenticated/admin/manufacturers/': typeof AuthenticatedAdminManufacturersIndexLazyRoute
+  '/_authenticated/admin/orders/': typeof AuthenticatedAdminOrdersIndexLazyRoute
   '/_authenticated/admin/products/': typeof AuthenticatedAdminProductsIndexLazyRoute
   '/_authenticated/admin/promocode/': typeof AuthenticatedAdminPromocodeIndexLazyRoute
   '/_authenticated/admin/users/': typeof AuthenticatedAdminUsersIndexLazyRoute
@@ -592,13 +616,15 @@ export interface FileRouteTypes {
     | '/product/$productSkuId'
     | '/catalog'
     | '/admin/'
+    | '/orders/{$orderNumber}'
     | '/admin/categories/create'
     | '/admin/manufacturers/create'
+    | '/admin/orders/{$orderNumber}'
     | '/admin/products/create'
     | '/admin/promocode/create'
-    | '/orders/{$orderNumber}'
     | '/admin/categories'
     | '/admin/manufacturers'
+    | '/admin/orders'
     | '/admin/products'
     | '/admin/promocode'
     | '/admin/users'
@@ -629,13 +655,15 @@ export interface FileRouteTypes {
     | '/product/$productSkuId'
     | '/catalog'
     | '/admin'
+    | '/orders/{$orderNumber}'
     | '/admin/categories/create'
     | '/admin/manufacturers/create'
+    | '/admin/orders/{$orderNumber}'
     | '/admin/products/create'
     | '/admin/promocode/create'
-    | '/orders/{$orderNumber}'
     | '/admin/categories'
     | '/admin/manufacturers'
+    | '/admin/orders'
     | '/admin/products'
     | '/admin/promocode'
     | '/admin/users'
@@ -670,13 +698,15 @@ export interface FileRouteTypes {
     | '/_regularLayout/product/$productSkuId'
     | '/_regularLayout/catalog/'
     | '/_authenticated/admin/'
+    | '/_regularLayout/_authenticated/orders/{$orderNumber}'
     | '/_authenticated/admin/categories/create'
     | '/_authenticated/admin/manufacturers/create'
+    | '/_authenticated/admin/orders/{$orderNumber}'
     | '/_authenticated/admin/products/create'
     | '/_authenticated/admin/promocode/create'
-    | '/_regularLayout/_authenticated/orders/{$orderNumber}'
     | '/_authenticated/admin/categories/'
     | '/_authenticated/admin/manufacturers/'
+    | '/_authenticated/admin/orders/'
     | '/_authenticated/admin/products/'
     | '/_authenticated/admin/promocode/'
     | '/_authenticated/admin/users/'
@@ -878,6 +908,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProductsIndexLazyRouteImport
       parentRoute: typeof AuthenticatedAdminRouteLazyRoute
     }
+    '/_authenticated/admin/orders/': {
+      id: '/_authenticated/admin/orders/'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AuthenticatedAdminOrdersIndexLazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
     '/_authenticated/admin/manufacturers/': {
       id: '/_authenticated/admin/manufacturers/'
       path: '/manufacturers'
@@ -891,13 +928,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/categories'
       preLoaderRoute: typeof AuthenticatedAdminCategoriesIndexLazyRouteImport
       parentRoute: typeof AuthenticatedAdminRouteLazyRoute
-    }
-    '/_regularLayout/_authenticated/orders/{$orderNumber}': {
-      id: '/_regularLayout/_authenticated/orders/{$orderNumber}'
-      path: '/orders/{$orderNumber}'
-      fullPath: '/orders/{$orderNumber}'
-      preLoaderRoute: typeof RegularLayoutAuthenticatedOrdersChar123orderNumberChar125LazyRouteImport
-      parentRoute: typeof RegularLayoutAuthenticatedRoute
     }
     '/_authenticated/admin/promocode/create': {
       id: '/_authenticated/admin/promocode/create'
@@ -913,6 +943,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProductsCreateLazyRouteImport
       parentRoute: typeof AuthenticatedAdminRouteLazyRoute
     }
+    '/_authenticated/admin/orders/{$orderNumber}': {
+      id: '/_authenticated/admin/orders/{$orderNumber}'
+      path: '/orders/{$orderNumber}'
+      fullPath: '/admin/orders/{$orderNumber}'
+      preLoaderRoute: typeof AuthenticatedAdminOrdersChar123orderNumberChar125LazyRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
     '/_authenticated/admin/manufacturers/create': {
       id: '/_authenticated/admin/manufacturers/create'
       path: '/manufacturers/create'
@@ -926,6 +963,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/categories/create'
       preLoaderRoute: typeof AuthenticatedAdminCategoriesCreateLazyRouteImport
       parentRoute: typeof AuthenticatedAdminRouteLazyRoute
+    }
+    '/_regularLayout/_authenticated/orders/{$orderNumber}': {
+      id: '/_regularLayout/_authenticated/orders/{$orderNumber}'
+      path: '/orders/{$orderNumber}'
+      fullPath: '/orders/{$orderNumber}'
+      preLoaderRoute: typeof RegularLayoutAuthenticatedOrdersChar123orderNumberChar125RouteImport
+      parentRoute: typeof RegularLayoutAuthenticatedRoute
     }
     '/_authenticated/admin/promocode/update/{-$promocodeId}': {
       id: '/_authenticated/admin/promocode/update/{-$promocodeId}'
@@ -976,10 +1020,12 @@ interface AuthenticatedAdminRouteLazyRouteChildren {
   AuthenticatedAdminIndexLazyRoute: typeof AuthenticatedAdminIndexLazyRoute
   AuthenticatedAdminCategoriesCreateLazyRoute: typeof AuthenticatedAdminCategoriesCreateLazyRoute
   AuthenticatedAdminManufacturersCreateLazyRoute: typeof AuthenticatedAdminManufacturersCreateLazyRoute
+  AuthenticatedAdminOrdersChar123orderNumberChar125LazyRoute: typeof AuthenticatedAdminOrdersChar123orderNumberChar125LazyRoute
   AuthenticatedAdminProductsCreateLazyRoute: typeof AuthenticatedAdminProductsCreateLazyRoute
   AuthenticatedAdminPromocodeCreateLazyRoute: typeof AuthenticatedAdminPromocodeCreateLazyRoute
   AuthenticatedAdminCategoriesIndexLazyRoute: typeof AuthenticatedAdminCategoriesIndexLazyRoute
   AuthenticatedAdminManufacturersIndexLazyRoute: typeof AuthenticatedAdminManufacturersIndexLazyRoute
+  AuthenticatedAdminOrdersIndexLazyRoute: typeof AuthenticatedAdminOrdersIndexLazyRoute
   AuthenticatedAdminProductsIndexLazyRoute: typeof AuthenticatedAdminProductsIndexLazyRoute
   AuthenticatedAdminPromocodeIndexLazyRoute: typeof AuthenticatedAdminPromocodeIndexLazyRoute
   AuthenticatedAdminUsersIndexLazyRoute: typeof AuthenticatedAdminUsersIndexLazyRoute
@@ -998,6 +1044,8 @@ const AuthenticatedAdminRouteLazyRouteChildren: AuthenticatedAdminRouteLazyRoute
       AuthenticatedAdminCategoriesCreateLazyRoute,
     AuthenticatedAdminManufacturersCreateLazyRoute:
       AuthenticatedAdminManufacturersCreateLazyRoute,
+    AuthenticatedAdminOrdersChar123orderNumberChar125LazyRoute:
+      AuthenticatedAdminOrdersChar123orderNumberChar125LazyRoute,
     AuthenticatedAdminProductsCreateLazyRoute:
       AuthenticatedAdminProductsCreateLazyRoute,
     AuthenticatedAdminPromocodeCreateLazyRoute:
@@ -1006,6 +1054,8 @@ const AuthenticatedAdminRouteLazyRouteChildren: AuthenticatedAdminRouteLazyRoute
       AuthenticatedAdminCategoriesIndexLazyRoute,
     AuthenticatedAdminManufacturersIndexLazyRoute:
       AuthenticatedAdminManufacturersIndexLazyRoute,
+    AuthenticatedAdminOrdersIndexLazyRoute:
+      AuthenticatedAdminOrdersIndexLazyRoute,
     AuthenticatedAdminProductsIndexLazyRoute:
       AuthenticatedAdminProductsIndexLazyRoute,
     AuthenticatedAdminPromocodeIndexLazyRoute:
@@ -1072,7 +1122,7 @@ interface RegularLayoutAuthenticatedRouteChildren {
   RegularLayoutAuthenticatedCartLazyRoute: typeof RegularLayoutAuthenticatedCartLazyRoute
   RegularLayoutAuthenticatedFavoriteLazyRoute: typeof RegularLayoutAuthenticatedFavoriteLazyRoute
   RegularLayoutAuthenticatedProfileLazyRoute: typeof RegularLayoutAuthenticatedProfileLazyRoute
-  RegularLayoutAuthenticatedOrdersChar123orderNumberChar125LazyRoute: typeof RegularLayoutAuthenticatedOrdersChar123orderNumberChar125LazyRoute
+  RegularLayoutAuthenticatedOrdersChar123orderNumberChar125Route: typeof RegularLayoutAuthenticatedOrdersChar123orderNumberChar125Route
   RegularLayoutAuthenticatedOrdersIndexLazyRoute: typeof RegularLayoutAuthenticatedOrdersIndexLazyRoute
 }
 
@@ -1084,8 +1134,8 @@ const RegularLayoutAuthenticatedRouteChildren: RegularLayoutAuthenticatedRouteCh
       RegularLayoutAuthenticatedFavoriteLazyRoute,
     RegularLayoutAuthenticatedProfileLazyRoute:
       RegularLayoutAuthenticatedProfileLazyRoute,
-    RegularLayoutAuthenticatedOrdersChar123orderNumberChar125LazyRoute:
-      RegularLayoutAuthenticatedOrdersChar123orderNumberChar125LazyRoute,
+    RegularLayoutAuthenticatedOrdersChar123orderNumberChar125Route:
+      RegularLayoutAuthenticatedOrdersChar123orderNumberChar125Route,
     RegularLayoutAuthenticatedOrdersIndexLazyRoute:
       RegularLayoutAuthenticatedOrdersIndexLazyRoute,
   }

@@ -14,14 +14,14 @@ export const cartApi = baseApi.injectEndpoints({
 			query: (body) => {
 				return { url: "/order", method: "POST", body };
 			},
-			invalidatesTags: ["cart"],
+			invalidatesTags: ["cart", "order"],
 		}),
 
 		getOrders: builder.query<GetOrdersResponse, GetOrdersRequest>({
-			query: () => {
-				return { url: `/order` };
+			query: (params) => {
+				return { url: `/order`, params };
 			},
-			// providesTags: ["cart"],
+			providesTags: ["order"],
 		}),
 		getOrder: builder.query<GetOrderResponse, GetOrderRequest>({
 			query: ({ orderNumber }) => {
@@ -32,5 +32,8 @@ export const cartApi = baseApi.injectEndpoints({
 	}),
 });
 
-export const { useCreateOrderMutation, useGetOrdersQuery, useGetOrderQuery } =
-	cartApi;
+export const {
+	useCreateOrderMutation,
+	useLazyGetOrderQuery,
+	useGetOrdersQuery,
+} = cartApi;

@@ -5,6 +5,7 @@ import { authSlice } from "./auth/authSlice";
 import { baseApi } from "./baseApi";
 import { cartSlice } from "./cart/cartSlice";
 import { categorySlice } from "./category/categorySlice";
+import { orderSlice } from "./order/orderSlice";
 import { productSkuSlice } from "./product-sku/productSkuSlice";
 
 export const store = configureStore({
@@ -14,6 +15,7 @@ export const store = configureStore({
 		[productSkuSlice.reducerPath]: productSkuSlice.reducer,
 		[categorySlice.reducerPath]: categorySlice.reducer,
 		[cartSlice.reducerPath]: cartSlice.reducer,
+		[orderSlice.reducerPath]: orderSlice.reducer,
 		[adminSlice.reducerPath]: adminSlice.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>

@@ -37,3 +37,5 @@ export const CreateOrderMaxCityLength = 100;
 export const CreateOrderMaxStreetLength = 150;
 export const CreateOrderMaxHomeLength = 20;
 export const CreateOrderMaxApartmentLength = 20;
+
+export const GetOrdersMaxLimit = 30;

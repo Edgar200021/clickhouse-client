@@ -17,8 +17,12 @@ export const Routes = {
 	Cart: "/cart",
 	Profile: "/profile",
 	Product: "/product/$productSkuId",
-	Orders: "/orders",
-	SpecificOrder: "/orders/{$orderNumber}",
+	Orders: {
+		Base: "/orders",
+		SpecificOrder: "/orders/{$orderNumber}",
+		Success: "/orders/success",
+		Cancel: "/orders/cancel",
+	},
 	Admin: {
 		Base: "/admin",
 		Categories: "/admin/categories",
@@ -36,5 +40,7 @@ export const Routes = {
 		Promocode: "/admin/promocode",
 		PromocodeCreate: "/admin/promocode/create",
 		PromocodeUpdate: "/admin/promocode/update/{-$promocodeId}",
+		Orders: "/admin/orders",
+		SpecificOrder: "/admin/orders/{$orderNumber}",
 	},
 } as const;

@@ -25,6 +25,10 @@ import type {
 	DeleteProductSkuResponse,
 	DeletePromocodeRequest,
 	DeletePromocodeResponse,
+	GetAdminOrderRequest,
+	GetAdminOrderResponse,
+	GetAdminOrdersRequest,
+	GetAdminOrdersResponse,
 	GetManufacturerRequest,
 	GetManufacturerResponse,
 	GetManufacturersRequest,
@@ -705,6 +709,26 @@ export const adminApi = baseApi.injectEndpoints({
 				);
 			},
 		}),
+
+		getAdminOrders: builder.query<
+			GetAdminOrdersResponse,
+			GetAdminOrdersRequest
+		>({
+			query: (params) => {
+				return {
+					url: "/admin/order",
+					params,
+				};
+			},
+		}),
+
+		getAdminOrder: builder.query<GetAdminOrderResponse, GetAdminOrderRequest>({
+			query: ({ orderNumber }) => {
+				return {
+					url: `/admin/order/${orderNumber}`,
+				};
+			},
+		}),
 	}),
 });
 
@@ -737,4 +761,6 @@ export const {
 	useCreatePromocodeMutation,
 	useUpdatePromocodeMutation,
 	useDeletePromocodeMutation,
+	useGetAdminOrdersQuery,
+	useGetAdminOrderQuery,
 } = adminApi;

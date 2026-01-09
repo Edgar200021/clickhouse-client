@@ -9,6 +9,7 @@ import type {
 } from "@/types/product";
 import type { PromocodeAdmin } from "@/types/promocode";
 import type {
+	GetAdminOrdersRequest,
 	GetProductsRequest,
 	GetProductsSkusAdminRequest,
 	GetPromocodesRequest,
@@ -30,6 +31,7 @@ type AdminState = {
 	productFilters: GetProductsRequest;
 	productsSkusFilters: GetProductsSkusAdminRequest;
 	promocodesFilters: GetPromocodesRequest;
+	ordersFilters: GetAdminOrdersRequest;
 };
 
 const initialState: AdminState = {
@@ -41,6 +43,7 @@ const initialState: AdminState = {
 	productFilters: {},
 	productsSkusFilters: {},
 	promocodesFilters: {},
+	ordersFilters: {},
 };
 
 export const adminSlice = createSlice({
@@ -160,6 +163,18 @@ export const adminSlice = createSlice({
 		) => {
 			state.promocodesFilters[payload.key] = payload.val;
 		},
+
+		setOrdersFilters: <T extends keyof AdminState["ordersFilters"]>(
+			state: AdminState,
+			{
+				payload,
+			}: PayloadAction<{
+				key: T;
+				val: AdminState["ordersFilters"][T];
+			}>,
+		) => {
+			state.ordersFilters[payload.key] = payload.val;
+		},
 	},
 	selectors: {
 		getManufactories: (state) => state.manufacturers,
@@ -204,6 +219,10 @@ export const adminSlice = createSlice({
 		getPromocodesFilters: (state) => state.promocodesFilters,
 		getPromocodesFiltersSearch: (state) => state.promocodesFilters.search,
 		getPromocodesFiltersLimit: (state) => state.promocodesFilters.limit,
+
+		getAdminOrdersFilters: (state) => state.ordersFilters,
+		getAdminOrdersFiltersSearch: (state) => state.ordersFilters.search,
+		getAdminOrdersFiltersLimit: (state) => state.ordersFilters.limit,
 	},
 });
 

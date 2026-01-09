@@ -140,7 +140,7 @@ export const UpdateProfileForm = ({ className }: Props) => {
 
 				<div className="flex items-center justify-between gap-x-4">
 					<Link
-						to={Routes.Orders}
+						to={Routes.Orders.Base}
 						className="cursor-pointer text-[#5a5a5a] hover:text-orange-400"
 						// variant="ghost"
 					>
